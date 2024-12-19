@@ -58,8 +58,28 @@ namespace WorkSphere.API.Endpoints
                 }
                 return Results.Empty;
             });
+            app.MapPost("AddTask", async (ITaskService taskService, TaskCreateDTO dto) =>
+            {
+                await taskService.AddTaskAsync(dto);
+                var task = new TaskDTO()
+                {
+                    TaskTitle = dto.TaskTitle,
+                    TaskDescr = dto.TaskDescr,
+                    AssignedTo = dto.AssignedTo,
+                    Project = dto.Project,
+                    Progress = dto.Progress,
+                    Status = dto.Status,
+                    IsActive = true,
+                    IsCompleted = false,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = dto.CreatedBy,
+                    ModifiedOn = DateTime.Now
 
-            app.MapPut("UpdateProject/{id}", async (ITaskService taskService, int id, TaskCreateDTO projDto) =>
+                };
+                return Results.Ok(task);
+            });
+
+            app.MapPut("UpdateTask/{id}", async (ITaskService taskService, int id, TaskCreateDTO projDto) =>
             {
                 var task = await taskService.GetTaskByIdSaync(id);
                 if (task == null) return Results.NotFound();

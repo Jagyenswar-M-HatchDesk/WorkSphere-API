@@ -47,6 +47,8 @@ namespace WorkSphere.Infrastructure.Repository
                 IsActive = true,
                 IsCompleted = false
             };
+            _context.Tasks.Add(newtask);
+            await _context.SaveChangesAsync();
         }
 
         public async Task EditTask(Tasks task)
