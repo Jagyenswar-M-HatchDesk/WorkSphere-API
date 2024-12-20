@@ -79,6 +79,43 @@ namespace WorkSphere.API.Endpoints
             //    int id = userd;
             //    //return await context.Users.Where(e => e.Id == userd).ToListAsync();
             //}).RequireAuthorization();
+            app.MapGet("account/checkAuth", async (ClaimsPrincipal claims, UserManager<User> userManager) =>
+            {
+                // Check if user is authenticated
+                if (claims.Identity?.IsAuthenticated != true)
+                {
+                    return Results.Unauthorized();
+                }
+
+                // Get user details from claims
+                var userId = claims.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Results.Unauthorized();
+                }
+
+                var user = await userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                // Return user authentication status
+                return Results.Ok(new
+                {
+                    IsAuthenticated = true,
+                    User = new
+                    {
+                        user.Id,
+                        user.UserName,
+                        user.Email,
+                        user.FirstName,
+                        user.LastName,
+                        user.Department,
+                        user.Rollid
+                    }
+                });
+            }).RequireAuthorization();
         }
     }
 }
