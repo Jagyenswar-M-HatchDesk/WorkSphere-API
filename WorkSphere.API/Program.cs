@@ -27,7 +27,15 @@ builder.Services.AddIdentityCore<User>()
 
 builder.Services.AddDbContext<WorkSphereDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
      b => b.MigrationsAssembly("WorkSphere.Infrastructure")));
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 builder.Services.AddIdentityCore<User>()
     .AddRoles<IdentityRole<int>>()
     .AddEntityFrameworkStores<WorkSphereDbContext>()
@@ -38,6 +46,8 @@ builder.Services.AddScoped<IProjectRepo, ProjectRepo>();
 builder.Services.AddScoped<IProjectService, ProjectServices>();
 builder.Services.AddScoped<ITaskRepo, TaskRepo>();
 builder.Services.AddScoped<ITaskService, TaskServices>();
+
+
 
 
 
@@ -52,7 +62,7 @@ if (app.Environment.IsDevelopment())
     //app.ApplyMigration();
 }
 
-
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
