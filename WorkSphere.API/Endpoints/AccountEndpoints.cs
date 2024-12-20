@@ -36,7 +36,7 @@ namespace WorkSphere.API.Endpoints
                 // Create the user
                 var user = new User
                 {
-                    UserName = request.UserName,
+                    UserName = request.Email,
                     Email = request.Email,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
