@@ -20,6 +20,7 @@ namespace WorkSphere.Infrastructure
         public DbSet<Projects> Projects { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Status> Status { get; set; }
+        public DbSet<SeverityLevel> SeverityLevel { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -104,6 +105,12 @@ namespace WorkSphere.Infrastructure
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
+            modelBuilder.Entity<SeverityLevel>(entity =>
+            {
+                entity.ToTable("mst_SeverityLevels");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            });
 
             // tbl_Task Configuration
             modelBuilder.Entity<Tasks>(entity =>
@@ -161,6 +168,12 @@ namespace WorkSphere.Infrastructure
                     .HasForeignKey(e => e.Status)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<SeverityLevel>()
+                    .WithMany()
+                    .HasForeignKey(e => e.SeverityLevel)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // tbl_Client Configuration
@@ -182,7 +195,7 @@ namespace WorkSphere.Infrastructure
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 2, Name = "Manager", NormalizedName = "Manager".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 3, Name = "User", NormalizedName = "User".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
 
-            modelBuilder.Entity<Department>().HasData(new Department { Id = 1, DeptName = "Web Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Department>().HasData(new Department { Id = 1, DeptName = "None", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Department>().HasData(new Department { Id = 2, DeptName = "Desktop App Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Department>().HasData(new Department { Id = 3, DeptName = "Mobile Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Department>().HasData(new Department { Id = 4, DeptName = "UI/UX Design", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
@@ -195,6 +208,14 @@ namespace WorkSphere.Infrastructure
             modelBuilder.Entity<Status>().HasData(new Status { Id = 5, StatusName = "At Risk", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Status>().HasData(new Status { Id = 6, StatusName = "Completed", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Status>().HasData(new Status { Id = 7, StatusName = "Rejected", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+
+            modelBuilder.Entity<SeverityLevel>().HasData(new SeverityLevel { Id = 1, level = "High", CreatedBy = 1, IsActive = true, IsDeleted = false, Createdon = DateTime.Now, Updatedon= DateTime.Now });
+            modelBuilder.Entity<SeverityLevel>().HasData(new SeverityLevel { Id = 2, level = "Medium", CreatedBy = 1, IsActive = true, IsDeleted = false, Createdon = DateTime.Now, Updatedon= DateTime.Now });
+            modelBuilder.Entity<SeverityLevel>().HasData(new SeverityLevel { Id = 3, level = "Low", CreatedBy = 1, IsActive = true, IsDeleted = false, Createdon = DateTime.Now, Updatedon= DateTime.Now });
+
+
+            modelBuilder.Entity<User>().HasData(new User { Id = 1, FirstName = "Admin", LastName = "Admin",UserName = "admin@gmail.com",PasswordHash = "Admin@123", Email="admin@gmail.com", Rollid= 1, Department=1, DateOfJoining=DateTime.Now , ModifiedOn=DateTime.Now, PhoneNumber="7723099993" ,CreatedBy = 1, IsActive = true, IsDeleted = false });
+            modelBuilder.Entity<User>().HasData(new User { Id = 2, FirstName = "Tapan", LastName = "Meher",UserName = "tapanmeher@gmail.com",PasswordHash = "Tapan@123", Email="tapanmeher@gmail.com", Rollid= 2, Department=3, DateOfJoining=DateTime.Now , ModifiedOn=DateTime.Now, PhoneNumber="7723099993" ,CreatedBy = 1, IsActive = true, IsDeleted = false });
 
             base.OnModelCreating(modelBuilder);
         }

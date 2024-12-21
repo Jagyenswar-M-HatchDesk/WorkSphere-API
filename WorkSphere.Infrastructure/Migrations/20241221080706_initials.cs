@@ -305,7 +305,9 @@ namespace WorkSphere.Infrastructure.Migrations
                     AssignedTo = table.Column<int>(type: "int", nullable: false),
                     TaskDescr = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Project = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Progress = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -314,6 +316,12 @@ namespace WorkSphere.Infrastructure.Migrations
                         name: "FK_tbl_Task_AspNetUsers_AssignedTo",
                         column: x => x.AssignedTo,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_tbl_Task_mst_Status_Status",
+                        column: x => x.Status,
+                        principalTable: "mst_Status",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -329,9 +337,9 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "CreatedOn", "Discriminator", "IsActive", "IsDelete", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2024, 12, 18, 17, 13, 21, 951, DateTimeKind.Local).AddTicks(1571), "Roles", true, false, "Admin", "ADMIN" },
-                    { 2, null, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(2417), "Roles", true, false, "Manager", "MANAGER" },
-                    { 3, null, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(2514), "Roles", true, false, "User", "USER" }
+                    { 1, null, new DateTime(2024, 12, 21, 13, 37, 5, 483, DateTimeKind.Local).AddTicks(7048), "Roles", true, false, "Admin", "ADMIN" },
+                    { 2, null, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(1323), "Roles", true, false, "Manager", "MANAGER" },
+                    { 3, null, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(1448), "Roles", true, false, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -339,11 +347,11 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeptName", "IsActive", "IsDelete" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(3581), "Web Development", true, false },
-                    { 2, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(3764), "Desktop App Development", true, false },
-                    { 3, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(3776), "Mobile Development", true, false },
-                    { 4, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(3788), "UI/UX Design", true, false },
-                    { 5, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(3798), "API Development", true, false }
+                    { 1, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2598), "None", true, false },
+                    { 2, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2815), "Desktop App Development", true, false },
+                    { 3, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2832), "Mobile Development", true, false },
+                    { 4, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2845), "UI/UX Design", true, false },
+                    { 5, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2858), "API Development", true, false }
                 });
 
             migrationBuilder.InsertData(
@@ -351,13 +359,22 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "IsActive", "IsDelete", "StatusName" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(4453), true, false, "Accepted" },
-                    { 2, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(4635), true, false, "In Progress" },
-                    { 3, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(4649), true, false, "Pending" },
-                    { 4, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(4662), true, false, "Delayed" },
-                    { 5, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(4674), true, false, "At Risk" },
-                    { 6, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(4687), true, false, "Completed" },
-                    { 7, 1, new DateTime(2024, 12, 18, 17, 13, 21, 952, DateTimeKind.Local).AddTicks(4699), true, false, "Rejected" }
+                    { 1, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3582), true, false, "Accepted" },
+                    { 2, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3857), true, false, "In Progress" },
+                    { 3, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3874), true, false, "Pending" },
+                    { 4, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3890), true, false, "Delayed" },
+                    { 5, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3904), true, false, "At Risk" },
+                    { 6, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3920), true, false, "Completed" },
+                    { 7, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3973), true, false, "Rejected" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "DateOfJoining", "Department", "Email", "EmailConfirmed", "FirstName", "IsActive", "IsDeleted", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Rollid", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { 1, 0, "3a9a4e71-3800-41ce-b0aa-9bf0601179ac", 1, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(3576), 1, "admin@gmail.com", false, "Admin", true, false, null, "Admin", false, null, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(3712), null, null, "Admin@123", "7723099993", false, 1, null, false, "admin@gmail.com" },
+                    { 2, 0, "2c74f737-a70a-4f3a-84ab-c74c790ece2e", 1, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(4721), 3, "tapanmeher@gmail.com", false, "Tapan", true, false, null, "Meher", false, null, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(4722), null, null, "Tapan@123", "7723099993", false, 2, null, false, "tapanmeher@gmail.com" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -438,6 +455,11 @@ namespace WorkSphere.Infrastructure.Migrations
                 name: "IX_tbl_Task_Project",
                 table: "tbl_Task",
                 column: "Project");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tbl_Task_Status",
+                table: "tbl_Task",
+                column: "Status");
         }
 
         /// <inheritdoc />

@@ -5,6 +5,7 @@ using WorkSphere.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WorkSphere.Application.DTOs.RegisterDTO;
+using System.Runtime.InteropServices;
 
 namespace WorkSphere.API.Endpoints
 {
@@ -100,7 +101,6 @@ namespace WorkSphere.API.Endpoints
                     return Results.Unauthorized();
                 }
 
-                // Return user authentication status
                 return Results.Ok(new
                 {
                     IsAuthenticated = true,
@@ -116,6 +116,15 @@ namespace WorkSphere.API.Endpoints
                     }
                 });
             }).RequireAuthorization();
+
+            app.MapGet("GetManagers", async (WorkSphereDbContext dbcontext) =>
+            {
+                var manager = await dbcontext.Users.Where(e => e.IsActive == true && e.Rollid == 2).ToListAsync();
+                var fullname = manager.Select(manager => new ManagerDto() { FullName = manager.FirstName +" "+ manager.LastName });
+                return fullname;
+            });
+
+
         }
     }
 }

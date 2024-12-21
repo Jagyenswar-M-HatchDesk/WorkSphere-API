@@ -159,5 +159,6 @@ app.MapIdentityApi<User>();
 app.Register_LoginEndpoint();
 app.Projects_Endpoints();
 app.Task_EndPoints();
+app.DepartmentEndpoint();
 
 app.Run();

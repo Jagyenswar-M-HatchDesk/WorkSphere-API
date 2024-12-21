@@ -56,7 +56,11 @@ namespace WorkSphere.Domain
         [ForeignKey("Status")]
         public int Status { get; set; }
 
-        
+        [Required]
+        [ForeignKey("SeverityLevel")]
+        public int SeverityLevel { get; set; }
+
+
         //public virtual Client? ClientNavigation { get; set; }
         //public virtual User? ManagerNavigation { get; set; }
     }
