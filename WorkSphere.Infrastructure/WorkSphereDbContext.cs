@@ -193,7 +193,7 @@ namespace WorkSphere.Infrastructure
 
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 1, Name = "Admin", NormalizedName = "Admin".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 2, Name = "Manager", NormalizedName = "Manager".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Roles>().HasData(new Roles { Id = 3, Name = "User", NormalizedName = "User".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Roles>().HasData(new Roles { Id = 3, Name = "Employee", NormalizedName = "Employee".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
 
             modelBuilder.Entity<Department>().HasData(new Department { Id = 1, DeptName = "None", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Department>().HasData(new Department { Id = 2, DeptName = "Desktop App Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
