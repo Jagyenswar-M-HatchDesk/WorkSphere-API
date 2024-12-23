@@ -30,11 +30,7 @@ namespace WorkSphere.API.Endpoints
                 return dept;
             });
 
-            app.MapGet("GetSeverityLevel", async (WorkSphereDbContext dbcontext) =>
-            {
-                var level = await dbcontext.SeverityLevel.ToListAsync();
-                return level;
-            });
+            
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSphere.Domain;
-using WorkSphere.Application.DTOs;
 using Microsoft.EntityFrameworkCore;
 using WorkSphere.Application.Interfaces.IRepo;
+using WorkSphere.Application.DTOs.ProjectDto;
 
 namespace WorkSphere.Infrastructure.Repository
 {
@@ -31,7 +31,7 @@ namespace WorkSphere.Infrastructure.Repository
             return projid;
         }
 
-        public async Task AddProjects(ProjectsDTO project)
+        public async Task<Projects> AddProjects(ProjectCreateDTO project)
         {
             var newproj = new Projects()
             {
@@ -39,28 +39,33 @@ namespace WorkSphere.Infrastructure.Repository
                 ProjDescr = project.ProjDescr,
                 Client = project.Client,
                 Manager = project.Manager,
-                CreatedBy = project.CreatedBy,
+                CreatedBy = 1,
                 Department = project.Department,
                 TeamSize = project.TeamSize,
-                CreatedOn = DateTime.Now,
-                IsActive = true,
-                IsCompleted = false,
-
-                
                 StartDate = project.StartDate,
                 Deadline = project.Deadline,
                 ImagePath = project.ImagePath,
-                Status = project.Status
+                Status = project.Status,
+                SeverityLevel = project.SeverityLevel,
+
+                CreatedOn = DateTime.Now,
+                IsActive = true,
+                IsCompleted = false,
+                ModifiedOn = DateTime.Now
 
             };
             _workSphereDbContext.Projects.Add(newproj);
             await _workSphereDbContext.SaveChangesAsync();
+
+            return newproj;
         }
 
-        public async Task UpdateProjects(Projects proj)
+        public async Task<Projects> UpdateProjects(Projects proj)
         {
             _workSphereDbContext.Projects.Update(proj);
             await _workSphereDbContext.SaveChangesAsync();
+
+            return proj;
         }
 
         public async Task CompleteProject(int id)

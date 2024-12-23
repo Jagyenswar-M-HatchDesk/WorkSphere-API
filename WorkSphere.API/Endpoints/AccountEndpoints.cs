@@ -119,12 +119,7 @@ namespace WorkSphere.API.Endpoints
                 });
             }).RequireAuthorization();
 
-            app.MapGet("GetManagers", async (WorkSphereDbContext dbcontext) =>
-            {
-                var manager = await dbcontext.Users.Where(e => e.IsActive == true && e.Rollid == 2).ToListAsync();
-                var fullname = manager.Select(manager => new ManagerDto() { FullName = manager.FirstName +" "+ manager.LastName, Id = manager.Id });
-                return fullname;
-            });
+            
 
             app.MapPost("account/logout", async (SignInManager<User> signInManager, HttpContext httpContext) =>
             {
@@ -139,25 +134,7 @@ namespace WorkSphere.API.Endpoints
             //{
 
             //})
-            app.MapPost("createClient", async (WorkSphereDbContext dbcontext, ClientCreateDTO dto) =>
-            {
-                var client = new Client()
-                {
-                    ClientName = dto.ClientName,
-                    Contact = dto.Contact,
-                    Email = dto.Email,  
-                    CreatedOn = DateTime.Now,
-                    ModifiedOn = DateTime.Now,
-                    CreatedBy = 1,
-                    IsActive = true,
-                    IsDelete = false
-                };
-
-                dbcontext.Clients.Add(client);
-                await dbcontext.SaveChangesAsync();
-
-                return Results.Ok("Client had been created");
-            });
+            
         }
     }
 }

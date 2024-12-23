@@ -11,7 +11,7 @@ namespace WorkSphere.Application.DTOs.ClientDTO
     {
         public string ClientName { get; set; } = string.Empty;
 
-        public int? Contact { get; set; }
+        public string? PhnoneNumber { get; set; }
 
         
         public string Email { get; set; } = string.Empty;

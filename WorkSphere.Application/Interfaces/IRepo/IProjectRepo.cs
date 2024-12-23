@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSphere.Application.DTOs;
+using WorkSphere.Application.DTOs.ProjectDto;
 using WorkSphere.Domain;
 
 namespace WorkSphere.Application.Interfaces.IRepo
@@ -14,9 +14,9 @@ namespace WorkSphere.Application.Interfaces.IRepo
 
         Task<Projects> GetProjectById(int i);
 
-        Task AddProjects(ProjectsDTO project);
+        Task<Projects> AddProjects(ProjectCreateDTO project);
 
-        Task UpdateProjects(Projects proj);
+        Task<Projects> UpdateProjects(Projects proj);
 
         Task CompleteProject(int id);
     }

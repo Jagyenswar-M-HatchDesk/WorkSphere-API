@@ -138,6 +138,8 @@ builder.Services.AddScoped<IProjectRepo, ProjectRepo>();
 builder.Services.AddScoped<IProjectService, ProjectServices>();
 builder.Services.AddScoped<ITaskRepo, TaskRepo>();
 builder.Services.AddScoped<ITaskService, TaskServices>();
+builder.Services.AddScoped<IClientRepo, ClientFRepo>();
+builder.Services.AddScoped<IClientServices, ClientService>();
 
 var app = builder.Build();
 
@@ -160,5 +162,8 @@ app.Register_LoginEndpoint();
 app.Projects_Endpoints();
 app.Task_EndPoints();
 app.DepartmentEndpoint();
+app.Client_Endpoints();
+app.Manager_Endpoints();
+app.Severity_Endponits();
 
 app.Run();

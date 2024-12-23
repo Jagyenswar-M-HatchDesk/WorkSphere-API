@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WorkSphere.Application.DTOs;
 using WorkSphere.Application.DTOs.ClientDTO;
+using WorkSphere.Application.DTOs.ProjectDto;
 using WorkSphere.Application.Interfaces.IServices;
 using WorkSphere.Domain;
 using WorkSphere.Infrastructure;
@@ -28,27 +28,40 @@ namespace WorkSphere.API.Endpoints.Admin
                     Deadline = proj.Deadline,
                     ImagePath = proj.ImagePath,
                     Status = proj.Status,
+                    SeverityLevel = proj.SeverityLevel,
                 });
             });
 
-            app.MapPost("AddProject", async (IProjectService projService, ProjectsDTO projDto) =>
+            app.MapPost("AddProject", async (IProjectService projService, ProjectCreateDTO projDto) =>
             {
-                await projService.AddProjectAsync(projDto);
+                var addproject = await projService.AddProjectAsync(projDto);
                 var proj = new ProjectsDTO()
                 {
-                    Title = projDto.Title,
-                    ProjDescr = projDto.ProjDescr,
-                    TeamSize = projDto.TeamSize,
-                    StartDate = projDto.StartDate,
-                    Department = projDto.Department,
-                    Client = projDto.Client,
-                    Manager = projDto.Manager,
-                    Deadline = projDto.Deadline,
-                    ImagePath = projDto.ImagePath,
-                    Status = projDto.Status,
+                    ProjID = addproject.ProjID,
+                    Title = addproject.Title,
+                    ProjDescr = addproject.ProjDescr,
+                    TeamSize = addproject.TeamSize,
+                    StartDate = addproject.StartDate,
+                    Department = addproject.Department,
+                    Client = addproject.Client,
+                    Manager = addproject.Manager,
+                    Deadline = addproject.Deadline,
+                    ImagePath = addproject.ImagePath,
+                    Status = addproject.Status,
+                    SeverityLevel = addproject.SeverityLevel,
+                    CreatedBy = addproject.CreatedBy,
+                    CreatedOn = addproject.CreatedOn,
+                    IsCompleted = addproject.IsCompleted,
+                    IsActive = addproject.IsActive,
+                    ModifiedOn = addproject.ModifiedOn
 
                 };
-                return Results.Ok(proj);
+
+                return Results.Ok(new
+                {
+                    message = "Successfully Created a new Project",
+                    Project = proj
+                });
             });
 
             app.MapGet("Project/{id}", async (IProjectService projService, int id) =>
@@ -58,6 +71,7 @@ namespace WorkSphere.API.Endpoints.Admin
                 {
                     var viewproj = new ProjectsDTO()
                     {
+                        ProjID = proj.ProjID,
                         Title = proj.Title,
                         ProjDescr = proj.ProjDescr,
                         TeamSize = proj.TeamSize,
@@ -68,14 +82,24 @@ namespace WorkSphere.API.Endpoints.Admin
                         Deadline = proj.Deadline,
                         ImagePath = proj.ImagePath,
                         Status = proj.Status,
+                        SeverityLevel = proj.SeverityLevel,
+                        CreatedBy = proj.CreatedBy,
+                        CreatedOn = proj.CreatedOn,
+                        IsCompleted = proj.IsCompleted,
+                        IsActive = proj.IsActive,
+                        ModifiedOn = proj.ModifiedOn
                     };
-                    return Results.Ok(viewproj);
+                    return Results.Ok(new 
+                    {
+                        message = "Successfully Updated the Project",
+                        Project = viewproj
+                    });
 
                 }
                 return Results.Empty;
             });
 
-            app.MapPut("UpdateProject/{id}", async (IProjectService projService, int id, ProjectsDTO projDto) =>
+            app.MapPut("UpdateProject/{id}", async (IProjectService projService, int id, ProjectEditDTO projDto) =>
             {
                 var proj = await projService.GetProjByIdAsync(id);
                 if (proj == null) return Results.NotFound();
@@ -85,14 +109,20 @@ namespace WorkSphere.API.Endpoints.Admin
                 proj.TeamSize = projDto.TeamSize;
                 proj.StartDate = projDto.StartDate;
                 proj.Department = projDto.Department;
-                proj.Client = projDto.Client;
+                //proj.Client = projDto.Client;
                 proj.Manager = projDto.Manager;
                 proj.Deadline = projDto.Deadline;
                 proj.ImagePath = projDto.ImagePath;
                 proj.Status = projDto.Status;
+                proj.SeverityLevel = projDto.SeverityLevel;
+                proj.ModifiedOn = DateTime.Now;
 
                 await projService.UpdateProjAsync(proj);
-                return Results.Ok(proj);
+                return Results.Ok(new
+                {
+                    message = "Successfully Updated data",
+                    Project = proj
+                });
             });
             app.MapGet("SearchProjects", async (IProjectService projService, string? title) =>
             {
@@ -111,6 +141,7 @@ namespace WorkSphere.API.Endpoints.Admin
                 // Transform to DTOs
                 var result = filteredProjects.Select(proj => new ProjectsDTO()
                 {
+                    ProjID = proj.ProjID,
                     Title = proj.Title,
                     ProjDescr = proj.ProjDescr,
                     TeamSize = proj.TeamSize,
@@ -121,21 +152,13 @@ namespace WorkSphere.API.Endpoints.Admin
                     Deadline = proj.Deadline,
                     ImagePath = proj.ImagePath,
                     Status = proj.Status,
+                    SeverityLevel = proj.SeverityLevel
                 });
 
                 return Results.Ok(result);
             });
 
-            app.MapGet("SearchClient", async (WorkSphereDbContext context, string? Name) =>
-            {
-                var client = await context.Clients.Where(e => e.IsActive == true).ToListAsync();
-
-                var selectedclients = client.Where(c => (string.IsNullOrEmpty(Name) || c.ClientName.Contains(Name, StringComparison.OrdinalIgnoreCase)));
-
-                var rslt = selectedclients.Select(c => new ClientDTO() { Name = c.ClientName });
-
-                return Results.Ok(rslt);    
-            });
+            
             //app.MapPost()
         }
 

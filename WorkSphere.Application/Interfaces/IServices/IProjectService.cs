@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorkSphere.Application.DTOs;
+﻿using WorkSphere.Application.DTOs.ProjectDto;
 using WorkSphere.Domain;
 
 namespace WorkSphere.Application.Interfaces.IServices
@@ -14,9 +9,9 @@ namespace WorkSphere.Application.Interfaces.IServices
 
         Task<Projects> GetProjByIdAsync(int id);
 
-        Task UpdateProjAsync(Projects proj);
+        Task<Projects> UpdateProjAsync(Projects proj);
 
-        Task AddProjectAsync(ProjectsDTO proj);
+        Task<Projects> AddProjectAsync(ProjectCreateDTO proj);
 
         Task CompleteProjectAsync(int id);
     }

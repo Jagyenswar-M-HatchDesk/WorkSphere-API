@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSphere.Application.DTOs;
+using WorkSphere.Application.DTOs.ProjectDto;
 using WorkSphere.Application.Interfaces.IRepo;
 using WorkSphere.Application.Interfaces.IServices;
 using WorkSphere.Domain;
@@ -30,14 +30,14 @@ namespace WorkSphere.Application.Services
 
         }
 
-        public async Task UpdateProjAsync(Projects proj)
+        public async Task<Projects> UpdateProjAsync(Projects proj)
         {
-             await _repo.UpdateProjects(proj);
+             return await _repo.UpdateProjects(proj);
         }
 
-        public async Task AddProjectAsync(ProjectsDTO proj)
+        public async Task<Projects> AddProjectAsync(ProjectCreateDTO proj)
         {
-            await _repo.AddProjects(proj);
+            return await _repo.AddProjects(proj);
         }
 
         public async Task CompleteProjectAsync(int id)
