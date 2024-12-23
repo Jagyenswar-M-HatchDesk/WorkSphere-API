@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WorkSphere.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initials : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +50,24 @@ namespace WorkSphere.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "mst_SeverityLevels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    level = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Createdon = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updatedon = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mst_SeverityLevels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mst_Status",
                 columns: table => new
                 {
@@ -73,7 +91,7 @@ namespace WorkSphere.Infrastructure.Migrations
                     ClientID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Contact = table.Column<int>(type: "int", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -115,7 +133,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Department = table.Column<int>(type: "int", nullable: false),
+                    Department = table.Column<int>(type: "int", nullable: true),
                     DateOfJoining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Rollid = table.Column<int>(type: "int", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -260,7 +278,8 @@ namespace WorkSphere.Infrastructure.Migrations
                     Department = table.Column<int>(type: "int", nullable: false),
                     TeamSize = table.Column<int>(type: "int", nullable: false),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    SeverityLevel = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -275,6 +294,12 @@ namespace WorkSphere.Infrastructure.Migrations
                         name: "FK_tbl_Project_mst_Department_Department",
                         column: x => x.Department,
                         principalTable: "mst_Department",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_tbl_Project_mst_SeverityLevels_SeverityLevel",
+                        column: x => x.SeverityLevel,
+                        principalTable: "mst_SeverityLevels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -306,7 +331,7 @@ namespace WorkSphere.Infrastructure.Migrations
                     TaskDescr = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Project = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: true),
                     Progress = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -337,9 +362,9 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "CreatedOn", "Discriminator", "IsActive", "IsDelete", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2024, 12, 21, 13, 37, 5, 483, DateTimeKind.Local).AddTicks(7048), "Roles", true, false, "Admin", "ADMIN" },
-                    { 2, null, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(1323), "Roles", true, false, "Manager", "MANAGER" },
-                    { 3, null, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(1448), "Roles", true, false, "User", "USER" }
+                    { 1, null, new DateTime(2024, 12, 23, 17, 53, 3, 321, DateTimeKind.Local).AddTicks(4814), "Roles", true, false, "Admin", "ADMIN" },
+                    { 2, null, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(4624), "Roles", true, false, "Manager", "MANAGER" },
+                    { 3, null, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(4708), "Roles", true, false, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -347,11 +372,21 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeptName", "IsActive", "IsDelete" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2598), "None", true, false },
-                    { 2, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2815), "Desktop App Development", true, false },
-                    { 3, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2832), "Mobile Development", true, false },
-                    { 4, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2845), "UI/UX Design", true, false },
-                    { 5, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(2858), "API Development", true, false }
+                    { 1, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5732), "None", true, false },
+                    { 2, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5898), "Desktop App Development", true, false },
+                    { 3, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5909), "Mobile Development", true, false },
+                    { 4, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5918), "UI/UX Design", true, false },
+                    { 5, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5927), "API Development", true, false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "mst_SeverityLevels",
+                columns: new[] { "Id", "CreatedBy", "Createdon", "IsActive", "IsDeleted", "Updatedon", "level" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7086), true, false, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7155), "High" },
+                    { 2, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7309), true, false, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7310), "Medium" },
+                    { 3, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7321), true, false, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7321), "Low" }
                 });
 
             migrationBuilder.InsertData(
@@ -359,13 +394,13 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "IsActive", "IsDelete", "StatusName" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3582), true, false, "Accepted" },
-                    { 2, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3857), true, false, "In Progress" },
-                    { 3, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3874), true, false, "Pending" },
-                    { 4, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3890), true, false, "Delayed" },
-                    { 5, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3904), true, false, "At Risk" },
-                    { 6, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3920), true, false, "Completed" },
-                    { 7, 1, new DateTime(2024, 12, 21, 13, 37, 5, 485, DateTimeKind.Local).AddTicks(3973), true, false, "Rejected" }
+                    { 1, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6436), true, false, "Accepted" },
+                    { 2, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6581), true, false, "In Progress" },
+                    { 3, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6592), true, false, "Pending" },
+                    { 4, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6603), true, false, "Delayed" },
+                    { 5, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6615), true, false, "At Risk" },
+                    { 6, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6625), true, false, "Completed" },
+                    { 7, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6636), true, false, "Rejected" }
                 });
 
             migrationBuilder.InsertData(
@@ -373,8 +408,8 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "DateOfJoining", "Department", "Email", "EmailConfirmed", "FirstName", "IsActive", "IsDeleted", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Rollid", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, "3a9a4e71-3800-41ce-b0aa-9bf0601179ac", 1, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(3576), 1, "admin@gmail.com", false, "Admin", true, false, null, "Admin", false, null, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(3712), null, null, "Admin@123", "7723099993", false, 1, null, false, "admin@gmail.com" },
-                    { 2, 0, "2c74f737-a70a-4f3a-84ab-c74c790ece2e", 1, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(4721), 3, "tapanmeher@gmail.com", false, "Tapan", true, false, null, "Meher", false, null, new DateTime(2024, 12, 21, 13, 37, 5, 486, DateTimeKind.Local).AddTicks(4722), null, null, "Tapan@123", "7723099993", false, 2, null, false, "tapanmeher@gmail.com" }
+                    { 1, 0, "a80d19ae-f3b6-435a-a02c-9525445b6eba", 1, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(4871), 1, "admin@gmail.com", false, "Admin", true, false, null, "Admin", false, null, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(4948), null, null, "Admin@123", "7723099993", false, 1, null, false, "admin@gmail.com" },
+                    { 2, 0, "82a0faab-a3e5-4244-b78e-2943bf7f7414", 1, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(5591), 3, "tapanmeher@gmail.com", false, "Tapan", true, false, null, "Meher", false, null, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(5592), null, null, "Tapan@123", "7723099993", false, 2, null, false, "tapanmeher@gmail.com" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -442,6 +477,11 @@ namespace WorkSphere.Infrastructure.Migrations
                 column: "Manager");
 
             migrationBuilder.CreateIndex(
+                name: "IX_tbl_Project_SeverityLevel",
+                table: "tbl_Project",
+                column: "SeverityLevel");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tbl_Project_Status",
                 table: "tbl_Project",
                 column: "Status");
@@ -488,6 +528,9 @@ namespace WorkSphere.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "mst_SeverityLevels");
 
             migrationBuilder.DropTable(
                 name: "mst_Status");

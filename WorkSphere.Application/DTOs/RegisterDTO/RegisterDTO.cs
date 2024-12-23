@@ -13,7 +13,7 @@ namespace WorkSphere.Application.DTOs.RegisterDTO
         public string UserName { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public int Department { get; set; }
+        public int? Department { get; set; }
         public int Rollid { get; set; }
     }
 }

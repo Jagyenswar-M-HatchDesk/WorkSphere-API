@@ -41,9 +41,9 @@ namespace WorkSphere.Domain
         public int? CreatedBy { get; set; }
 
 
-        [Required]
+        //[Required]
         [ForeignKey("Status")]
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         public int? Progress { get; set; }
         //public virtual User? UserNavigation { get; set; }

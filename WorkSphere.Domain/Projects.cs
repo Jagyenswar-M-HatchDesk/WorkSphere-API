@@ -52,9 +52,9 @@ namespace WorkSphere.Domain
         public int TeamSize { get; set; }
         public DateTime Deadline { get; set; }
 
-        [Required]
+        //[Required]
         [ForeignKey("Status")]
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         [Required]
         [ForeignKey("SeverityLevel")]

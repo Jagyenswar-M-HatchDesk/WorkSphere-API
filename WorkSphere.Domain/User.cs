@@ -25,9 +25,9 @@ namespace WorkSphere.Domain
         //[Required]
         //public string Email { get; set; } = string.Empty ;
 
-        [Required]
+        //[Required]
         [ForeignKey("Department")]
-        public int Department { get; set; } 
+        public int? Department { get; set; } 
 
         [Required]
         public DateTime DateOfJoining { get; set; }

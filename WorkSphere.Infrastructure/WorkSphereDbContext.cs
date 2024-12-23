@@ -62,7 +62,7 @@ namespace WorkSphere.Infrastructure
                 entity.HasOne<Department>()
                       .WithMany()
                       .HasForeignKey(u => u.Department)
-                      .IsRequired()
+                      //.IsRequired()
                       .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne<Roles>()
@@ -134,7 +134,7 @@ namespace WorkSphere.Infrastructure
                 entity.HasOne<Status>()
                    .WithMany()
                    .HasForeignKey(e => e.Status)
-                   .IsRequired()
+                   //.IsRequired()
                    .OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -166,7 +166,7 @@ namespace WorkSphere.Infrastructure
                 entity.HasOne<Status>()
                     .WithMany()
                     .HasForeignKey(e => e.Status)
-                    .IsRequired()
+                    //.IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne<SeverityLevel>()
