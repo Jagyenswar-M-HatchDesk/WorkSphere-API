@@ -8,6 +8,7 @@ namespace WorkSphere.Application.DTOs.RegisterDTO
 {
     public class ManagerDto
     {
+        public int Id { get; set; }
         public string FullName {  get; set; }
     }
 }

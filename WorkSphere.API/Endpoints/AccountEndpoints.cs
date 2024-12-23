@@ -122,7 +122,7 @@ namespace WorkSphere.API.Endpoints
             app.MapGet("GetManagers", async (WorkSphereDbContext dbcontext) =>
             {
                 var manager = await dbcontext.Users.Where(e => e.IsActive == true && e.Rollid == 2).ToListAsync();
-                var fullname = manager.Select(manager => new ManagerDto() { FullName = manager.FirstName +" "+ manager.LastName });
+                var fullname = manager.Select(manager => new ManagerDto() { FullName = manager.FirstName +" "+ manager.LastName, Id = manager.Id });
                 return fullname;
             });
 
