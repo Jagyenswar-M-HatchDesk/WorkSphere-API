@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using WorkSphere.Domain;
+using WorkSphere.Application;
 using WorkSphere.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WorkSphere.Application.DTOs.RegisterDTO;
 using System.Runtime.InteropServices;
+using WorkSphere.Application.DTOs.ClientDTO;
 
 namespace WorkSphere.API.Endpoints
 {
@@ -133,7 +135,29 @@ namespace WorkSphere.API.Endpoints
                 return Results.Ok(new { Message = "User logged out successfully." });
             });
 
+            //app.MapPut("CreateManager", async (WorkSphereDbContext dbcontext,  ) =>
+            //{
 
+            //})
+            app.MapPost("createClient", async (WorkSphereDbContext dbcontext, ClientCreateDTO dto) =>
+            {
+                var client = new Client()
+                {
+                    ClientName = dto.ClientName,
+                    Contact = dto.Contact,
+                    Email = dto.Email,  
+                    CreatedOn = DateTime.Now,
+                    ModifiedOn = DateTime.Now,
+                    CreatedBy = 1,
+                    IsActive = true,
+                    IsDelete = false
+                };
+
+                dbcontext.Clients.Add(client);
+                await dbcontext.SaveChangesAsync();
+
+                return Results.Ok("Client had been created");
+            });
         }
     }
 }

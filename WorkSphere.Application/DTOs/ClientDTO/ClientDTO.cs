@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSphere.Application.DTOs
+namespace WorkSphere.Application.DTOs.ClientDTO
 {
     public class ClientDTO
     {

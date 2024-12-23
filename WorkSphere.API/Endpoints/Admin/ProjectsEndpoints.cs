@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkSphere.Application.DTOs;
+using WorkSphere.Application.DTOs.ClientDTO;
 using WorkSphere.Application.Interfaces.IServices;
 using WorkSphere.Domain;
 using WorkSphere.Infrastructure;
