@@ -124,6 +124,15 @@ namespace WorkSphere.API.Endpoints
                 return fullname;
             });
 
+            app.MapPost("account/logout", async (SignInManager<User> signInManager, HttpContext httpContext) =>
+            {
+                await signInManager.SignOutAsync();
+
+                httpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
+
+                return Results.Ok(new { Message = "User logged out successfully." });
+            });
+
 
         }
     }

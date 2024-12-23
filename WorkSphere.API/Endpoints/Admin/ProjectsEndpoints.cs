@@ -1,6 +1,8 @@
-﻿using WorkSphere.Application.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using WorkSphere.Application.DTOs;
 using WorkSphere.Application.Interfaces.IServices;
 using WorkSphere.Domain;
+using WorkSphere.Infrastructure;
 
 namespace WorkSphere.API.Endpoints.Admin
 {
@@ -91,7 +93,48 @@ namespace WorkSphere.API.Endpoints.Admin
                 await projService.UpdateProjAsync(proj);
                 return Results.Ok(proj);
             });
+            app.MapGet("SearchProjects", async (IProjectService projService, string? title) =>
+            {
+                // Fetch all projects
+                var projects = await projService.GetallProjAsync();
 
+                // Apply filters if search criteria are provided
+                var filteredProjects = projects.Where(proj =>
+                    (string.IsNullOrEmpty(title) || proj.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+                    //&&
+                    //(string.IsNullOrEmpty(department) || proj..Contains(department, StringComparison.OrdinalIgnoreCase)) &&
+                    //(string.IsNullOrEmpty(client) || proj.Client.Contains(client, StringComparison.OrdinalIgnoreCase)) &&
+                    //(string.IsNullOrEmpty(status) || proj.Status.Equals(status, StringComparison.OrdinalIgnoreCase))
+                );
+
+                // Transform to DTOs
+                var result = filteredProjects.Select(proj => new ProjectsDTO()
+                {
+                    Title = proj.Title,
+                    ProjDescr = proj.ProjDescr,
+                    TeamSize = proj.TeamSize,
+                    StartDate = proj.StartDate,
+                    Department = proj.Department,
+                    Client = proj.Client,
+                    Manager = proj.Manager,
+                    Deadline = proj.Deadline,
+                    ImagePath = proj.ImagePath,
+                    Status = proj.Status,
+                });
+
+                return Results.Ok(result);
+            });
+
+            app.MapGet("SearchClient", async (WorkSphereDbContext context, string? Name) =>
+            {
+                var client = await context.Clients.Where(e => e.IsActive == true).ToListAsync();
+
+                var selectedclients = client.Where(c => (string.IsNullOrEmpty(Name) || c.ClientName.Contains(Name, StringComparison.OrdinalIgnoreCase)));
+
+                var rslt = selectedclients.Select(c => new ClientDTO() { Name = c.ClientName });
+
+                return Results.Ok(rslt);    
+            });
             //app.MapPost()
         }
 
