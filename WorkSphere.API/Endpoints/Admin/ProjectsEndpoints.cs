@@ -9,15 +9,25 @@ namespace WorkSphere.API.Endpoints.Admin
 {
     public static class ProjectsEndpoints
     {
+        
+
         public static void Projects_Endpoints(this IEndpointRouteBuilder erb)
         {
             var app = erb.MapGroup("").WithTags("Projects");
 
-            app.MapGet("GetAllProject", async (IProjectService projservice) =>
+            app.MapGet("GetAllProject", async (IProjectService projservice, int pageNumber=1, int pageSize=10) =>
             {
+                if(pageNumber <=0 ) pageNumber=1;
+                if (pageSize <=0 ) pageSize=10;
+
                 var proj = await projservice.GetallProjAsync();
-                return proj.Select(proj => new ProjectsDTO()
+
+                var count = proj.Count();
+
+                var pageProduct = proj.Skip((pageNumber -1)*pageSize).Take(pageSize)
+                 .Select(proj => new ProjectsDTO()
                 {
+                     ProjID = proj.ProjID,
                     Title = proj.Title,
                     ProjDescr = proj.ProjDescr,
                     TeamSize = proj.TeamSize,
@@ -29,6 +39,20 @@ namespace WorkSphere.API.Endpoints.Admin
                     ImagePath = proj.ImagePath,
                     Status = proj.Status,
                     SeverityLevel = proj.SeverityLevel,
+                    IsActive = proj.IsActive,
+                    IsCompleted = proj.IsCompleted,
+                    ModifiedOn = proj.ModifiedOn,
+                    CreatedBy = proj.CreatedBy,
+                    CreatedOn = proj.CreatedOn
+                });
+
+                return Results.Ok(new
+                {
+                    Total = count,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(count/(double)pageSize),
+                    Projects = pageProduct
                 });
             });
 

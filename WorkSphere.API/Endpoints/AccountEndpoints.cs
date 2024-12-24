@@ -61,10 +61,17 @@ namespace WorkSphere.API.Endpoints
                 return Results.Ok(new { Message = "User registered successfully." });
             });
 
-            app.MapGet("account/Getall", async (WorkSphereDbContext dbContext) =>
+            app.MapGet("account/Getall", async (WorkSphereDbContext dbContext, int pageNumber =1, int pageSize =10) =>
             {
+                if (pageNumber <= 0) pageNumber = 1;
+                if (pageSize <= 10) pageSize = 10;
+
                 var users = await dbContext.Users.Where(e => e.IsActive == true).ToListAsync();
-                return users.Select(users => new RegisterDTO()
+
+                var count = users.Count();
+
+                var totalUsers = users.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                .Select(users => new RegisterDTO()
                 {
                     UserName = users.UserName,
                     Email = users.Email,
@@ -73,6 +80,15 @@ namespace WorkSphere.API.Endpoints
                     Password = users.PasswordHash,
                     Department = users.Department,
                     Rollid=users.Rollid
+                });
+
+                return Results.Ok(new
+                {
+                    TotalCount = count,
+                    CurrentPage = pageNumber,
+                    PageSize = pageSize,
+                    TotalPAges = (int)Math.Ceiling(count / (double)pageSize),
+                    TotalUsers = totalUsers
                 });
             }).RequireAuthorization();
 

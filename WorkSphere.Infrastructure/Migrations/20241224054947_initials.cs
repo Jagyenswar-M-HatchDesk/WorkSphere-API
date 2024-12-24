@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WorkSphere.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initials : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -277,7 +277,7 @@ namespace WorkSphere.Infrastructure.Migrations
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Department = table.Column<int>(type: "int", nullable: false),
                     TeamSize = table.Column<int>(type: "int", nullable: false),
-                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: true),
                     SeverityLevel = table.Column<int>(type: "int", nullable: false)
                 },
@@ -362,9 +362,9 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "CreatedOn", "Discriminator", "IsActive", "IsDelete", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2024, 12, 23, 17, 53, 3, 321, DateTimeKind.Local).AddTicks(4814), "Roles", true, false, "Admin", "ADMIN" },
-                    { 2, null, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(4624), "Roles", true, false, "Manager", "MANAGER" },
-                    { 3, null, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(4708), "Roles", true, false, "User", "USER" }
+                    { 1, null, new DateTime(2024, 12, 24, 11, 19, 46, 527, DateTimeKind.Local).AddTicks(9438), "Roles", true, false, "Admin", "ADMIN" },
+                    { 2, null, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(1862), "Roles", true, false, "Manager", "MANAGER" },
+                    { 3, null, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(2008), "Roles", true, false, "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.InsertData(
@@ -372,11 +372,11 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeptName", "IsActive", "IsDelete" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5732), "None", true, false },
-                    { 2, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5898), "Desktop App Development", true, false },
-                    { 3, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5909), "Mobile Development", true, false },
-                    { 4, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5918), "UI/UX Design", true, false },
-                    { 5, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(5927), "API Development", true, false }
+                    { 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3117), "None", true, false },
+                    { 2, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3357), "Desktop App Development", true, false },
+                    { 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3373), "Mobile Development", true, false },
+                    { 4, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3386), "UI/UX Design", true, false },
+                    { 5, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3398), "API Development", true, false }
                 });
 
             migrationBuilder.InsertData(
@@ -384,9 +384,9 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "Createdon", "IsActive", "IsDeleted", "Updatedon", "level" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7086), true, false, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7155), "High" },
-                    { 2, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7309), true, false, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7310), "Medium" },
-                    { 3, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7321), true, false, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(7321), "Low" }
+                    { 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5070), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5171), "High" },
+                    { 2, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5340), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5340), "Medium" },
+                    { 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5357), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5357), "Low" }
                 });
 
             migrationBuilder.InsertData(
@@ -394,13 +394,22 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "IsActive", "IsDelete", "StatusName" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6436), true, false, "Accepted" },
-                    { 2, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6581), true, false, "In Progress" },
-                    { 3, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6592), true, false, "Pending" },
-                    { 4, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6603), true, false, "Delayed" },
-                    { 5, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6615), true, false, "At Risk" },
-                    { 6, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6625), true, false, "Completed" },
-                    { 7, 1, new DateTime(2024, 12, 23, 17, 53, 3, 322, DateTimeKind.Local).AddTicks(6636), true, false, "Rejected" }
+                    { 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4093), true, false, "Accepted" },
+                    { 2, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4265), true, false, "In Progress" },
+                    { 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4281), true, false, "Pending" },
+                    { 4, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4374), true, false, "Delayed" },
+                    { 5, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4390), true, false, "At Risk" },
+                    { 6, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4425), true, false, "Completed" },
+                    { 7, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4439), true, false, "Rejected" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "tbl_Client",
+                columns: new[] { "ClientID", "ClientName", "CreatedBy", "CreatedOn", "Email", "IsActive", "IsDelete", "ModifiedOn", "PhoneNumber" },
+                values: new object[,]
+                {
+                    { 1, "Hatchdesk", 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(4238), "hatchdesk18@gmail.com", true, false, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(4664), "7723099993" },
+                    { 2, "Congent", 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(5439), "cogent@gmail.com", true, false, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(5440), "374t4328234" }
                 });
 
             migrationBuilder.InsertData(
@@ -408,9 +417,20 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "DateOfJoining", "Department", "Email", "EmailConfirmed", "FirstName", "IsActive", "IsDeleted", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Rollid", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, "a80d19ae-f3b6-435a-a02c-9525445b6eba", 1, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(4871), 1, "admin@gmail.com", false, "Admin", true, false, null, "Admin", false, null, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(4948), null, null, "Admin@123", "7723099993", false, 1, null, false, "admin@gmail.com" },
-                    { 2, 0, "82a0faab-a3e5-4244-b78e-2943bf7f7414", 1, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(5591), 3, "tapanmeher@gmail.com", false, "Tapan", true, false, null, "Meher", false, null, new DateTime(2024, 12, 23, 17, 53, 3, 323, DateTimeKind.Local).AddTicks(5592), null, null, "Tapan@123", "7723099993", false, 2, null, false, "tapanmeher@gmail.com" }
+                    { 1, 0, "b38839c0-80d5-40ab-a485-a1fbafeb77b0", 1, new DateTime(2024, 12, 24, 11, 19, 46, 531, DateTimeKind.Local).AddTicks(2197), 1, "admin@gmail.com", false, "Admin", true, false, null, "Admin", false, null, new DateTime(2024, 12, 24, 11, 19, 46, 531, DateTimeKind.Local).AddTicks(2302), null, null, "AQAAAAIAAYagAAAAEJdicrG3voD0n8TywxstbcmEOdGCRgM2m1m879oyGIo9KD3UMEXzsmcQC4m1/Yltzg==", "7723099993", false, 1, null, false, "admin@gmail.com" },
+                    { 2, 0, "45a1cb75-9eaf-45b4-9203-526199f3edbc", 1, new DateTime(2024, 12, 24, 11, 19, 46, 592, DateTimeKind.Local).AddTicks(8772), 3, "tapanmeher@gmail.com", false, "Tapan", true, false, null, "Meher", false, null, new DateTime(2024, 12, 24, 11, 19, 46, 592, DateTimeKind.Local).AddTicks(8793), null, null, "AQAAAAIAAYagAAAAENgHOS8wSyPGgjQfQPeTwgRfBuFblJ0XkOrFnA1fXZsgxjrBRCrmEephow31iMzaQA==", "7723099993", false, 2, null, false, "tapanmeher@gmail.com" },
+                    { 3, 0, "92642f61-f6ed-480e-8c8f-a41397186e03", 1, new DateTime(2024, 12, 24, 11, 19, 46, 649, DateTimeKind.Local).AddTicks(3309), 3, "sakshiyadav@gmail.com", false, "Sakshi", true, false, null, "Yadav", false, null, new DateTime(2024, 12, 24, 11, 19, 46, 649, DateTimeKind.Local).AddTicks(3321), null, null, "AQAAAAIAAYagAAAAEHpmGFDQyaS+ejd2TkdHaFpyxvpukHAaDPBIEmqHETbtGRyjPuR5fwnAR+p/72Mblw==", "2783682993", false, 3, null, false, "sakshiyadav@gmail.com" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "tbl_Project",
+                columns: new[] { "ProjID", "Client", "CreatedBy", "CreatedOn", "Deadline", "Department", "ImagePath", "IsActive", "IsCompleted", "Manager", "ModifiedOn", "ProjDescr", "SeverityLevel", "StartDate", "Status", "TeamSize", "Title" },
+                values: new object[] { 1, 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(6028), null, 1, "string.jpeg", true, false, 2, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(6802), "Project For test", 2, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(7290), null, 3, "Test Project" });
+
+            migrationBuilder.InsertData(
+                table: "tbl_Task",
+                columns: new[] { "TaskID", "AssignedTo", "CreatedBy", "CreatedOn", "IsActive", "IsCompleted", "ModifiedOn", "Progress", "Project", "Status", "TaskDescr", "TaskTitle" },
+                values: new object[] { 1, 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(8333), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(8884), 25, 1, null, "Task For test", "Test TAsk" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

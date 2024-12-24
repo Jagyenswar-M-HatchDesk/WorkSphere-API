@@ -11,10 +11,16 @@ namespace WorkSphere.API.Endpoints
         {
             var app = erb.MapGroup("").WithTags("Task");
 
-            app.MapGet("AllTask", async (ITaskService taskService) =>
+            app.MapGet("AllTask", async (ITaskService taskService, int pageNumber = 1, int pageSize = 10) =>
             {
+                if(pageNumber <=0 ) pageNumber = 1;
+                if(pageSize <= 0 ) pageSize = 10;
+
                 var task = await taskService.GetTasksAsync();
-                return task.Select(task => new TaskDTO()
+
+                var count = task.Count();
+
+                var totaltasks = task.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(task => new TaskDTO()
                 {
                     TaskID = task.TaskID,
                     TaskTitle = task.TaskTitle,
@@ -28,6 +34,16 @@ namespace WorkSphere.API.Endpoints
                     CreatedOn = task.CreatedOn,
                     CreatedBy = task.CreatedBy,
                     ModifiedOn = task.ModifiedOn
+
+                });
+
+                return Results.Ok(new
+                {
+                    Totalcount = count,
+                    Page = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(count / (double)pageSize),
+                    Totaltasks = totaltasks
 
                 });
 

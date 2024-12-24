@@ -24,7 +24,7 @@ namespace WorkSphere.Domain
         public int Client { get; set; } 
 
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [Required]
         public bool IsActive { get; set; }
@@ -50,7 +50,7 @@ namespace WorkSphere.Domain
         public int Department {  get; set; }
 
         public int TeamSize { get; set; }
-        public DateTime Deadline { get; set; }
+        public DateTime? Deadline { get; set; }
 
         //[Required]
         [ForeignKey("Status")]
