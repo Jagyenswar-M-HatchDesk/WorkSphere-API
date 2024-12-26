@@ -26,9 +26,9 @@ namespace WorkSphere.API.Endpoints
                     TaskTitle = task.TaskTitle,
                     TaskDescr = task.TaskDescr,
                     AssignedTo = task.AssignedTo,
-                    Project = task.Project,
+                    Project = task.ProjID,
                     Progress = task.Progress,
-                    Status = task.Status,
+                    Status = task.StatusId,
                     IsActive = task.IsActive,
                     IsCompleted = task.IsCompleted,
                     CreatedOn = task.CreatedOn,
@@ -60,9 +60,9 @@ namespace WorkSphere.API.Endpoints
                         TaskTitle = task.TaskTitle,
                         TaskDescr = task.TaskDescr,
                         AssignedTo = task.AssignedTo,
-                        Project = task.Project,
+                        Project = task.ProjID,
                         Progress = task.Progress,
-                        Status = task.Status,
+                        Status = task.StatusId,
                         IsActive = task.IsActive,
                         IsCompleted = task.IsCompleted,
                         CreatedOn = task.CreatedOn,
@@ -104,7 +104,7 @@ namespace WorkSphere.API.Endpoints
                 task.TaskDescr = projDto.TaskDescr;
                 task.AssignedTo = projDto.AssignedTo;
                 task.Progress = projDto.Progress;
-                task.Status = projDto.Status;
+                task.StatusId = projDto.Status;
                 //task.Client = projDto.Client;
                 //task.Manager = projDto.Manager;
                 //task.Deadline = projDto.Deadline;

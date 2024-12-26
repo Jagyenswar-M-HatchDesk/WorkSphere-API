@@ -21,13 +21,13 @@ namespace WorkSphere.Infrastructure.Repository
 
         public async Task<IEnumerable<Tasks>> GetTasks()
         {
-            var task = await _context.Tasks.ToListAsync();
+            var task = await _context.tbl_Tasks.ToListAsync();
             return task;
         }
 
         public async Task<Tasks> GetTaskbyId(int id)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(e=>e.TaskID == id);
+            var task = await _context.tbl_Tasks.FirstOrDefaultAsync(e=>e.TaskID == id);
             return task;
         }
 
@@ -39,21 +39,21 @@ namespace WorkSphere.Infrastructure.Repository
                 TaskDescr = task.TaskDescr,
                 AssignedTo = task.AssignedTo,
                 CreatedBy = task.CreatedBy,
-                Status = task.Status,
+                StatusId = task.Status,
                 Progress = task.Progress,
-                Project = task.Project,
+                ProjID = task.Project,
                 CreatedOn = DateTime.Now,
                 ModifiedOn = DateTime.Now,
                 IsActive = true,
                 IsCompleted = false
             };
-            _context.Tasks.Add(newtask);
+            _context.tbl_Tasks.Add(newtask);
             await _context.SaveChangesAsync();
         }
 
         public async Task EditTask(Tasks task)
         {
-             _context.Tasks.Update(task);
+             _context.tbl_Tasks.Update(task);
             await _context.SaveChangesAsync();
 
         }
@@ -65,10 +65,10 @@ namespace WorkSphere.Infrastructure.Repository
             {
                 deltask.IsActive = true;
                 deltask.IsCompleted = true;
-                deltask.Status = 6;
+                deltask.StatusId = 6;
             }
 
-            _context.Tasks.Update(deltask); 
+            _context.tbl_Tasks.Update(deltask); 
             await _context.SaveChangesAsync();
 
         }

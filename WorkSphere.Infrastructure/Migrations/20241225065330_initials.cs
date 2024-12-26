@@ -33,10 +33,10 @@ namespace WorkSphere.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mst_Department",
+                name: "mst_Departments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    DeptId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeptName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -46,11 +46,11 @@ namespace WorkSphere.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mst_Department", x => x.Id);
+                    table.PrimaryKey("PK_mst_Departments", x => x.DeptId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mst_SeverityLevels",
+                name: "mst_SeverityLevel",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -64,14 +64,14 @@ namespace WorkSphere.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mst_SeverityLevels", x => x.Id);
+                    table.PrimaryKey("PK_mst_SeverityLevel", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "mst_Status",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StatusName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -81,11 +81,11 @@ namespace WorkSphere.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mst_Status", x => x.Id);
+                    table.PrimaryKey("PK_mst_Status", x => x.StatusId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_Client",
+                name: "tbl_Clients",
                 columns: table => new
                 {
                     ClientID = table.Column<int>(type: "int", nullable: false)
@@ -101,7 +101,7 @@ namespace WorkSphere.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_Client", x => x.ClientID);
+                    table.PrimaryKey("PK_tbl_Clients", x => x.ClientID);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,7 +133,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Department = table.Column<int>(type: "int", nullable: true),
+                    DeptId = table.Column<int>(type: "int", nullable: true),
                     DateOfJoining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Rollid = table.Column<int>(type: "int", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -166,10 +166,10 @@ namespace WorkSphere.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_mst_Department_Department",
-                        column: x => x.Department,
-                        principalTable: "mst_Department",
-                        principalColumn: "Id",
+                        name: "FK_AspNetUsers_mst_Departments_DeptId",
+                        column: x => x.DeptId,
+                        principalTable: "mst_Departments",
+                        principalColumn: "DeptId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -229,13 +229,13 @@ namespace WorkSphere.Infrastructure.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -259,65 +259,65 @@ namespace WorkSphere.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_Project",
+                name: "tbl_Projects",
                 columns: table => new
                 {
                     ProjID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProjDescr = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Client = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
-                    Manager = table.Column<int>(type: "int", nullable: false),
+                    ManagerID = table.Column<int>(type: "int", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Department = table.Column<int>(type: "int", nullable: false),
+                    DepartmentID = table.Column<int>(type: "int", nullable: false),
                     TeamSize = table.Column<int>(type: "int", nullable: false),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: true),
-                    SeverityLevel = table.Column<int>(type: "int", nullable: false)
+                    StatusId = table.Column<int>(type: "int", nullable: true),
+                    SeverityLevelId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_Project", x => x.ProjID);
+                    table.PrimaryKey("PK_tbl_Projects", x => x.ProjID);
                     table.ForeignKey(
-                        name: "FK_tbl_Project_AspNetUsers_Manager",
-                        column: x => x.Manager,
+                        name: "FK_tbl_Projects_AspNetUsers_ManagerID",
+                        column: x => x.ManagerID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_tbl_Project_mst_Department_Department",
-                        column: x => x.Department,
-                        principalTable: "mst_Department",
+                        name: "FK_tbl_Projects_mst_Departments_DepartmentID",
+                        column: x => x.DepartmentID,
+                        principalTable: "mst_Departments",
+                        principalColumn: "DeptId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_tbl_Projects_mst_SeverityLevel_SeverityLevelId",
+                        column: x => x.SeverityLevelId,
+                        principalTable: "mst_SeverityLevel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_tbl_Project_mst_SeverityLevels_SeverityLevel",
-                        column: x => x.SeverityLevel,
-                        principalTable: "mst_SeverityLevels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_tbl_Project_mst_Status_Status",
-                        column: x => x.Status,
+                        name: "FK_tbl_Projects_mst_Status_StatusId",
+                        column: x => x.StatusId,
                         principalTable: "mst_Status",
-                        principalColumn: "Id",
+                        principalColumn: "StatusId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_tbl_Project_tbl_Client_Client",
-                        column: x => x.Client,
-                        principalTable: "tbl_Client",
+                        name: "FK_tbl_Projects_tbl_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "tbl_Clients",
                         principalColumn: "ClientID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_Task",
+                name: "tbl_Tasks",
                 columns: table => new
                 {
                     TaskID = table.Column<int>(type: "int", nullable: false)
@@ -329,30 +329,30 @@ namespace WorkSphere.Infrastructure.Migrations
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     AssignedTo = table.Column<int>(type: "int", nullable: false),
                     TaskDescr = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Project = table.Column<int>(type: "int", nullable: false),
+                    ProjID = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: true),
                     Progress = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_Task", x => x.TaskID);
+                    table.PrimaryKey("PK_tbl_Tasks", x => x.TaskID);
                     table.ForeignKey(
-                        name: "FK_tbl_Task_AspNetUsers_AssignedTo",
+                        name: "FK_tbl_Tasks_AspNetUsers_AssignedTo",
                         column: x => x.AssignedTo,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_tbl_Task_mst_Status_Status",
-                        column: x => x.Status,
+                        name: "FK_tbl_Tasks_mst_Status_StatusId",
+                        column: x => x.StatusId,
                         principalTable: "mst_Status",
-                        principalColumn: "Id",
+                        principalColumn: "StatusId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_tbl_Task_tbl_Project_Project",
-                        column: x => x.Project,
-                        principalTable: "tbl_Project",
+                        name: "FK_tbl_Tasks_tbl_Projects_ProjID",
+                        column: x => x.ProjID,
+                        principalTable: "tbl_Projects",
                         principalColumn: "ProjID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -362,75 +362,75 @@ namespace WorkSphere.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "CreatedOn", "Discriminator", "IsActive", "IsDelete", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2024, 12, 24, 11, 19, 46, 527, DateTimeKind.Local).AddTicks(9438), "Roles", true, false, "Admin", "ADMIN" },
-                    { 2, null, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(1862), "Roles", true, false, "Manager", "MANAGER" },
-                    { 3, null, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(2008), "Roles", true, false, "Employee", "EMPLOYEE" }
+                    { 1, null, new DateTime(2024, 12, 25, 12, 23, 29, 909, DateTimeKind.Local).AddTicks(5263), "Roles", true, false, "Admin", "ADMIN" },
+                    { 2, null, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(4242), "Roles", true, false, "Manager", "MANAGER" },
+                    { 3, null, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(4324), "Roles", true, false, "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.InsertData(
-                table: "mst_Department",
-                columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeptName", "IsActive", "IsDelete" },
+                table: "mst_Departments",
+                columns: new[] { "DeptId", "CreatedBy", "CreatedOn", "DeptName", "IsActive", "IsDelete" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3117), "None", true, false },
-                    { 2, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3357), "Desktop App Development", true, false },
-                    { 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3373), "Mobile Development", true, false },
-                    { 4, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3386), "UI/UX Design", true, false },
-                    { 5, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(3398), "API Development", true, false }
+                    { 1, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5089), "None", true, false },
+                    { 2, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5224), "Desktop App Development", true, false },
+                    { 3, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5235), "Mobile Development", true, false },
+                    { 4, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5244), "UI/UX Design", true, false },
+                    { 5, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5252), "API Development", true, false }
                 });
 
             migrationBuilder.InsertData(
-                table: "mst_SeverityLevels",
+                table: "mst_SeverityLevel",
                 columns: new[] { "Id", "CreatedBy", "Createdon", "IsActive", "IsDeleted", "Updatedon", "level" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5070), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5171), "High" },
-                    { 2, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5340), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5340), "Medium" },
-                    { 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5357), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(5357), "Low" }
+                    { 1, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(6439), true, false, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(6506), "High" },
+                    { 2, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(6626), true, false, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(6626), "Medium" },
+                    { 3, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(6638), true, false, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(6638), "Low" }
                 });
 
             migrationBuilder.InsertData(
                 table: "mst_Status",
-                columns: new[] { "Id", "CreatedBy", "CreatedOn", "IsActive", "IsDelete", "StatusName" },
+                columns: new[] { "StatusId", "CreatedBy", "CreatedOn", "IsActive", "IsDelete", "StatusName" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4093), true, false, "Accepted" },
-                    { 2, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4265), true, false, "In Progress" },
-                    { 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4281), true, false, "Pending" },
-                    { 4, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4374), true, false, "Delayed" },
-                    { 5, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4390), true, false, "At Risk" },
-                    { 6, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4425), true, false, "Completed" },
-                    { 7, 1, new DateTime(2024, 12, 24, 11, 19, 46, 529, DateTimeKind.Local).AddTicks(4439), true, false, "Rejected" }
+                    { 1, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5744), true, false, "Accepted" },
+                    { 2, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5918), true, false, "In Progress" },
+                    { 3, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5929), true, false, "Pending" },
+                    { 4, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5946), true, false, "Delayed" },
+                    { 5, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5955), true, false, "At Risk" },
+                    { 6, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5965), true, false, "Completed" },
+                    { 7, 1, new DateTime(2024, 12, 25, 12, 23, 29, 910, DateTimeKind.Local).AddTicks(5974), true, false, "Rejected" }
                 });
 
             migrationBuilder.InsertData(
-                table: "tbl_Client",
+                table: "tbl_Clients",
                 columns: new[] { "ClientID", "ClientName", "CreatedBy", "CreatedOn", "Email", "IsActive", "IsDelete", "ModifiedOn", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, "Hatchdesk", 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(4238), "hatchdesk18@gmail.com", true, false, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(4664), "7723099993" },
-                    { 2, "Congent", 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(5439), "cogent@gmail.com", true, false, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(5440), "374t4328234" }
+                    { 1, "Hatchdesk", 1, new DateTime(2024, 12, 25, 12, 23, 30, 27, DateTimeKind.Local).AddTicks(8698), "hatchdesk18@gmail.com", true, false, new DateTime(2024, 12, 25, 12, 23, 30, 27, DateTimeKind.Local).AddTicks(9001), "7723099993" },
+                    { 2, "Congent", 1, new DateTime(2024, 12, 25, 12, 23, 30, 27, DateTimeKind.Local).AddTicks(9532), "cogent@gmail.com", true, false, new DateTime(2024, 12, 25, 12, 23, 30, 27, DateTimeKind.Local).AddTicks(9533), "374t4328234" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "DateOfJoining", "Department", "Email", "EmailConfirmed", "FirstName", "IsActive", "IsDeleted", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Rollid", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "DateOfJoining", "DeptId", "Email", "EmailConfirmed", "FirstName", "IsActive", "IsDeleted", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Rollid", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, "b38839c0-80d5-40ab-a485-a1fbafeb77b0", 1, new DateTime(2024, 12, 24, 11, 19, 46, 531, DateTimeKind.Local).AddTicks(2197), 1, "admin@gmail.com", false, "Admin", true, false, null, "Admin", false, null, new DateTime(2024, 12, 24, 11, 19, 46, 531, DateTimeKind.Local).AddTicks(2302), null, null, "AQAAAAIAAYagAAAAEJdicrG3voD0n8TywxstbcmEOdGCRgM2m1m879oyGIo9KD3UMEXzsmcQC4m1/Yltzg==", "7723099993", false, 1, null, false, "admin@gmail.com" },
-                    { 2, 0, "45a1cb75-9eaf-45b4-9203-526199f3edbc", 1, new DateTime(2024, 12, 24, 11, 19, 46, 592, DateTimeKind.Local).AddTicks(8772), 3, "tapanmeher@gmail.com", false, "Tapan", true, false, null, "Meher", false, null, new DateTime(2024, 12, 24, 11, 19, 46, 592, DateTimeKind.Local).AddTicks(8793), null, null, "AQAAAAIAAYagAAAAENgHOS8wSyPGgjQfQPeTwgRfBuFblJ0XkOrFnA1fXZsgxjrBRCrmEephow31iMzaQA==", "7723099993", false, 2, null, false, "tapanmeher@gmail.com" },
-                    { 3, 0, "92642f61-f6ed-480e-8c8f-a41397186e03", 1, new DateTime(2024, 12, 24, 11, 19, 46, 649, DateTimeKind.Local).AddTicks(3309), 3, "sakshiyadav@gmail.com", false, "Sakshi", true, false, null, "Yadav", false, null, new DateTime(2024, 12, 24, 11, 19, 46, 649, DateTimeKind.Local).AddTicks(3321), null, null, "AQAAAAIAAYagAAAAEHpmGFDQyaS+ejd2TkdHaFpyxvpukHAaDPBIEmqHETbtGRyjPuR5fwnAR+p/72Mblw==", "2783682993", false, 3, null, false, "sakshiyadav@gmail.com" }
+                    { 1, 0, "b3ad381e-53b9-426a-902d-2df8885dc9de", 1, new DateTime(2024, 12, 25, 12, 23, 29, 911, DateTimeKind.Local).AddTicks(8946), 1, "admin@gmail.com", false, "Admin", true, false, null, "Admin", false, null, new DateTime(2024, 12, 25, 12, 23, 29, 911, DateTimeKind.Local).AddTicks(9020), null, null, "AQAAAAIAAYagAAAAEO77TJQwM0MG+79FYKS9v5zl2cKDI6ggcoYd+9H+GMLMmAFwDG5q1z2MwqEkEqn0Jg==", "7723099993", false, 1, null, false, "admin@gmail.com" },
+                    { 2, 0, "c4bf8e8f-f5c1-48fc-bc2a-ccfa878c1239", 1, new DateTime(2024, 12, 25, 12, 23, 29, 952, DateTimeKind.Local).AddTicks(6032), 3, "tapanmeher@gmail.com", false, "Tapan", true, false, null, "Meher", false, null, new DateTime(2024, 12, 25, 12, 23, 29, 952, DateTimeKind.Local).AddTicks(6037), null, null, "AQAAAAIAAYagAAAAEEr8HzyFr524o2npY2dyCEl3MYyiTfGLc7r6Js9hq4kZ4g4QvHy4It6VEv2yuuwu1Q==", "7723099993", false, 2, null, false, "tapanmeher@gmail.com" },
+                    { 3, 0, "2ce304a3-30b8-4f28-84bf-4a2011f110f6", 1, new DateTime(2024, 12, 25, 12, 23, 29, 990, DateTimeKind.Local).AddTicks(5100), 3, "sakshiyadav@gmail.com", false, "Sakshi", true, false, null, "Yadav", false, null, new DateTime(2024, 12, 25, 12, 23, 29, 990, DateTimeKind.Local).AddTicks(5102), null, null, "AQAAAAIAAYagAAAAEB3VzFqEdRX/drNO5YoTGM7O17HcJNfK2iv1vRzmZybP/cnYvDqJctRgIP+ke/AQ8g==", "2783682993", false, 3, null, false, "sakshiyadav@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
-                table: "tbl_Project",
-                columns: new[] { "ProjID", "Client", "CreatedBy", "CreatedOn", "Deadline", "Department", "ImagePath", "IsActive", "IsCompleted", "Manager", "ModifiedOn", "ProjDescr", "SeverityLevel", "StartDate", "Status", "TeamSize", "Title" },
-                values: new object[] { 1, 1, 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(6028), null, 1, "string.jpeg", true, false, 2, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(6802), "Project For test", 2, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(7290), null, 3, "Test Project" });
+                table: "tbl_Projects",
+                columns: new[] { "ProjID", "ClientId", "CreatedBy", "CreatedOn", "Deadline", "DepartmentID", "ImagePath", "IsActive", "IsCompleted", "ManagerID", "ModifiedOn", "ProjDescr", "SeverityLevelId", "StartDate", "StatusId", "TeamSize", "Title" },
+                values: new object[] { 1, 1, 1, new DateTime(2024, 12, 25, 12, 23, 30, 28, DateTimeKind.Local).AddTicks(308), null, 1, "string.jpeg", true, false, 2, new DateTime(2024, 12, 25, 12, 23, 30, 28, DateTimeKind.Local).AddTicks(922), "Project For test", 2, new DateTime(2024, 12, 25, 12, 23, 30, 28, DateTimeKind.Local).AddTicks(1057), null, 3, "Test Project" });
 
             migrationBuilder.InsertData(
-                table: "tbl_Task",
-                columns: new[] { "TaskID", "AssignedTo", "CreatedBy", "CreatedOn", "IsActive", "IsCompleted", "ModifiedOn", "Progress", "Project", "Status", "TaskDescr", "TaskTitle" },
-                values: new object[] { 1, 3, 1, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(8333), true, false, new DateTime(2024, 12, 24, 11, 19, 46, 705, DateTimeKind.Local).AddTicks(8884), 25, 1, null, "Task For test", "Test TAsk" });
+                table: "tbl_Tasks",
+                columns: new[] { "TaskID", "AssignedTo", "CreatedBy", "CreatedOn", "IsActive", "IsCompleted", "ModifiedOn", "Progress", "ProjID", "StatusId", "TaskDescr", "TaskTitle" },
+                values: new object[] { 1, 3, 1, new DateTime(2024, 12, 25, 12, 23, 30, 28, DateTimeKind.Local).AddTicks(2188), true, false, new DateTime(2024, 12, 25, 12, 23, 30, 28, DateTimeKind.Local).AddTicks(2594), 25, 1, null, "Task For test", "Test TAsk" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -465,9 +465,9 @@ namespace WorkSphere.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_Department",
+                name: "IX_AspNetUsers_DeptId",
                 table: "AspNetUsers",
-                column: "Department");
+                column: "DeptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_Rollid",
@@ -482,44 +482,44 @@ namespace WorkSphere.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Project_Client",
-                table: "tbl_Project",
-                column: "Client");
+                name: "IX_tbl_Projects_ClientId",
+                table: "tbl_Projects",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Project_Department",
-                table: "tbl_Project",
-                column: "Department");
+                name: "IX_tbl_Projects_DepartmentID",
+                table: "tbl_Projects",
+                column: "DepartmentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Project_Manager",
-                table: "tbl_Project",
-                column: "Manager");
+                name: "IX_tbl_Projects_ManagerID",
+                table: "tbl_Projects",
+                column: "ManagerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Project_SeverityLevel",
-                table: "tbl_Project",
-                column: "SeverityLevel");
+                name: "IX_tbl_Projects_SeverityLevelId",
+                table: "tbl_Projects",
+                column: "SeverityLevelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Project_Status",
-                table: "tbl_Project",
-                column: "Status");
+                name: "IX_tbl_Projects_StatusId",
+                table: "tbl_Projects",
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Task_AssignedTo",
-                table: "tbl_Task",
+                name: "IX_tbl_Tasks_AssignedTo",
+                table: "tbl_Tasks",
                 column: "AssignedTo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Task_Project",
-                table: "tbl_Task",
-                column: "Project");
+                name: "IX_tbl_Tasks_ProjID",
+                table: "tbl_Tasks",
+                column: "ProjID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_Task_Status",
-                table: "tbl_Task",
-                column: "Status");
+                name: "IX_tbl_Tasks_StatusId",
+                table: "tbl_Tasks",
+                column: "StatusId");
         }
 
         /// <inheritdoc />
@@ -541,28 +541,28 @@ namespace WorkSphere.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "tbl_Task");
+                name: "tbl_Tasks");
 
             migrationBuilder.DropTable(
-                name: "tbl_Project");
+                name: "tbl_Projects");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "mst_SeverityLevels");
+                name: "mst_SeverityLevel");
 
             migrationBuilder.DropTable(
                 name: "mst_Status");
 
             migrationBuilder.DropTable(
-                name: "tbl_Client");
+                name: "tbl_Clients");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "mst_Department");
+                name: "mst_Departments");
         }
     }
 }

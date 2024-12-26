@@ -21,13 +21,23 @@ namespace WorkSphere.Infrastructure.Repository
 
         public async Task<IEnumerable<Projects>> GetallProjects()
         {
-            var proj = await _workSphereDbContext.Projects.ToListAsync();
+            var proj = await _workSphereDbContext.tbl_Projects.Include(e => e.StatusNav)
+                                .Include(e => e.SeverityLevelNav)
+                                .Include(e => e.ManagerNavigation)
+                                .Include(e => e.DepartmentNav)
+                                .Include(e => e.ClientNavigation).ToListAsync();
             return proj;
         }
 
         public async Task<Projects> GetProjectById(int i)
         {
-            var projid = await _workSphereDbContext.Projects.FindAsync(i);
+            var projid = await _workSphereDbContext.tbl_Projects.Include(e => e.StatusNav)
+                                .Include(e => e.SeverityLevelNav)
+                                .Include(e => e.ManagerNavigation)
+                                .Include(e => e.DepartmentNav)
+                                .Include(e => e.ClientNavigation)
+
+                .Where(e => e.ProjID == i && e.IsActive == true).FirstOrDefaultAsync();
             return projid;
         }
 
@@ -37,16 +47,16 @@ namespace WorkSphere.Infrastructure.Repository
             {
                 Title = project.Title,
                 ProjDescr = project.ProjDescr,
-                Client = project.Client,
-                Manager = project.Manager,
+                ClientId = project.Client,
+                ManagerID = project.Manager,
                 CreatedBy = 1,
-                Department = project.Department,
+                DepartmentID = project.Department,
                 TeamSize = project.TeamSize,
                 StartDate = project.StartDate,
                 Deadline = project.Deadline,
                 ImagePath = project.ImagePath,
-                Status = project.Status,
-                SeverityLevel = project.SeverityLevel,
+                StatusId = project.Status,
+                SeverityLevelId = project.SeverityLevel,
 
                 CreatedOn = DateTime.Now,
                 IsActive = true,
@@ -54,7 +64,7 @@ namespace WorkSphere.Infrastructure.Repository
                 ModifiedOn = DateTime.Now
 
             };
-            _workSphereDbContext.Projects.Add(newproj);
+            _workSphereDbContext.tbl_Projects.Add(newproj);
             await _workSphereDbContext.SaveChangesAsync();
 
             return newproj;
@@ -62,7 +72,7 @@ namespace WorkSphere.Infrastructure.Repository
 
         public async Task<Projects> UpdateProjects(Projects proj)
         {
-            _workSphereDbContext.Projects.Update(proj);
+            _workSphereDbContext.tbl_Projects.Update(proj);
             await _workSphereDbContext.SaveChangesAsync();
 
             return proj;
@@ -77,8 +87,11 @@ namespace WorkSphere.Infrastructure.Repository
                 proj.IsCompleted = true;
                
             }
-            _workSphereDbContext.Projects.Update(proj);
+            _workSphereDbContext.tbl_Projects.Update(proj);
             await _workSphereDbContext.SaveChangesAsync();
         }
+
+        //public async Task 
     }
 }
+//

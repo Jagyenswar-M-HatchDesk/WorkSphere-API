@@ -14,13 +14,13 @@ namespace WorkSphere.Infrastructure
         {
         }
 
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Roles> Roles { get; set; }
-        public DbSet<Tasks> Tasks { get; set; }
-        public DbSet<Projects> Projects { get; set; }
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<Status> Status { get; set; }
-        public DbSet<SeverityLevel> SeverityLevel { get; set; }
+        public DbSet<Department> mst_Departments { get; set; }
+        public DbSet<Roles> mst_Roles { get; set; }
+        public DbSet<Tasks> tbl_Tasks { get; set; }
+        public DbSet<Projects> tbl_Projects { get; set; }
+        public DbSet<Client> tbl_Clients { get; set; }
+        public DbSet<Status> mst_Status { get; set; }
+        public DbSet<SeverityLevel> mst_SeverityLevel { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -32,182 +32,136 @@ namespace WorkSphere.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Required for Identity tables
+            //modelBuilder.Entity<User>()
+            //   .HasOne(u => u.DepartmentNavigation)
+            //   .WithMany()
+            //   .HasForeignKey(u => u.DepartmentID)
+            //   .OnDelete(DeleteBehavior.Restrict);
 
-            // Identity User Configuration
-            //modelBuilder.Entity<User>(b =>
-            //{
-            //    b.ToTable("tbl_User");
-            //    b.HasKey(u => u.Id);
-            //    b.Property(u => u.Id).HasColumnName("ID").ValueGeneratedOnAdd();
+            //// User - Role (Many-to-One)
+            //modelBuilder.Entity<User>()
+            //    .HasOne(u => u.RoleNavigation)
+            //    .WithMany()
+            //    .HasForeignKey(u => u.Rollid)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-            //    // Foreign key relationships
-            //    b.HasOne<Department>()
-            //        .WithMany()
-            //        .HasForeignKey(u => u.Department)
-            //        .IsRequired()
-            //        .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+            //// Task - User (Many-to-One)
+            //modelBuilder.Entity<Tasks>()
+            //    .HasOne(t => t.AssignedEmployee)
+            //    .WithMany(u => u.AssignedTasks)
+            //    .HasForeignKey(t => t.AssignedTo)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-            //    b.HasOne<Roles>()
-            //        .WithMany()
-            //        .HasForeignKey(u => u.Rollid)
-            //        .IsRequired()
-            //        .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
-            //});
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("tbl_User");
-                entity.HasKey(u => u.Id);
-                entity.Property(u => u.Id).ValueGeneratedOnAdd();
+            //// Task - Project (Many-to-One)
+            //modelBuilder.Entity<Tasks>()
+            //    .HasOne(t => t.ProjectNav)
+            //    .WithMany()
+            //    .HasForeignKey(t => t.ProjectID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne<Department>()
-                      .WithMany()
-                      .HasForeignKey(u => u.Department)
-                      //.IsRequired()
-                      .OnDelete(DeleteBehavior.Restrict);
+            //// Task - Status (Many-to-One)
+            //modelBuilder.Entity<Tasks>()
+            //    .HasOne(t => t.StatusNav)
+            //    .WithMany()
+            //    .HasForeignKey(t => t.StatusID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne<Roles>()
-                      .WithMany()
-                      .HasForeignKey(u => u.Rollid)
-                      .IsRequired()
-                      .OnDelete(DeleteBehavior.Restrict);
-            });
+            //// Project - Client (Many-to-One)
+            //modelBuilder.Entity<Projects>()
+            //    .HasOne(p => p.ClientNavigation)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.ClientId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Project - User (Manager) (Many-to-One)
+            //modelBuilder.Entity<Projects>()
+            //    .HasOne(p => p.ManagerNavigation)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.ManagerID)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Project - Department (Many-to-One)
+            //modelBuilder.Entity<Projects>()
+            //    .HasOne(p => p.DepartmentNav)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.DepartmentID)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Project - Status (Many-to-One)
+            //modelBuilder.Entity<Projects>()
+            //    .HasOne(p => p.StatusNav)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.StatusID)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Project - SeverityLevel (Many-to-One)
+            //modelBuilder.Entity<Projects>()
+            //    .HasOne(p => p.SeverityLevelNav)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.SeverityLevelId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// SeverityLevel - Projects (One-to-Many)
+            //modelBuilder.Entity<SeverityLevel>()
+            //    .HasMany(s => s.Projects)
+            //    .WithOne(p => p.SeverityLevelNav)
+            //    .HasForeignKey(p => p.SeverityLevelId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Department - Projects (One-to-Many)
+            //modelBuilder.Entity<Department>()
+            //    .HasMany(d => d.Projects)
+            //    .WithOne(p => p.DepartmentNav)
+            //    .HasForeignKey(p => p.DepartmentID)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Status - Tasks (One-to-Many)
+            //modelBuilder.Entity<Status>()
+            //    .HasMany(s => s.Tasks)
+            //    .WithOne(t => t.StatusNav)
+            //    .HasForeignKey(t => t.StatusID)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Client - Projects (One-to-Many)
+            //modelBuilder.Entity<Client>()
+            //    .HasMany(c => c.Projects)
+            //    .WithOne(p => p.ClientNavigation)
+            //    .HasForeignKey(p => p.ClientId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// Roles - Users (One-to-Many)
+            //modelBuilder.Entity<Roles>()
+            //    .HasMany(r => r.Users)
+            //    .WithOne(u => u.RoleNavigation)
+            //    .HasForeignKey(u => u.Rollid)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// SeverityLevel - Projects (One-to-Many)
+            //modelBuilder.Entity<SeverityLevel>()
+            //    .HasMany(s => s.Projects)
+            //    .WithOne(p => p.SeverityLevelNav)
+            //    .HasForeignKey(p => p.SeverityLevelId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
 
-            // Identity Role Configuration
-            modelBuilder.Entity<IdentityRole<int>>(b =>
-            {
-                b.ToTable("mst_Roles");
-                b.HasKey(r => r.Id);
-                b.Property(r => r.Id).ValueGeneratedOnAdd();
-            });
-
-            // Configure AspNetUserRoles to avoid multiple cascade paths
-            modelBuilder.Entity<IdentityUserRole<int>>(b =>
-            {
-                b.ToTable("AspNetUserRoles");
-                b.HasKey(ur => new { ur.UserId, ur.RoleId });
-
-                b.HasOne<User>()
-                    .WithMany()
-                    .HasForeignKey(ur => ur.UserId)
-                    .OnDelete(DeleteBehavior.Restrict); // Disable cascade delete
-
-                b.HasOne<IdentityRole<int>>()
-                    .WithMany()
-                    .HasForeignKey(ur => ur.RoleId)
-                    .OnDelete(DeleteBehavior.Restrict); // Disable cascade delete
-            });
-
-            // mst_Department Configuration
-            modelBuilder.Entity<Department>(entity =>
-            {
-                entity.ToTable("mst_Department");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
-            modelBuilder.Entity<SeverityLevel>(entity =>
-            {
-                entity.ToTable("mst_SeverityLevels");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
-
-            // tbl_Task Configuration
-            modelBuilder.Entity<Tasks>(entity =>
-            {
-                entity.ToTable("tbl_Task");
-                entity.HasKey(e => e.TaskID);
-                entity.Property(e => e.TaskID).ValueGeneratedOnAdd();
-
-                entity.HasOne<User>()
-                    .WithMany()
-                    .HasForeignKey(e => e.AssignedTo)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
-
-                entity.HasOne<Projects>()
-                    .WithMany()
-                    .HasForeignKey(e => e.Project)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
-
-                entity.HasOne<Status>()
-                   .WithMany()
-                   .HasForeignKey(e => e.Status)
-                   //.IsRequired()
-                   .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // tbl_Project Configuration
-            modelBuilder.Entity<Projects>(entity =>
-            {
-                entity.ToTable("tbl_Project");
-                entity.HasKey(e => e.ProjID);
-                entity.Property(e => e.ProjID).ValueGeneratedOnAdd();
-
-                entity.HasOne<Client>()
-                    .WithMany()
-                    .HasForeignKey(e => e.Client)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
-
-                entity.HasOne<User>()
-                    .WithMany()
-                    .HasForeignKey(e => e.Manager)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
-
-                entity.HasOne<Department>()
-                    .WithMany()
-                    .HasForeignKey(e => e.Department)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne<Status>()
-                    .WithMany()
-                    .HasForeignKey(e => e.Status)
-                    //.IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne<SeverityLevel>()
-                    .WithMany()
-                    .HasForeignKey(e => e.SeverityLevel)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // tbl_Client Configuration
-            modelBuilder.Entity<Client>(entity =>
-            {
-                entity.ToTable("tbl_Client");
-                entity.HasKey(e => e.ClientID);
-                entity.Property(e => e.ClientID).ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<Status>(entity =>
-            {
-                entity.ToTable("mst_Status");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            });
 
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 1, Name = "Admin", NormalizedName = "Admin".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 2, Name = "Manager", NormalizedName = "Manager".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 3, Name = "Employee", NormalizedName = "Employee".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
 
-            modelBuilder.Entity<Department>().HasData(new Department { Id = 1, DeptName = "None", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Department>().HasData(new Department { Id = 2, DeptName = "Desktop App Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Department>().HasData(new Department { Id = 3, DeptName = "Mobile Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Department>().HasData(new Department { Id = 4, DeptName = "UI/UX Design", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Department>().HasData(new Department { Id = 5, DeptName = "API Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Department>().HasData(new Department { DeptId = 1, DeptName = "None", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Department>().HasData(new Department { DeptId = 2, DeptName = "Desktop App Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Department>().HasData(new Department { DeptId = 3, DeptName = "Mobile Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Department>().HasData(new Department { DeptId = 4, DeptName = "UI/UX Design", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Department>().HasData(new Department { DeptId = 5, DeptName = "API Development", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
 
-            modelBuilder.Entity<Status>().HasData(new Status { Id = 1, StatusName = "Accepted", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Status>().HasData(new Status { Id = 2, StatusName = "In Progress", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Status>().HasData(new Status { Id = 3, StatusName = "Pending", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Status>().HasData(new Status { Id = 4, StatusName = "Delayed", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Status>().HasData(new Status { Id = 5, StatusName = "At Risk", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Status>().HasData(new Status { Id = 6, StatusName = "Completed", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
-            modelBuilder.Entity<Status>().HasData(new Status { Id = 7, StatusName = "Rejected", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Status>().HasData(new Status { StatusId = 1, StatusName = "Accepted", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Status>().HasData(new Status { StatusId = 2, StatusName = "In Progress", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Status>().HasData(new Status { StatusId = 3, StatusName = "Pending", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Status>().HasData(new Status { StatusId = 4, StatusName = "Delayed", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Status>().HasData(new Status { StatusId = 5, StatusName = "At Risk", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Status>().HasData(new Status { StatusId = 6, StatusName = "Completed", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
+            modelBuilder.Entity<Status>().HasData(new Status { StatusId = 7, StatusName = "Rejected", CreatedBy = 1, IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
 
             modelBuilder.Entity<SeverityLevel>().HasData(new SeverityLevel { Id = 1, level = "High", CreatedBy = 1, IsActive = true, IsDeleted = false, Createdon = DateTime.Now, Updatedon= DateTime.Now });
             modelBuilder.Entity<SeverityLevel>().HasData(new SeverityLevel { Id = 2, level = "Medium", CreatedBy = 1, IsActive = true, IsDeleted = false, Createdon = DateTime.Now, Updatedon= DateTime.Now });
@@ -227,7 +181,7 @@ namespace WorkSphere.Infrastructure
                 UserName = "admin@gmail.com",
                 Email = "admin@gmail.com",
                 Rollid = 1,
-                Department = 1,
+                DeptId = 1,
                 DateOfJoining = DateTime.Now,
                 ModifiedOn = DateTime.Now,
                 PhoneNumber = "7723099993",
@@ -245,7 +199,7 @@ namespace WorkSphere.Infrastructure
                 UserName = "tapanmeher@gmail.com",
                 Email = "tapanmeher@gmail.com",
                 Rollid = 2,
-                Department = 3,
+                DeptId = 3,
                 DateOfJoining = DateTime.Now,
                 ModifiedOn = DateTime.Now,
                 PhoneNumber = "7723099993",
@@ -263,7 +217,7 @@ namespace WorkSphere.Infrastructure
                 UserName = "sakshiyadav@gmail.com",
                 Email = "sakshiyadav@gmail.com",
                 Rollid = 3,
-                Department = 3,
+                DeptId = 3,
                 DateOfJoining = DateTime.Now,
                 ModifiedOn = DateTime.Now,
                 PhoneNumber = "2783682993",
@@ -280,9 +234,9 @@ namespace WorkSphere.Infrastructure
             modelBuilder.Entity<Client>().HasData(new Client { ClientID = 2, ClientName = "Congent", CreatedOn = DateTime.Now, Email = "cogent@gmail.com", ModifiedOn = DateTime.Now, PhoneNumber = "374t4328234", CreatedBy = 1, IsActive = true, IsDelete = false });
 
 
-            modelBuilder.Entity<Projects>().HasData(new Projects { ProjID = 1, ProjDescr = "Project For test", Title = "Test Project", Client = 1, CreatedOn = DateTime.Now, Deadline = null, Department= 1, ImagePath="string.jpeg",  CreatedBy=1, IsActive= true, IsCompleted=false, Manager=2, ModifiedOn=DateTime.Now, SeverityLevel = 2, StartDate= DateTime.Now, TeamSize = 3, Status=null});
+            modelBuilder.Entity<Projects>().HasData(new Projects { ProjID = 1, ProjDescr = "Project For test", Title = "Test Project", ClientId = 1, CreatedOn = DateTime.Now, Deadline = null, DepartmentID= 1, ImagePath="string.jpeg",  CreatedBy=1, IsActive= true, IsCompleted=false, ManagerID=2, ModifiedOn=DateTime.Now, SeverityLevelId = 2, StartDate= DateTime.Now, TeamSize = 3, StatusId =null});
             
-            modelBuilder.Entity<Tasks>().HasData(new Tasks { TaskID = 1, TaskDescr = "Task For test", TaskTitle = "Test TAsk", AssignedTo = 3, CreatedOn = DateTime.Now, Progress= 25, Project= 1,   CreatedBy=1, IsActive= true, IsCompleted=false,  ModifiedOn=DateTime.Now, Status=null});
+            modelBuilder.Entity<Tasks>().HasData(new Tasks { TaskID = 1, TaskDescr = "Task For test", TaskTitle = "Test TAsk", AssignedTo = 3, CreatedOn = DateTime.Now, Progress= 25, ProjID= 1,   CreatedBy=1, IsActive= true, IsCompleted=false,  ModifiedOn=DateTime.Now, StatusId =null});
 
             base.OnModelCreating(modelBuilder);
         }

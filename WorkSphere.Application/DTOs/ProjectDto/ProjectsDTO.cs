@@ -19,6 +19,7 @@ namespace WorkSphere.Application.DTOs.ProjectDto
 
 
         public int Client { get; set; }
+        public string ClientName { get; set; }
 
         public DateTime? StartDate { get; set; }
 
@@ -29,6 +30,7 @@ namespace WorkSphere.Application.DTOs.ProjectDto
         public bool IsCompleted { get; set; }
 
         public int Manager { get; set; }
+        public string ManagerName { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
 
@@ -41,11 +43,14 @@ namespace WorkSphere.Application.DTOs.ProjectDto
 
         
         public int Department { get; set; }
+        public string DepartmentName { get; set; }
 
         public int TeamSize { get; set; }
         public DateTime? Deadline { get; set; }
         public int? Status { get; set; }
+        public string? StatusName { get; set; }
 
         public int SeverityLevel { get; set; }
+        public string SeverityLevelName { get; set; }
     }
 }

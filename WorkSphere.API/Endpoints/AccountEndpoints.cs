@@ -8,6 +8,7 @@ using System.Security.Claims;
 using WorkSphere.Application.DTOs.RegisterDTO;
 using System.Runtime.InteropServices;
 using WorkSphere.Application.DTOs.ClientDTO;
+using WorkSphere.Application.DTOs.UserDTO;
 
 namespace WorkSphere.API.Endpoints
 {
@@ -44,7 +45,7 @@ namespace WorkSphere.API.Endpoints
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     PasswordHash = request.Password,
-                    Department = 1,
+                    DeptId = 1,
                     Rollid = 3,
                     DateOfJoining = DateTime.UtcNow,
                     IsActive = true,
@@ -58,7 +59,8 @@ namespace WorkSphere.API.Endpoints
                     return Results.BadRequest(result.Errors);
                 }
 
-                return Results.Ok(new { Message = "User registered successfully." });
+                return Results.Ok(new { Message = "User registered successfully." ,
+                User = user});
             });
 
             app.MapGet("account/Getall", async (WorkSphereDbContext dbContext, int pageNumber =1, int pageSize =10) =>
@@ -78,7 +80,7 @@ namespace WorkSphere.API.Endpoints
                     FirstName = users.FirstName,
                     LastName = users.LastName,
                     Password = users.PasswordHash,
-                    Department = users.Department,
+                    Department = users.DeptId,
                     Rollid=users.Rollid
                 });
 
@@ -90,14 +92,9 @@ namespace WorkSphere.API.Endpoints
                     TotalPAges = (int)Math.Ceiling(count / (double)pageSize),
                     TotalUsers = totalUsers
                 });
-            }).RequireAuthorization();
+            });
 
-            //app.MapGet("account/me", async (ClaimsPrincipal claims, WorkSphereDbContext context) =>
-            //{
-            //    var userd = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            //    int id = userd;
-            //    //return await context.Users.Where(e => e.Id == userd).ToListAsync();
-            //}).RequireAuthorization();
+            
             app.MapGet("account/checkAuth", async (ClaimsPrincipal claims, UserManager<User> userManager) =>
             {
                 // Check if user is authenticated
@@ -129,7 +126,7 @@ namespace WorkSphere.API.Endpoints
                         user.Email,
                         user.FirstName,
                         user.LastName,
-                        user.Department,
+                        user.DeptId,
                         user.Rollid
                     }
                 });
@@ -150,7 +147,48 @@ namespace WorkSphere.API.Endpoints
             //{
 
             //})
-            
+            app.MapGet("UserInfo", async (HttpContext httpContext, UserManager<User> userManager) =>
+            {
+                // Ensure the user is authenticated
+                if (!httpContext.User.Identity.IsAuthenticated)
+                {
+                    return Results.Unauthorized();
+                }
+
+                // Get the currently logged-in user
+                var userIdClaim = httpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                if (userIdClaim == null)
+                {
+                    return Results.BadRequest("User ID not found in claims.");
+                }
+
+                int userId = int.Parse(userIdClaim);
+                var user = await userManager.FindByIdAsync(userId.ToString());
+
+                if (user == null)
+                {
+                    return Results.NotFound("User not found.");
+                }
+
+                // Get roles
+                var roles = await userManager.GetRolesAsync(user);
+
+                // Map to DTO
+                var userInfo = new UserDTO
+                {
+                    UserID = user.Id,
+                    Email = user.UserName,
+                    //Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Roles = roles.ToList()
+                };
+
+                return Results.Ok(userInfo);
+            });
+
+
         }
     }
 }

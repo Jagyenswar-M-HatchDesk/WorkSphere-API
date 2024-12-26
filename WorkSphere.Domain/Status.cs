@@ -12,7 +12,7 @@ namespace WorkSphere.Domain
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int StatusId { get; set; }
 
         [Required]
         public string StatusName { get; set; } = string.Empty;
@@ -27,5 +27,8 @@ namespace WorkSphere.Domain
         public DateTime CreatedOn { get; set; }
 
         public int? CreatedBy { get; set; }
+
+        public virtual ICollection<Projects>? Projects { get; set; }
+        public virtual ICollection<Tasks>? Tasks { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,6 @@ namespace WorkSphere.Application.DTOs.ProjectDto
 {
     public class ProjectCreateDTO
     {
-        //public int ProjID { get; set; }
 
 
         public string? Title { get; set; }
@@ -20,22 +20,10 @@ namespace WorkSphere.Application.DTOs.ProjectDto
 
         public DateTime? StartDate { get; set; }
 
-
-        //public bool IsActive { get; set; }
-
-
-        //public bool IsCompleted { get; set; }
-
         public int Manager { get; set; }
 
-        //public DateTime? ModifiedOn { get; set; }
-
-
-        //public DateTime CreatedOn { get; set; }
-
-        //public int? CreatedBy { get; set; }
-
         public string? ImagePath { get; set; }
+        //public IFormFile? ImageFile { get; set; }
 
 
         public int Department { get; set; }

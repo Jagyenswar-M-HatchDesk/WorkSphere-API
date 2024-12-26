@@ -2,6 +2,7 @@
 
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace WorkSphere.Domain
@@ -26,14 +27,14 @@ namespace WorkSphere.Domain
         //public string Email { get; set; } = string.Empty ;
 
         //[Required]
-        [ForeignKey("Department")]
-        public int? Department { get; set; } 
+        
+        public int? DeptId { get; set; } 
 
         [Required]
         public DateTime DateOfJoining { get; set; }
 
         [Required]
-        [ForeignKey("Role")]
+        
         public int Rollid { get; set; } 
 
         public DateTime? LastLogin { get; set; }
@@ -47,9 +48,15 @@ namespace WorkSphere.Domain
         public DateTime? ModifiedOn { get; set; }
 
         public int? CreatedBy { get; set; }
-
-        //public virtual Department? DepartmentNavigation { get; set; }
-        //public virtual Roles? RoleNavigation { get; set; }
+        [ForeignKey("DeptId")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+        public virtual Department? DepartmentNavigation { get; set; }
+        [ForeignKey("Rollid")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+        public virtual Roles? RoleNavigation { get; set; }
+        public virtual ICollection<Tasks>? AssignedTasks { get; set; }
+        public virtual ICollection<Projects>? Projects { get; set; }
+        //public ICollection<Tasks> Tasks { get; set; }
     }
 
 }

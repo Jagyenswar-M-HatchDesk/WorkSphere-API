@@ -26,6 +26,8 @@ namespace WorkSphere.Domain
 
         [Required]
         public DateTime CreatedOn { get; set; }
+
+        public virtual ICollection<User>? Users { get; set; }
     }
 
 }

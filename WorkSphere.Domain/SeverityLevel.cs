@@ -16,5 +16,7 @@ namespace WorkSphere.Domain
         public DateTime Updatedon { get; set; }
         public int CreatedBy { get; set; }
 
+        public virtual ICollection<Projects>? Projects { get; set; }
+
     }
 }

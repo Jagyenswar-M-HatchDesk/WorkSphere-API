@@ -20,19 +20,19 @@ namespace WorkSphere.Infrastructure.Repository
 
         public async Task<IEnumerable<Client>> GetAllClients()
         {
-            var clients = await _db.Clients.Where(e => e.IsActive == true).ToListAsync();
+            var clients = await _db.tbl_Clients.Where(e => e.IsActive == true).ToListAsync();
             return clients;
         }
 
         public async Task<Client> GetClientById(int id)
         {
-            var client = await _db.Clients.FindAsync(id);
+            var client = await _db.tbl_Clients.FindAsync(id);
             return client;
         }
 
         public async Task<Client> UpdateClient(Client client)
         {
-            _db.Clients.Update(client);
+            _db.tbl_Clients.Update(client);
             await _db.SaveChangesAsync();
             return client;
         }
@@ -51,7 +51,7 @@ namespace WorkSphere.Infrastructure.Repository
                 IsDelete = false
             };
 
-            _db.Clients.Add(client);
+            _db.tbl_Clients.Add(client);
             await _db.SaveChangesAsync();
 
             return client;
@@ -67,7 +67,7 @@ namespace WorkSphere.Infrastructure.Repository
                 client.IsActive = false;
             }
 
-            _db.Clients.Update(client);
+            _db.tbl_Clients.Update(client);
             await _db.SaveChangesAsync();
         }
     }

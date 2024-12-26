@@ -35,6 +35,8 @@ namespace WorkSphere.Domain
         public bool IsDelete { get; set; }
 
         public int? CreatedBy { get; set; }
+
+        public virtual ICollection<Projects>? Projects { get; set; }
     }
 
 }

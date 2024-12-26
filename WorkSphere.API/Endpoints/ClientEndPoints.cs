@@ -17,7 +17,7 @@ namespace WorkSphere.API.Endpoints
 
             app.MapGet("SearchClient", async (WorkSphereDbContext context, string? Name) =>
             {
-                var client = await context.Clients.Where(e => e.IsActive == true).ToListAsync();
+                var client = await context.tbl_Clients.Where(e => e.IsActive == true).ToListAsync();
 
                 var selectedclients = client.Where(c => (string.IsNullOrEmpty(Name) || c.ClientName.Contains(Name, StringComparison.OrdinalIgnoreCase)));
 

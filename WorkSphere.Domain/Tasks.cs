@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace WorkSphere.Domain
 {
@@ -29,21 +30,30 @@ namespace WorkSphere.Domain
         public bool IsCompleted { get; set; }
 
         [Required]
-        [ForeignKey("User")]
-        public int AssignedTo { get; set; } 
+        public int AssignedTo { get; set; }
+        [ForeignKey("AssignedTo")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual User? AssignedEmployee { get; set; } 
 
         public string? TaskDescr { get; set; }
 
         [Required]
-        [ForeignKey("Project")]
-        public int Project { get; set; } 
+        public int ProjID { get; set; }
+        [ForeignKey("ProjID")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual Projects? ProjectNav { get; set; } 
 
         public int? CreatedBy { get; set; }
 
 
         //[Required]
-        [ForeignKey("Status")]
-        public int? Status { get; set; }
+        public int? StatusId { get; set; }
+        [ForeignKey("StatusId")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual Status? StatusNav { get; set; }
 
         public int? Progress { get; set; }
         //public virtual User? UserNavigation { get; set; }

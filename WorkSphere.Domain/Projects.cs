@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace WorkSphere.Domain
 {
@@ -20,8 +21,7 @@ namespace WorkSphere.Domain
         public string? ProjDescr { get; set; }
 
         [Required]
-        [ForeignKey("Client")]
-        public int Client { get; set; } 
+        public int ClientId { get; set; } 
 
         [Required]
         public DateTime? StartDate { get; set; }
@@ -33,8 +33,7 @@ namespace WorkSphere.Domain
         public bool IsCompleted { get; set; }
 
         [Required]
-        [ForeignKey("User")]
-        public int Manager { get; set; } 
+        public int ManagerID { get; set; } 
 
         public DateTime? ModifiedOn { get; set; }
 
@@ -46,23 +45,41 @@ namespace WorkSphere.Domain
         public string? ImagePath { get; set; }
 
         [Required]
-        [ForeignKey("Department")]
-        public int Department {  get; set; }
+        public int DepartmentID {  get; set; }
 
         public int TeamSize { get; set; }
         public DateTime? Deadline { get; set; }
 
         //[Required]
-        [ForeignKey("Status")]
-        public int? Status { get; set; }
+        public int? StatusId { get; set; }
 
         [Required]
-        [ForeignKey("SeverityLevel")]
-        public int SeverityLevel { get; set; }
+        public int SeverityLevelId { get; set; }
 
+        [ForeignKey("ClientId")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
 
-        //public virtual Client? ClientNavigation { get; set; }
-        //public virtual User? ManagerNavigation { get; set; }
+        public virtual Client? ClientNavigation { get; set; }
+        [ForeignKey("ManagerID")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual User? ManagerNavigation { get; set; }
+
+        [ForeignKey("DepartmentID")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual Department? DepartmentNav { get; set; }
+        [ForeignKey("StatusId")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual Status? StatusNav { get; set; }
+        [ForeignKey("SeverityLevelId")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual SeverityLevel? SeverityLevelNav { get; set; }
+        public virtual ICollection<Tasks>? Tasks { get; set; }
+
+        
     }
 
 }

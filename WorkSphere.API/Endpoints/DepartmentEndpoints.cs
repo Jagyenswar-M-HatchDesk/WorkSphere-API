@@ -21,12 +21,20 @@ namespace WorkSphere.API.Endpoints
                     CreatedBy = 1,
                     CreatedOn = DateTime.Now
                 };
+                dbcontext.AddAsync(dept);
+                await dbcontext.SaveChangesAsync();
+
+                return Results.Ok(new
+                {
+                    Message = "Successfully Created a Department",
+                    Department = dept 
+                });
 
             });
 
             app.MapGet("GetDepartment", async (WorkSphereDbContext dbcontext) =>
             {
-                var dept = await dbcontext.Departments.Where(e => e.IsActive == true).ToListAsync();
+                var dept = await dbcontext.mst_Departments.Where(e => e.IsActive == true).ToListAsync();
                 return dept;
             });
 
