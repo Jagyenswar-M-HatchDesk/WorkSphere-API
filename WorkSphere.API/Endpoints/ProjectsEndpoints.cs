@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Globalization;
 using WorkSphere.Application.DTOs.ClientDTO;
 using WorkSphere.Application.DTOs.ProjectDto;
@@ -90,102 +91,6 @@ namespace WorkSphere.API.Endpoints
                 });
             });
 
-
-
-            //app.MapPost("AddProject", async (IProjectService projService, ProjectCreateDTO projDto) =>
-            //{
-            //    var addproject = await projService.AddProjectAsync(projDto);
-            //    var proj = new ProjectsDTO()
-            //    {
-            //        ProjID = addproject.ProjID,
-            //        Title = addproject.Title,
-            //        ProjDescr = addproject.ProjDescr,
-            //        TeamSize = addproject.TeamSize,
-            //        StartDate = addproject.StartDate,
-            //        Department = addproject.DepartmentID,
-            //        Client = addproject.ClientId,
-            //        Manager = addproject.ManagerID,
-            //        Deadline = addproject.Deadline,
-            //        ImagePath = addproject.ImagePath,
-            //        Status = addproject.StatusId,
-            //        SeverityLevel = addproject.SeverityLevelId,
-            //        CreatedBy = addproject.CreatedBy,
-            //        CreatedOn = addproject.CreatedOn,
-            //        IsCompleted = addproject.IsCompleted,
-            //        IsActive = addproject.IsActive,
-            //        ModifiedOn = addproject.ModifiedOn
-
-            //    };
-
-            //    return Results.Ok(new
-            //    {
-            //        message = "Successfully Created a new Project",
-            //        Project = proj
-            //    });
-            //});
-            //app.MapPost("AddProject", async (IProjectService projService, [FromForm] ProjectCreateDTO projDto, IHostEnvironment environment) =>
-            //{
-            //    // Validate incoming project details
-            //    if (projDto == null)
-            //    {
-            //        return Results.BadRequest(new { message = "Invalid project data" });
-            //    }
-
-            //    // Handle image upload
-            //    string imagePath = null;
-            //    if (projDto.ImageFile != null)
-            //    {
-            //        var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
-            //        if (!Directory.Exists(uploadsFolder))
-            //        {
-            //            Directory.CreateDirectory(uploadsFolder);
-            //        }
-
-            //        var uniqueFileName = $"{Guid.NewGuid()}_{projDto.ImageFile.FileName}";
-            //        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            //        using (var fileStream = new FileStream(filePath, FileMode.Create))
-            //        {
-            //            await projDto.ImageFile.CopyToAsync(fileStream);
-            //        }
-
-            //        // Save relative path
-            //        imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
-            //    }
-
-            //    // Add the project
-            //    projDto.ImagePath = imagePath;
-            //    var addproject = await projService.AddProjectAsync(projDto);
-
-            //    var proj = new ProjectsDTO()
-            //    {
-            //        ProjID = addproject.ProjID,
-            //        Title = addproject.Title,
-            //        ProjDescr = addproject.ProjDescr,
-            //        TeamSize = addproject.TeamSize,
-            //        StartDate = addproject.StartDate,
-            //        Department = addproject.DepartmentID,
-            //        Client = addproject.ClientId,
-            //        Manager = addproject.ManagerID,
-            //        Deadline = addproject.Deadline,
-            //        ImagePath = addproject.ImagePath,
-            //        Status = addproject.StatusId,
-            //        SeverityLevel = addproject.SeverityLevelId,
-            //        CreatedBy = addproject.CreatedBy,
-            //        CreatedOn = addproject.CreatedOn,
-            //        IsCompleted = addproject.IsCompleted,
-            //        IsActive = addproject.IsActive,
-            //        ModifiedOn = addproject.ModifiedOn
-            //    };
-
-            //    return Results.Ok(new
-            //    {
-            //        message = "Successfully Created a new Project",
-            //        Project = proj
-            //    });
-            //});
-
-
             app.MapPost("AddProject", async ([FromForm] IFormFile? imageFile, [FromForm] ProjectCreateDTO projDto, IProjectService projService, IHostEnvironment environment) =>
             {
                 // Validate Anti-Forgery Token
@@ -254,80 +159,7 @@ namespace WorkSphere.API.Endpoints
                 });
             }).DisableAntiforgery();
 
-            //app.MapPost("AddProject1", async ([FromForm] IFormFile? imageFile, 
-            //    [FromForm]string title, 
-            //    [FromForm]string projdescr,
-            //    [FromForm]int clientid,
-            //    [FromForm]int managerid,
-            //    [FromForm]int departmentid,
-            //    [FromForm]int teamsize,
-            //    [FromForm]datetime, IProjectService projService, IHostEnvironment environment) =>
-            //{
-            //    // Validate Anti-Forgery Token
-            //    //await antiforgery.ValidateRequestAsync(context);
-
-            //    // Validate DTO
-            //    if (projDto == null)
-            //    {
-            //        return Results.BadRequest(new { message = "Invalid project data." });
-            //    }
-
-            //    // Handle file upload
-            //    string imagePath = null;
-            //    if (imageFile != null)
-            //    {
-            //        var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
-            //        var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
-
-            //        if (!allowedExtensions.Contains(fileExtension))
-            //        {
-            //            return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
-            //        }
-
-            //        var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
-            //        if (!Directory.Exists(uploadsFolder))
-            //        {
-            //            Directory.CreateDirectory(uploadsFolder);
-            //        }
-
-            //        var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
-            //        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            //        using (var fileStream = new FileStream(filePath, FileMode.Create))
-            //        {
-            //            await imageFile.CopyToAsync(fileStream);
-            //        }
-
-            //        imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
-            //    }
-
-            //    // Set the image path in DTO
-            //    projDto.ImagePath = imagePath;
-
-            //    // Add the project
-            //    var addedProject = await projService.AddProjectAsync(projDto);
-
-            //    // Return the response
-            //    return Results.Ok(new
-            //    {
-            //        message = "Successfully created a new project",
-            //        Project = new
-            //        {
-            //            addedProject.ProjID,
-            //            addedProject.Title,
-            //            addedProject.ProjDescr,
-            //            addedProject.ClientId,
-            //            addedProject.ManagerID,
-            //            addedProject.DepartmentID,
-            //            addedProject.TeamSize,
-            //            addedProject.StartDate,
-            //            addedProject.Deadline,
-            //            addedProject.ImagePath,
-            //            addedProject.StatusId,
-            //            addedProject.SeverityLevelId
-            //        }
-            //    });
-            //}).DisableAntiforgery();
+            
             app.MapPost("AddProject1", async (
     [FromForm] IFormFile? imageFile,
     [FromForm] string title,
@@ -466,73 +298,44 @@ namespace WorkSphere.API.Endpoints
                 return Results.Empty;
             });
 
-            //app.MapPost("AddProject", async ([FromForm] IFormFile? imageFile, [FromForm] ProjectCreateDTO projDto, IProjectService projService, IHostEnvironment environment) =>
-            //{
-
-            //    if (projDto == null)
-            //    {
-            //        return Results.BadRequest(new { message = "Invalid project data." });
-            //    }
-
-            //    // Validate and save the uploaded file
-            //    string imagePath = null;
-            //    if (imageFile != null)
-            //    {
-            //        var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
-            //        var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
-
-            //        if (!allowedExtensions.Contains(fileExtension))
-            //        {
-            //            return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
-            //        }
-
-            //        var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
-            //        if (!Directory.Exists(uploadsFolder))
-            //        {
-            //            Directory.CreateDirectory(uploadsFolder);
-            //        }
-
-            //        var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
-            //        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            //        using (var fileStream = new FileStream(filePath, FileMode.Create))
-            //        {
-            //            await imageFile.CopyToAsync(fileStream);
-            //        }
-
-            //        imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
-            //    }
-
-            //    // Assign the uploaded image path to the DTO
-            //    projDto.ImagePath = imagePath;
-
-            //    // Add the project
-            //    var addedProject = await projService.AddProjectAsync(projDto);
-
-            //    // Return response
-            //    return Results.Ok(new
-            //    {
-            //        message = "Successfully created a new project",
-            //        Project = new
-            //        {
-            //            addedProject.ProjID,
-            //            addedProject.Title,
-            //            addedProject.ProjDescr,
-            //            addedProject.ClientId,
-            //            addedProject.ManagerID,
-            //            addedProject.DepartmentID,
-            //            addedProject.TeamSize,
-            //            addedProject.StartDate,
-            //            addedProject.Deadline,
-            //            addedProject.ImagePath,
-            //            addedProject.StatusId,
-            //            addedProject.SeverityLevelId
-            //        }
-            //    });
-            //});
-
-            app.MapPut("UpdateProject/{id}", async (IProjectService projService, int id, ProjectEditDTO projDto) =>
+            
+           
+            app.MapPut("UpdateProject/{id}", async (int id,[FromForm] IFormFile? imageFile, [FromForm] ProjectEditDTO projDto, IProjectService projService, IHostEnvironment environment) =>
             {
+                if (projDto == null)
+                {
+                    return Results.BadRequest(new { message = "Invalid project data." });
+                }
+
+                // Handle file upload
+                string imagePath = null;
+                if (imageFile != null)
+                {
+                    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
+                    var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
+                    }
+
+                    var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
+                }
+
                 var proj = await projService.GetProjByIdAsync(id);
                 if (proj == null) return Results.NotFound();
 
@@ -544,7 +347,7 @@ namespace WorkSphere.API.Endpoints
                 //proj.Client = projDto.Client;
                 proj.ManagerID = projDto.Manager;
                 proj.Deadline = projDto.Deadline;
-                proj.ImagePath = projDto.ImagePath;
+                proj.ImagePath = imagePath;
                 proj.StatusId = projDto.Status;
                 proj.SeverityLevelId = projDto.SeverityLevel;
                 proj.ModifiedOn = DateTime.Now;
@@ -579,7 +382,7 @@ namespace WorkSphere.API.Endpoints
                         CreatedOn = proj.CreatedOn
                     }
                 });
-            });
+            }).DisableAntiforgery();
 
             app.MapGet("SearchProjects", async (IProjectService projService, string? title, string? department, string? client, string? status, string? manager, int pageNumber = 1, int pageSize = 10) =>
             {
