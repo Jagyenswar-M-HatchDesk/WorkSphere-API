@@ -254,6 +254,171 @@ namespace WorkSphere.API.Endpoints
                 });
             }).DisableAntiforgery();
 
+            //app.MapPost("AddProject1", async ([FromForm] IFormFile? imageFile, 
+            //    [FromForm]string title, 
+            //    [FromForm]string projdescr,
+            //    [FromForm]int clientid,
+            //    [FromForm]int managerid,
+            //    [FromForm]int departmentid,
+            //    [FromForm]int teamsize,
+            //    [FromForm]datetime, IProjectService projService, IHostEnvironment environment) =>
+            //{
+            //    // Validate Anti-Forgery Token
+            //    //await antiforgery.ValidateRequestAsync(context);
+
+            //    // Validate DTO
+            //    if (projDto == null)
+            //    {
+            //        return Results.BadRequest(new { message = "Invalid project data." });
+            //    }
+
+            //    // Handle file upload
+            //    string imagePath = null;
+            //    if (imageFile != null)
+            //    {
+            //        var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
+            //        var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+            //        if (!allowedExtensions.Contains(fileExtension))
+            //        {
+            //            return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
+            //        }
+
+            //        var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
+            //        if (!Directory.Exists(uploadsFolder))
+            //        {
+            //            Directory.CreateDirectory(uploadsFolder);
+            //        }
+
+            //        var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+            //        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            //        using (var fileStream = new FileStream(filePath, FileMode.Create))
+            //        {
+            //            await imageFile.CopyToAsync(fileStream);
+            //        }
+
+            //        imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
+            //    }
+
+            //    // Set the image path in DTO
+            //    projDto.ImagePath = imagePath;
+
+            //    // Add the project
+            //    var addedProject = await projService.AddProjectAsync(projDto);
+
+            //    // Return the response
+            //    return Results.Ok(new
+            //    {
+            //        message = "Successfully created a new project",
+            //        Project = new
+            //        {
+            //            addedProject.ProjID,
+            //            addedProject.Title,
+            //            addedProject.ProjDescr,
+            //            addedProject.ClientId,
+            //            addedProject.ManagerID,
+            //            addedProject.DepartmentID,
+            //            addedProject.TeamSize,
+            //            addedProject.StartDate,
+            //            addedProject.Deadline,
+            //            addedProject.ImagePath,
+            //            addedProject.StatusId,
+            //            addedProject.SeverityLevelId
+            //        }
+            //    });
+            //}).DisableAntiforgery();
+            app.MapPost("AddProject1", async (
+    [FromForm] IFormFile? imageFile,
+    [FromForm] string title,
+    [FromForm] string projdescr,
+    [FromForm] int clientid,
+    [FromForm] int managerid,
+    [FromForm] int departmentid,
+    [FromForm] int teamsize,
+    [FromForm] int severitylevel,
+    [FromForm] string startDate, // Expecting string for manual parsing
+    [FromForm] string deadline, // Expecting string for manual parsing
+    IProjectService projService,
+    IHostEnvironment environment) =>
+            {
+                // Parse DateTime values
+                if (!DateTime.TryParse(startDate, out var parsedStartDate) ||
+                    !DateTime.TryParse(deadline, out var parsedDeadline))
+                {
+                    return Results.BadRequest(new { message = "Invalid date format. Please use yyyy-MM-dd or yyyy-MM-ddTHH:mm:ss." });
+                }
+
+                // Handle file upload
+                string imagePath = null;
+                if (imageFile != null)
+                {
+                    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
+                    var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
+                    }
+
+                    var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
+                }
+
+                // Construct DTO manually
+                var projDto = new ProjectCreateDTO
+                {
+                    Title = title,
+                    ProjDescr = projdescr,
+                    Client = clientid,
+                    Manager = managerid,
+                    Department = departmentid,
+                    TeamSize = teamsize,
+                    StartDate = parsedStartDate,
+                    Deadline = parsedDeadline,
+                    ImagePath = imagePath,
+                    SeverityLevel = severitylevel
+
+                };
+
+                // Add the project
+                var addedProject = await projService.AddProjectAsync(projDto);
+
+                // Return response
+                return Results.Ok(new
+                {
+                    message = "Successfully created a new project",
+                    Project = new
+                    {
+                        addedProject.ProjID,
+                        addedProject.Title,
+                        addedProject.ProjDescr,
+                        addedProject.ClientId,
+                        addedProject.ManagerID,
+                        addedProject.DepartmentID,
+                        addedProject.TeamSize,
+                        addedProject.StartDate,
+                        addedProject.Deadline,
+                        addedProject.ImagePath,
+                        //addedProject.StatusId,
+                        addedProject.SeverityLevelId
+                    }
+                });
+            }).DisableAntiforgery();
+
 
 
 

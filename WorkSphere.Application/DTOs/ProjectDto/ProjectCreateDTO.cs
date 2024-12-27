@@ -30,7 +30,7 @@ namespace WorkSphere.Application.DTOs.ProjectDto
 
         public int TeamSize { get; set; }
         public DateTime? Deadline { get; set; }
-        public int? Status { get; set; }
+        //public int? Status { get; set; }
 
         public int SeverityLevel { get; set; }
     }

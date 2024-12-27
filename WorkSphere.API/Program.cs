@@ -16,25 +16,27 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.MapType<IFormFile>(() => new Microsoft.OpenApi.Models.OpenApiSchema
-    {
-        Type = "string",
-        Format = "binary"
-    });
-});
+builder.Services.AddSwaggerGen(
+//    options =>
+//{
+//    options.MapType<IFormFile>(() => new Microsoft.OpenApi.Models.OpenApiSchema
+//    {
+//        Type = "string",
+//        Format = "binary"
+//    });
+//}
+);
 builder.Services.AddAntiforgery(options =>
 {
     options.HeaderName = "X-CSRF-TOKEN"; // Optional: Custom header name
 });
 
 
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
-{
-    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-    options.SerializerOptions.WriteIndented = true; // Optional: makes JSON output readable
-});
+//builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+//{
+//    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+//    options.SerializerOptions.WriteIndented = true; // Optional: makes JSON output readable
+//});
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);

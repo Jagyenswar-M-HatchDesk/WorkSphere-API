@@ -55,7 +55,7 @@ namespace WorkSphere.Infrastructure.Repository
                 StartDate = project.StartDate,
                 Deadline = project.Deadline,
                 ImagePath = project.ImagePath,
-                StatusId = project.Status,
+                //StatusId = project.Status,
                 SeverityLevelId = project.SeverityLevel,
 
                 CreatedOn = DateTime.Now,
