@@ -1,4 +1,5 @@
-﻿using WorkSphere.Application.DTOs.ProjectDto;
+﻿using System.Threading.Tasks;
+using WorkSphere.Application.DTOs.ProjectDto;
 using WorkSphere.Domain;
 
 namespace WorkSphere.Application.Interfaces.IServices
@@ -14,5 +15,7 @@ namespace WorkSphere.Application.Interfaces.IServices
         Task<Projects> AddProjectAsync(ProjectCreateDTO proj);
 
         Task CompleteProjectAsync(int id);
+        Task DeleteProjAsync(int id);
+        Task ChangeStatusAsync(ChangeStatusDto dto, int id);
     }
 }

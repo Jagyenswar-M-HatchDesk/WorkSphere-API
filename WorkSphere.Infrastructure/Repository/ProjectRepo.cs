@@ -85,13 +85,27 @@ namespace WorkSphere.Infrastructure.Repository
             {
                 proj.IsActive = false;
                 proj.IsCompleted = true;
-               
+               proj.StatusId = 6;
             }
             _workSphereDbContext.tbl_Projects.Update(proj);
             await _workSphereDbContext.SaveChangesAsync();
         }
 
-        //public async Task 
+        public async Task DeleteProject(int id)
+        {
+            var proj = await GetProjectById(id);
+            _workSphereDbContext.tbl_Projects.Remove(proj);
+            await _workSphereDbContext.SaveChangesAsync();
+        }
+
+        public async Task ChangeStatus(ChangeStatusDto dto, int id)
+        {
+            var project = await GetProjectById(id);
+
+            project.StatusId = dto.Status;
+            _workSphereDbContext.tbl_Projects.Update(project);
+            await _workSphereDbContext.SaveChangesAsync();
+        }
     }
 }
 //

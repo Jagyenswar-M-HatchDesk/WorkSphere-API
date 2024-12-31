@@ -63,6 +63,52 @@ namespace WorkSphere.API.Endpoints
                 User = user});
             });
 
+            app.MapPost("account/register-admin", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, WorkSphereDbContext dbContext) =>
+            {
+                // Validate incoming request
+                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+                {
+                    return Results.BadRequest("Invalid request data. Ensure all fields are provided.");
+                }
+
+                // Check if the department exists
+                //var departmentExists = await dbContext.Departments.AnyAsync(d => d.Id == request.Department);
+                //var roleExists = await roleManager.Roles.AnyAsync(r => r.Id == request.Rollid);
+
+                //if (!departmentExists || !roleExists)
+                //{
+                //    return Results.BadRequest("Invalid department or role ID.");
+                //}
+
+                // Create the user
+                var user = new User
+                {
+                    UserName = request.Email,
+                    Email = request.Email,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    PasswordHash = request.Password,
+                    DeptId = 1,
+                    Rollid = 1,
+                    DateOfJoining = DateTime.UtcNow,
+                    IsActive = true,
+                    IsDeleted = false
+                };
+
+                var result = await userManager.CreateAsync(user, request.Password);
+
+                if (!result.Succeeded)
+                {
+                    return Results.BadRequest(result.Errors);
+                }
+
+                return Results.Ok(new
+                {
+                    Message = "User registered successfully.",
+                    User = user
+                });
+            });
+
             app.MapGet("account/Getall", async (WorkSphereDbContext dbContext, int pageNumber =1, int pageSize =10) =>
             {
                 if (pageNumber <= 0) pageNumber = 1;
@@ -186,6 +232,60 @@ namespace WorkSphere.API.Endpoints
                 };
 
                 return Results.Ok(userInfo);
+            });
+            app.MapPost("account/login", async (LogInDTO request, SignInManager<User> signInManager, UserManager<User> userManager) =>
+            {
+                // Validate the incoming request
+                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+                {
+                    return Results.BadRequest("Email and Password are required.");
+                }
+
+                // Find the user by email
+
+                //var user = await userManager.FindByEmailAsync(request.Email);
+                var user = await userManager.Users
+        .Include(u => u.DepartmentNavigation)
+        .Include(u => u.RoleNavigation)
+        .FirstOrDefaultAsync(u => u.Email == request.Email);
+                if (user == null)
+                {
+                    return Results.Unauthorized();//new { Message = "Invalid email or password." });
+                }
+
+                // Check if the user is active
+                if (!user.IsActive)
+                {
+                    return Results.Forbid();//new { Message = "Account is inactive. Please contact support." });
+                }
+
+                // Attempt to sign in the user
+                var passwordCheck = await userManager.CheckPasswordAsync(user, request.Password);
+                if (!passwordCheck)
+                {
+                    return Results.Unauthorized();//new { Message = "Invalid email or password." });
+                }
+
+                // Sign in the user
+                await signInManager.SignInAsync(user, isPersistent: false);
+
+                // Create a response with user info and roles
+               // var roles = await userManager.GetRolesAsync(user);
+                return Results.Ok(new
+                {
+                    Message = "Login successful.",
+                    User = new
+                    {
+                        user.Id,
+                        user.UserName,
+                        user.Email,
+                        user.FirstName,
+                        user.LastName,
+                        user.DepartmentNavigation.DeptName,
+                        user.RoleNavigation.Name,
+                        //Roles = roles
+                    }
+                });
             });
 
 

@@ -19,42 +19,33 @@ namespace WorkSphere.API.Endpoints
         {
             var app = erb.MapGroup("").WithTags("Projects");
 
-            app.MapGet("GetAllProject", async (IProjectService projservice, string? title, string? department, string? client, string? status, string? manager, string? sorting = "", int pageNumber = 1, int pageSize = 10, bool isAscending = true) =>
+            app.MapGet("GetAllProject", async (IProjectService projservice, string? sorting = "", int pageNumber = 1, int pageSize = 10, bool isAscending = true) =>
             {
                 if (pageNumber <= 0) pageNumber = 1;
                 if (pageSize <= 0) pageSize = 10;
 
                 var proj = await projservice.GetallProjAsync();
 
-                //searching
-                var filteredProjects = proj.Where(p =>
-                    (string.IsNullOrEmpty(title) || p.Title!.Contains(title, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(department) || p.DepartmentNav!.DeptName.Contains(department, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(client) || p.ClientNavigation!.ClientName.Contains(client, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(status) || p.StatusNav!.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(manager) || p.ManagerNavigation!.FirstName.Contains(manager, StringComparison.OrdinalIgnoreCase))
-                //&&
-                //(string.IsNullOrEmpty(status) || proj.StatusNav.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase))
-                );
+                
 
                 //sortiing
-                filteredProjects = sorting.ToLower() switch
+                proj = sorting.ToLower() switch
                 {
-                    "title" => isAscending ? filteredProjects.OrderBy(p => p.Title).ToList() : filteredProjects.OrderByDescending(p => p.Title).ToList(),
-                    "startdate" => isAscending ? filteredProjects.OrderBy(p => p.StartDate).ToList() : filteredProjects.OrderByDescending(p => p.StartDate).ToList(),
-                    "teamSize" => isAscending ? filteredProjects.OrderBy(p => p.TeamSize).ToList() : filteredProjects.OrderByDescending(p => p.TeamSize).ToList(),
-                    "createdon" => isAscending ? filteredProjects.OrderBy(p => p.CreatedOn).ToList() : filteredProjects.OrderByDescending(p => p.CreatedOn).ToList(),
-                    "manager" => isAscending ? filteredProjects.OrderBy(p => p.ManagerNavigation?.FirstName).ToList() : filteredProjects.OrderByDescending(p => p.ManagerNavigation?.FirstName).ToList(),
-                    "enddate" => isAscending ? filteredProjects.OrderBy(p => p.Deadline).ToList() : filteredProjects.OrderByDescending(p => p.Deadline).ToList(),
-                    "department" => isAscending ? filteredProjects.OrderBy(p => p.DepartmentNav?.DeptName).ToList() : filteredProjects.OrderByDescending(p => p.DepartmentNav?.DeptName).ToList(),
-                    "status" => isAscending ? filteredProjects.OrderBy(p => p.StatusNav?.StatusName).ToList() : filteredProjects.OrderByDescending(p => p.StatusNav?.StatusName).ToList(),
-                    _ => filteredProjects.OrderBy(p => p.ProjID).ToList(), // Default sorting by Title
+                    "title" => isAscending ? proj.OrderBy(p => p.Title).ToList() : proj.OrderByDescending(p => p.Title).ToList(),
+                    "startdate" => isAscending ? proj.OrderBy(p => p.StartDate).ToList() : proj.OrderByDescending(p => p.StartDate).ToList(),
+                    "teamSize" => isAscending ? proj.OrderBy(p => p.TeamSize).ToList() : proj.OrderByDescending(p => p.TeamSize).ToList(),
+                    "createdon" => isAscending ? proj.OrderBy(p => p.CreatedOn).ToList() : proj.OrderByDescending(p => p.CreatedOn).ToList(),
+                    "manager" => isAscending ? proj.OrderBy(p => p.ManagerNavigation?.FirstName).ToList() : proj.OrderByDescending(p => p.ManagerNavigation?.FirstName).ToList(),
+                    "enddate" => isAscending ? proj.OrderBy(p => p.Deadline).ToList() : proj.OrderByDescending(p => p.Deadline).ToList(),
+                    "department" => isAscending ? proj.OrderBy(p => p.DepartmentNav?.DeptName).ToList() : proj.OrderByDescending(p => p.DepartmentNav?.DeptName).ToList(),
+                    "status" => isAscending ? proj.OrderBy(p => p.StatusNav?.StatusName).ToList() : proj.OrderByDescending(p => p.StatusNav?.StatusName).ToList(),
+                    _ => proj.OrderBy(p => p.ProjID).ToList(), // Default sorting by Title
                 };
 
 
-                var count = filteredProjects.Count();
+                var count = proj.Count();
 
-                var pageProduct = filteredProjects.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                var pageProduct = proj.Skip((pageNumber - 1) * pageSize).Take(pageSize)
                  .Select(proj => new ProjectsDTO
                  {
                      ProjID = proj.ProjID,
@@ -160,102 +151,6 @@ namespace WorkSphere.API.Endpoints
             }).DisableAntiforgery();
 
             
-            app.MapPost("AddProject1", async (
-    [FromForm] IFormFile? imageFile,
-    [FromForm] string title,
-    [FromForm] string projdescr,
-    [FromForm] int clientid,
-    [FromForm] int managerid,
-    [FromForm] int departmentid,
-    [FromForm] int teamsize,
-    [FromForm] int severitylevel,
-    [FromForm] string startDate, // Expecting string for manual parsing
-    [FromForm] string deadline, // Expecting string for manual parsing
-    IProjectService projService,
-    IHostEnvironment environment) =>
-            {
-                // Parse DateTime values
-                if (!DateTime.TryParse(startDate, out var parsedStartDate) ||
-                    !DateTime.TryParse(deadline, out var parsedDeadline))
-                {
-                    return Results.BadRequest(new { message = "Invalid date format. Please use yyyy-MM-dd or yyyy-MM-ddTHH:mm:ss." });
-                }
-
-                // Handle file upload
-                string imagePath = null;
-                if (imageFile != null)
-                {
-                    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
-                    var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
-
-                    if (!allowedExtensions.Contains(fileExtension))
-                    {
-                        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
-                    }
-
-                    var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await imageFile.CopyToAsync(fileStream);
-                    }
-
-                    imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
-                }
-
-                // Construct DTO manually
-                var projDto = new ProjectCreateDTO
-                {
-                    Title = title,
-                    ProjDescr = projdescr,
-                    Client = clientid,
-                    Manager = managerid,
-                    Department = departmentid,
-                    TeamSize = teamsize,
-                    StartDate = parsedStartDate,
-                    Deadline = parsedDeadline,
-                    ImagePath = imagePath,
-                    SeverityLevel = severitylevel
-
-                };
-
-                // Add the project
-                var addedProject = await projService.AddProjectAsync(projDto);
-
-                // Return response
-                return Results.Ok(new
-                {
-                    message = "Successfully created a new project",
-                    Project = new
-                    {
-                        addedProject.ProjID,
-                        addedProject.Title,
-                        addedProject.ProjDescr,
-                        addedProject.ClientId,
-                        addedProject.ManagerID,
-                        addedProject.DepartmentID,
-                        addedProject.TeamSize,
-                        addedProject.StartDate,
-                        addedProject.Deadline,
-                        addedProject.ImagePath,
-                        //addedProject.StatusId,
-                        addedProject.SeverityLevelId
-                    }
-                });
-            }).DisableAntiforgery();
-
-
-
-
-
-
             app.MapGet("Project/{id}", async (IProjectService projService, int id) =>
             {
                 var proj = await projService.GetProjByIdAsync(id);
@@ -300,12 +195,12 @@ namespace WorkSphere.API.Endpoints
 
             
            
-            app.MapPut("UpdateProject/{id}", async (int id,[FromForm] IFormFile? imageFile, [FromForm] ProjectEditDTO projDto, IProjectService projService, IHostEnvironment environment) =>
+            app.MapPut("UpdateProject/{id}", async ([FromRoute]int id,[FromForm] IFormFile? imageFile, [FromForm] ProjectEditDTO projDto, IProjectService projService, IHostEnvironment environment) =>
             {
-                if (projDto == null)
-                {
-                    return Results.BadRequest(new { message = "Invalid project data." });
-                }
+                //if (projDto == null)
+                //{
+                //    return Results.BadRequest(new { message = "Invalid project data." });
+                //}
 
                 // Handle file upload
                 string imagePath = null;
@@ -348,7 +243,7 @@ namespace WorkSphere.API.Endpoints
                 proj.ManagerID = projDto.Manager;
                 proj.Deadline = projDto.Deadline;
                 proj.ImagePath = imagePath;
-                proj.StatusId = projDto.Status;
+                //proj.StatusId = projDto.Status;
                 proj.SeverityLevelId = projDto.SeverityLevel;
                 proj.ModifiedOn = DateTime.Now;
 
@@ -384,23 +279,78 @@ namespace WorkSphere.API.Endpoints
                 });
             }).DisableAntiforgery();
 
-            app.MapGet("SearchProjects", async (IProjectService projService, string? title, string? department, string? client, string? status, string? manager, int pageNumber = 1, int pageSize = 10) =>
+            //app.MapGet("SearchProjects", async (IProjectService projService, string? title, string? department, string? client, string? status, string? manager, int pageNumber = 1, int pageSize = 10) =>
+            //{
+            //    if (pageNumber <= 0) pageNumber = 1;
+            //    if (pageSize <= 0) pageSize = 10;
+            //    // Fetch all projects
+            //    var projects = await projService.GetallProjAsync();
+
+            //    // Apply filters if search criteria are provided
+            //    var filteredProjects = projects.Where(proj =>
+            //        (string.IsNullOrEmpty(title) || proj.Title!.Contains(title, StringComparison.OrdinalIgnoreCase))
+            //        &&
+            //        (string.IsNullOrEmpty(department) || proj.DepartmentNav!.DeptName.Contains(department, StringComparison.OrdinalIgnoreCase)) &&
+            //        (string.IsNullOrEmpty(client) || proj.ClientNavigation!.ClientName.Contains(client, StringComparison.OrdinalIgnoreCase)) &&
+            //        (string.IsNullOrEmpty(status) || proj.StatusNav!.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase)) &&
+            //        (string.IsNullOrEmpty(status) || proj.ManagerNavigation!.FirstName.Contains(status, StringComparison.OrdinalIgnoreCase))
+            //    //&&
+            //    //(string.IsNullOrEmpty(status) || proj.StatusNav.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase))
+            //    );
+
+            //    var count = filteredProjects.Count();
+            //    // Transform to DTOs
+            //    var result = filteredProjects.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(proj => new ProjectsDTO
+            //    {
+            //        ProjID = proj.ProjID,
+            //        Title = proj.Title,
+            //        ProjDescr = proj.ProjDescr,
+            //        TeamSize = proj.TeamSize,
+            //        StartDate = proj.StartDate,
+            //        Department = proj.DepartmentID,
+            //        DepartmentName = proj.DepartmentNav?.DeptName ?? "Null",
+            //        Client = proj.ClientId,
+            //        ClientName = proj.ClientNavigation?.ClientName ?? "Null",
+            //        Manager = proj.ManagerID,
+            //        ManagerName = proj.ManagerNavigation?.FirstName ?? "Null",
+            //        Deadline = proj.Deadline,
+            //        ImagePath = proj.ImagePath,
+            //        Status = proj.StatusId,
+            //        StatusName = proj.StatusNav?.StatusName ?? "Null",
+            //        SeverityLevel = proj.SeverityLevelId,
+            //        SeverityLevelName = proj.SeverityLevelNav?.level ?? "Null",
+            //        IsActive = proj.IsActive,
+            //        IsCompleted = proj.IsCompleted,
+            //        ModifiedOn = proj.ModifiedOn,
+            //        CreatedBy = proj.CreatedBy,
+            //        CreatedOn = proj.CreatedOn
+            //    });
+
+            //    return Results.Ok(new
+            //    {
+
+            //        Total = count,
+            //        PageNumber = pageNumber,
+            //        PageSize = pageSize,
+            //        TotalPages = (int)Math.Ceiling(count / (double)pageSize),
+            //        Projects = result
+            //    });
+            //});
+            app.MapGet("SearchProjects", async (IProjectService projService, string? query, int pageNumber = 1, int pageSize = 10) =>
             {
                 if (pageNumber <= 0) pageNumber = 1;
                 if (pageSize <= 0) pageSize = 10;
+
                 // Fetch all projects
                 var projects = await projService.GetallProjAsync();
 
-                // Apply filters if search criteria are provided
+                // Apply filter based on the query parameter
                 var filteredProjects = projects.Where(proj =>
-                    (string.IsNullOrEmpty(title) || proj.Title!.Contains(title, StringComparison.OrdinalIgnoreCase))
-                    &&
-                    (string.IsNullOrEmpty(department) || proj.DepartmentNav!.DeptName.Contains(department, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(client) || proj.ClientNavigation!.ClientName.Contains(client, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(status) || proj.StatusNav!.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrEmpty(status) || proj.ManagerNavigation!.FirstName.Contains(status, StringComparison.OrdinalIgnoreCase))
-                //&&
-                //(string.IsNullOrEmpty(status) || proj.StatusNav.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase))
+                    (string.IsNullOrEmpty(query) || proj.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                     proj.DepartmentNav.DeptName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                     proj.ClientNavigation.ClientName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                     proj.ManagerNavigation.FirstName.Contains(query, StringComparison.OrdinalIgnoreCase)
+                     /*proj.StatusNav.StatusName.Contains(query, StringComparison.OrdinalIgnoreCase)*/)
                 );
 
                 var count = filteredProjects.Count();
@@ -429,21 +379,38 @@ namespace WorkSphere.API.Endpoints
                     ModifiedOn = proj.ModifiedOn,
                     CreatedBy = proj.CreatedBy,
                     CreatedOn = proj.CreatedOn
+
+
+
                 });
 
                 return Results.Ok(new
                 {
-                    Count = count,
-                    CurrentPaage = pageNumber,
-                    Size = pageSize,
+                    Total = count,
+                    CurrentPage = pageNumber,
+                    PageSize = pageSize,
                     TotalPages = (int)Math.Ceiling(count / (double)pageSize),
-                    Peojects = result
+                    Projects = result
                 });
             });
 
+            app.MapPut("CompleteProject", async (IProjectService service, int id) =>
+            {
+                await service.CompleteProjectAsync(id);
+                return Results.Ok("The Project status has change to Completed");
+            });
 
-            //app.MapPost()
-            // app.MapDelete("CompleteProject", async ())
+            app.MapDelete("DeleteProject", async (IProjectService service, int id) =>
+            {
+                await service.DeleteProjAsync(id);
+                return Results.Ok("The Data has been Deleted");
+            });
+
+            app.MapPut("ChangeStatus", async (IProjectService service, ChangeStatusDto dto, int id) =>
+            {
+                await service.ChangeStatusAsync(dto, id);
+                return Results.Ok("The Status Has CHanged");
+            });
         }
 
     }

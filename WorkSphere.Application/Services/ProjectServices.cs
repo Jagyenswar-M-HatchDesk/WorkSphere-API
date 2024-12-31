@@ -44,5 +44,15 @@ namespace WorkSphere.Application.Services
         {
             await _repo.CompleteProject(id);
         }
+
+        public async Task DeleteProjAsync(int id)
+        {
+            await _repo.DeleteProject(id);
+        }
+
+        public async Task ChangeStatusAsync(ChangeStatusDto dto, int id)
+        {
+            await _repo.ChangeStatus(dto, id);
+        }
     }
 }

@@ -19,5 +19,8 @@ namespace WorkSphere.Application.Interfaces.IRepo
         Task<Projects> UpdateProjects(Projects proj);
 
         Task CompleteProject(int id);
+        Task DeleteProject(int id);
+
+        Task ChangeStatus(ChangeStatusDto dto, int id);
     }
 }
