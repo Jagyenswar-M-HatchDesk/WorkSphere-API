@@ -16,34 +16,32 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(
-//    options =>
-//{
-//    options.MapType<IFormFile>(() => new Microsoft.OpenApi.Models.OpenApiSchema
-//    {
-//        Type = "string",
-//        Format = "binary"
-//    });
-//}
-);
+builder.Services.AddSwaggerGen();
 builder.Services.AddAntiforgery(options =>
 {
     options.HeaderName = "X-CSRF-TOKEN"; // Optional: Custom header name
 });
 
 
-//builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
-//{
-//    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-//    options.SerializerOptions.WriteIndented = true; // Optional: makes JSON output readable
-//});
 
+//builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+
+//builder.Services.AddIdentityCore<User>()
+//    .AddEntityFrameworkStores<WorkSphereDbContext>()
+//    .AddDefaultTokenProviders();
+
+builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+})
+.AddEntityFrameworkStores<WorkSphereDbContext>()
+.AddDefaultTokenProviders();
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
 
-builder.Services.AddIdentityCore<User>()
-    .AddEntityFrameworkStores<WorkSphereDbContext>()
-    .AddApiEndpoints();
 
 builder.Services.AddDbContext<WorkSphereDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -61,11 +59,11 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddIdentityCore<User>()
-    .AddRoles<IdentityRole<int>>()
-    .AddEntityFrameworkStores<WorkSphereDbContext>()
-    .AddSignInManager()
-    .AddDefaultTokenProviders();
+//builder.Services.AddIdentity<User, IdentityRole<int>>()
+//    .AddRoles<IdentityRole<int>>()
+//    .AddEntityFrameworkStores<WorkSphereDbContext>()
+//    .AddSignInManager()
+//    .AddDefaultTokenProviders();
 
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -107,7 +105,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
 
-app.MapIdentityApi<User>();
+//app.MapIdentityApi<User>();
 app.Register_LoginEndpoint();
 app.Projects_Endpoints();
 app.Task_EndPoints();

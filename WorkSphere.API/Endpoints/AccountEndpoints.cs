@@ -18,96 +18,167 @@ namespace WorkSphere.API.Endpoints
         {
             var app = endpointRouteBuilder.MapGroup("").WithTags("Account");
 
-            
 
-            app.MapPost("account/register", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, WorkSphereDbContext dbContext) =>
+
+            //app.MapPost("account/register", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, WorkSphereDbContext dbContext) =>
+            //{
+            //    // Validate incoming request
+            //    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password) )
+            //    {
+            //        return Results.BadRequest("Invalid request data. Ensure all fields are provided.");
+            //    }
+
+            //    // Check if the department exists
+            //    //var departmentExists = await dbContext.Departments.AnyAsync(d => d.Id == request.Department);
+            //    //var roleExists = await roleManager.Roles.AnyAsync(r => r.Id == request.Rollid);
+
+            //    //if (!departmentExists || !roleExists)
+            //    //{
+            //    //    return Results.BadRequest("Invalid department or role ID.");
+            //    //}
+
+            //    // Create the user
+            //    var user = new User
+            //    {
+            //        UserName = request.Email,
+            //        Email = request.Email,
+            //        FirstName = request.FirstName,
+            //        LastName = request.LastName,
+            //        PasswordHash = request.Password,
+            //        DeptId = 1,
+            //        Rollid = 3,
+            //        DateOfJoining = DateTime.UtcNow,
+            //        IsActive = true,
+            //        IsDeleted = false
+            //    };
+
+            //    var result = await userManager.CreateAsync(user, request.Password);
+
+            //    if (!result.Succeeded)
+            //    {
+            //        return Results.BadRequest(result.Errors);
+            //    }
+
+            //    return Results.Ok(new { Message = "User registered successfully." ,
+            //    User = user});
+            //});
+
+            app.MapPost("account/register", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager) =>
             {
-                // Validate incoming request
-                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password) )
-                {
-                    return Results.BadRequest("Invalid request data. Ensure all fields are provided.");
-                }
-
-                // Check if the department exists
-                //var departmentExists = await dbContext.Departments.AnyAsync(d => d.Id == request.Department);
-                //var roleExists = await roleManager.Roles.AnyAsync(r => r.Id == request.Rollid);
-
-                //if (!departmentExists || !roleExists)
-                //{
-                //    return Results.BadRequest("Invalid department or role ID.");
-                //}
-
-                // Create the user
-                var user = new User
-                {
-                    UserName = request.Email,
-                    Email = request.Email,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    PasswordHash = request.Password,
-                    DeptId = 1,
-                    Rollid = 3,
-                    DateOfJoining = DateTime.UtcNow,
-                    IsActive = true,
-                    IsDeleted = false
-                };
-
-                var result = await userManager.CreateAsync(user, request.Password);
-
-                if (!result.Succeeded)
-                {
-                    return Results.BadRequest(result.Errors);
-                }
-
-                return Results.Ok(new { Message = "User registered successfully." ,
-                User = user});
-            });
-
-            app.MapPost("account/register-admin", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, WorkSphereDbContext dbContext) =>
-            {
-                // Validate incoming request
                 if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
                 {
-                    return Results.BadRequest("Invalid request data. Ensure all fields are provided.");
+                    return Results.BadRequest("Invalid request data.");
                 }
 
-                // Check if the department exists
-                //var departmentExists = await dbContext.Departments.AnyAsync(d => d.Id == request.Department);
-                //var roleExists = await roleManager.Roles.AnyAsync(r => r.Id == request.Rollid);
-
-                //if (!departmentExists || !roleExists)
-                //{
-                //    return Results.BadRequest("Invalid department or role ID.");
-                //}
-
-                // Create the user
                 var user = new User
                 {
                     UserName = request.Email,
                     Email = request.Email,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                    PasswordHash = request.Password,
                     DeptId = 1,
-                    Rollid = 1,
+                    Rollid = 3, // Default to Employee role
                     DateOfJoining = DateTime.UtcNow,
                     IsActive = true,
                     IsDeleted = false
                 };
 
                 var result = await userManager.CreateAsync(user, request.Password);
-
                 if (!result.Succeeded)
                 {
                     return Results.BadRequest(result.Errors);
                 }
 
-                return Results.Ok(new
+                var role = await roleManager.FindByIdAsync(user.Rollid.ToString());
+                if (role != null)
                 {
-                    Message = "User registered successfully.",
-                    User = user
-                });
+                    await userManager.AddToRoleAsync(user, role.Name);
+                }
+
+                return Results.Ok(new { Message = "User registered successfully." });
             });
+
+            app.MapPost("account/register-admin", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager) =>
+            {
+                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+                {
+                    return Results.BadRequest("Invalid request data.");
+                }
+
+                var user = new User
+                {
+                    UserName = request.Email,
+                    Email = request.Email,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    DeptId = 1,
+                    Rollid = 1, // Default to Employee role
+                    DateOfJoining = DateTime.UtcNow,
+                    IsActive = true,
+                    IsDeleted = false
+                };
+
+                var result = await userManager.CreateAsync(user, request.Password);
+                if (!result.Succeeded)
+                {
+                    return Results.BadRequest(result.Errors);
+                }
+
+                var role = await roleManager.FindByIdAsync(user.Rollid.ToString());
+                if (role != null)
+                {
+                    await userManager.AddToRoleAsync(user, role.Name);
+                }
+
+                return Results.Ok(new { Message = "User registered successfully." });
+            });
+
+
+            //app.MapPost("account/register-admin", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, WorkSphereDbContext dbContext) =>
+            //{
+            //    // Validate incoming request
+            //    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+            //    {
+            //        return Results.BadRequest("Invalid request data. Ensure all fields are provided.");
+            //    }
+
+            //    // Check if the department exists
+            //    //var departmentExists = await dbContext.Departments.AnyAsync(d => d.Id == request.Department);
+            //    //var roleExists = await roleManager.Roles.AnyAsync(r => r.Id == request.Rollid);
+
+            //    //if (!departmentExists || !roleExists)
+            //    //{
+            //    //    return Results.BadRequest("Invalid department or role ID.");
+            //    //}
+
+            //    // Create the user
+            //    var user = new User
+            //    {
+            //        UserName = request.Email,
+            //        Email = request.Email,
+            //        FirstName = request.FirstName,
+            //        LastName = request.LastName,
+            //        PasswordHash = request.Password,
+            //        DeptId = 1,
+            //        Rollid = 1,
+            //        DateOfJoining = DateTime.UtcNow,
+            //        IsActive = true,
+            //        IsDeleted = false
+            //    };
+
+            //    var result = await userManager.CreateAsync(user, request.Password);
+
+            //    if (!result.Succeeded)
+            //    {
+            //        return Results.BadRequest(result.Errors);
+            //    }
+
+            //    return Results.Ok(new
+            //    {
+            //        Message = "User registered successfully.",
+            //        User = user
+            //    });
+            //});
 
             app.MapGet("account/Getall", async (WorkSphereDbContext dbContext, int pageNumber =1, int pageSize =10) =>
             {
@@ -270,10 +341,13 @@ namespace WorkSphere.API.Endpoints
                 await signInManager.SignInAsync(user, isPersistent: false);
 
                 // Create a response with user info and roles
-               // var roles = await userManager.GetRolesAsync(user);
+                var roles = await userManager.GetRolesAsync(user);
+
+                var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "Purpose");
                 return Results.Ok(new
                 {
                     Message = "Login successful.",
+                    Token = token,
                     User = new
                     {
                         user.Id,
@@ -283,7 +357,7 @@ namespace WorkSphere.API.Endpoints
                         user.LastName,
                         user.DepartmentNavigation.DeptName,
                         user.RoleNavigation.Name,
-                        //Roles = roles
+                        Roles = roles
                     }
                 });
             });
