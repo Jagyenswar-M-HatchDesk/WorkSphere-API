@@ -114,9 +114,15 @@ namespace WorkSphere.Infrastructure.Repository
             return getusers;
         }
 
+        public async Task<User> GetManagerById(int id)
+        {
+            var manager = await _dbcontext.Users.Include(e => e.RoleNavigation).Include(e => e.DepartmentNavigation).Where(e => e.Id == id && e.Rollid == 2 && e.IsActive == true).FirstAsync();
+            return manager;
+        }
+
         public async Task<User> GetUserById(int id)
         {
-            var manager = await _dbcontext.Users.Include(e => e.RoleNavigation).Include(e => e.DepartmentNavigation).Where(e => e.Id == id && e.Rollid == 2).FirstAsync();
+            var manager = await _dbcontext.Users.Include(e => e.RoleNavigation).Include(e => e.DepartmentNavigation).Where(e => e.Id == id && e.IsActive==true).FirstAsync();
             return manager;
         }
 

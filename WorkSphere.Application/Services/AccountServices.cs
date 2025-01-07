@@ -38,6 +38,11 @@ namespace WorkSphere.Application.Services
             return await accountRepo.GetManagers();
         }
 
+        public async Task<User> GetManagerByIdAsync(int id)
+        {
+            return await accountRepo.GetManagerById(id);
+        }
+
         public async Task<User> GetUserByIdAsync(int id)
         {
             return await accountRepo.GetUserById(id);

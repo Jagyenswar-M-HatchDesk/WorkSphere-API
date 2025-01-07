@@ -14,6 +14,7 @@ namespace WorkSphere.Application.Interfaces.IRepo
         Task<User> UpdateManager(User manager);
         Task<IEnumerable<ManagerDto>> GetManagers();
         Task<IEnumerable<User>> GetAllUser();
+        Task<User> GetManagerById(int id);
         Task<User> GetUserById(int id);
 
     }

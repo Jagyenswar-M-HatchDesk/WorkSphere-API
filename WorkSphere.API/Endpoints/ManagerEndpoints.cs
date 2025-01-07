@@ -116,7 +116,7 @@ namespace WorkSphere.API.Endpoints
                     imagepath = Path.Combine("Uploads/ProfileImage", uniqueFileName).Replace("\\", "/");
                 }
 
-                var editmanager = await service.GetUserByIdAsync(id);
+                var editmanager = await service.GetManagerByIdAsync(id);
                 if (editmanager == null) return Results.BadRequest("NO User Found");
 
                 editmanager.FirstName = manager.FirstName;
@@ -152,6 +152,17 @@ namespace WorkSphere.API.Endpoints
 
             }).DisableAntiforgery();
 
+            app.MapDelete("DeleteManager", async (IAccountService service, int id) =>
+            {
+                var manager = await service.GetManagerByIdAsync(id);
+                if (manager == null) return Results.NotFound("No user Found");
+
+                manager.IsActive = false;
+                manager.IsDeleted = true;
+
+                await service.UpdateManagerAsync(manager);
+                return Results.Ok("Manager is Successfully Deleted");
+            });
 
         }
     }

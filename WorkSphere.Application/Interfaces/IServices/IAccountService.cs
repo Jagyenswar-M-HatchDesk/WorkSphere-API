@@ -14,6 +14,7 @@ namespace WorkSphere.Application.Interfaces.IServices
         Task<string> GeneratePasswordAsync(int l = 12);
         Task<IEnumerable<User>> GetUsersAllAsync();
         Task<IEnumerable<ManagerDto>> GetAllManagerAsync();
+        Task<User> GetManagerByIdAsync(int id);
         Task<User> GetUserByIdAsync(int id);
     }
 }
