@@ -82,6 +82,9 @@ builder.Services.AddScoped<ITaskRepo, TaskRepo>();
 builder.Services.AddScoped<ITaskService, TaskServices>();
 builder.Services.AddScoped<IClientRepo, ClientFRepo>();
 builder.Services.AddScoped<IClientServices, ClientService>();
+builder.Services.AddScoped<IAccountRepo, AccountRepo>();
+builder.Services.AddScoped<IAccountService, AccountServices>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 

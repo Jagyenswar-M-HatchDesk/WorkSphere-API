@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace WorkSphere.Application.DTOs.RegisterDTO
 {
-    internal class ManagerCreateDTO
+    public class ManagerCreateDTO
     {
-        public int RollId { get; set; }
+        public string Email { get; set; }
+
+        //public string Password { get; set; }
+        //public string UserName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+
     }
 }

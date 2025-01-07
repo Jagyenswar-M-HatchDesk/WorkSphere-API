@@ -48,6 +48,10 @@ namespace WorkSphere.Domain
         public DateTime? ModifiedOn { get; set; }
 
         public int? CreatedBy { get; set; }
+        public string? Gender { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? Country { get; set; }
+        public string? ProfileImgPath { get; set; }
         [ForeignKey("DeptId")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public virtual Department? DepartmentNavigation { get; set; }
@@ -56,7 +60,8 @@ namespace WorkSphere.Domain
         public virtual Roles? RoleNavigation { get; set; }
         public virtual ICollection<Tasks>? AssignedTasks { get; set; }
         public virtual ICollection<Projects>? Projects { get; set; }
-        //public ICollection<Tasks> Tasks { get; set; }
+
+
     }
 
 }

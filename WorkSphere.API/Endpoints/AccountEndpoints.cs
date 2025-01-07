@@ -9,6 +9,7 @@ using WorkSphere.Application.DTOs.RegisterDTO;
 using System.Runtime.InteropServices;
 using WorkSphere.Application.DTOs.ClientDTO;
 using WorkSphere.Application.DTOs.UserDTO;
+using WorkSphere.Application.Interfaces.IServices;
 
 namespace WorkSphere.API.Endpoints
 {
@@ -18,50 +19,6 @@ namespace WorkSphere.API.Endpoints
         {
             var app = endpointRouteBuilder.MapGroup("").WithTags("Account");
 
-
-
-            //app.MapPost("account/register", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, WorkSphereDbContext dbContext) =>
-            //{
-            //    // Validate incoming request
-            //    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password) )
-            //    {
-            //        return Results.BadRequest("Invalid request data. Ensure all fields are provided.");
-            //    }
-
-            //    // Check if the department exists
-            //    //var departmentExists = await dbContext.Departments.AnyAsync(d => d.Id == request.Department);
-            //    //var roleExists = await roleManager.Roles.AnyAsync(r => r.Id == request.Rollid);
-
-            //    //if (!departmentExists || !roleExists)
-            //    //{
-            //    //    return Results.BadRequest("Invalid department or role ID.");
-            //    //}
-
-            //    // Create the user
-            //    var user = new User
-            //    {
-            //        UserName = request.Email,
-            //        Email = request.Email,
-            //        FirstName = request.FirstName,
-            //        LastName = request.LastName,
-            //        PasswordHash = request.Password,
-            //        DeptId = 1,
-            //        Rollid = 3,
-            //        DateOfJoining = DateTime.UtcNow,
-            //        IsActive = true,
-            //        IsDeleted = false
-            //    };
-
-            //    var result = await userManager.CreateAsync(user, request.Password);
-
-            //    if (!result.Succeeded)
-            //    {
-            //        return Results.BadRequest(result.Errors);
-            //    }
-
-            //    return Results.Ok(new { Message = "User registered successfully." ,
-            //    User = user});
-            //});
 
             app.MapPost("account/register", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager) =>
             {
@@ -133,53 +90,6 @@ namespace WorkSphere.API.Endpoints
                 return Results.Ok(new { Message = "User registered successfully." });
             });
 
-
-            //app.MapPost("account/register-admin", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, WorkSphereDbContext dbContext) =>
-            //{
-            //    // Validate incoming request
-            //    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
-            //    {
-            //        return Results.BadRequest("Invalid request data. Ensure all fields are provided.");
-            //    }
-
-            //    // Check if the department exists
-            //    //var departmentExists = await dbContext.Departments.AnyAsync(d => d.Id == request.Department);
-            //    //var roleExists = await roleManager.Roles.AnyAsync(r => r.Id == request.Rollid);
-
-            //    //if (!departmentExists || !roleExists)
-            //    //{
-            //    //    return Results.BadRequest("Invalid department or role ID.");
-            //    //}
-
-            //    // Create the user
-            //    var user = new User
-            //    {
-            //        UserName = request.Email,
-            //        Email = request.Email,
-            //        FirstName = request.FirstName,
-            //        LastName = request.LastName,
-            //        PasswordHash = request.Password,
-            //        DeptId = 1,
-            //        Rollid = 1,
-            //        DateOfJoining = DateTime.UtcNow,
-            //        IsActive = true,
-            //        IsDeleted = false
-            //    };
-
-            //    var result = await userManager.CreateAsync(user, request.Password);
-
-            //    if (!result.Succeeded)
-            //    {
-            //        return Results.BadRequest(result.Errors);
-            //    }
-
-            //    return Results.Ok(new
-            //    {
-            //        Message = "User registered successfully.",
-            //        User = user
-            //    });
-            //});
-
             app.MapGet("account/Getall", async (WorkSphereDbContext dbContext, int pageNumber =1, int pageSize =10) =>
             {
                 if (pageNumber <= 0) pageNumber = 1;
@@ -190,15 +100,22 @@ namespace WorkSphere.API.Endpoints
                 var count = users.Count();
 
                 var totalUsers = users.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-                .Select(users => new RegisterDTO()
+                .Select(users => new UserShowDTO
                 {
-                    UserName = users.UserName,
-                    Email = users.Email,
                     FirstName = users.FirstName,
                     LastName = users.LastName,
-                    Password = users.PasswordHash,
-                    Department = users.DeptId,
-                    Rollid=users.Rollid
+                    Phone = users.PhoneNumber,
+                    Gender = users.Gender,
+                    Country = users.Country,
+                    Email = users.Email,
+                    RoleName = users.RoleNavigation.Name,
+                    DeptName = users.DepartmentNavigation.DeptName,
+                    DateOfBirth = users.DateOfBirth,
+                    DateOfJoining = users.DateOfJoining,
+                    IsActive = users.IsActive,
+                    IsDeleted = users.IsDeleted,
+                    ProfileImgPath = users.ProfileImgPath
+
                 });
 
                 return Results.Ok(new
@@ -304,7 +221,7 @@ namespace WorkSphere.API.Endpoints
 
                 return Results.Ok(userInfo);
             });
-            app.MapPost("account/login", async (LogInDTO request, SignInManager<User> signInManager, UserManager<User> userManager) =>
+            app.MapPost("account/login", async (LogInDTO request, SignInManager<User> signInManager, UserManager<User> userManager, IAccountService service) =>
             {
                 // Validate the incoming request
                 if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
@@ -330,6 +247,7 @@ namespace WorkSphere.API.Endpoints
                     return Results.Forbid();//new { Message = "Account is inactive. Please contact support." });
                 }
 
+
                 // Attempt to sign in the user
                 var passwordCheck = await userManager.CheckPasswordAsync(user, request.Password);
                 if (!passwordCheck)
@@ -342,6 +260,9 @@ namespace WorkSphere.API.Endpoints
 
                 // Create a response with user info and roles
                 var roles = await userManager.GetRolesAsync(user);
+
+                user.LastLogin = DateTime.Now;
+                await service.UpdateManagerAsync(user);
 
                 var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "Purpose");
                 return Results.Ok(new
@@ -360,6 +281,37 @@ namespace WorkSphere.API.Endpoints
                         Roles = roles
                     }
                 });
+            });
+
+            app.MapGet("GetUser/{id}", async ( IAccountService service, int id) =>
+            {
+                var manager =  await service.GetUserByIdAsync(id);
+                if(manager != null)
+                {
+                    var showManager = new UserShowDTO
+                    {
+                        FirstName = manager.FirstName,
+                        LastName = manager.LastName,
+                        Phone = manager.PhoneNumber,
+                        Gender = manager.Gender,
+                        Country = manager.Country,
+                        Email = manager.Email,
+                        RoleName = manager.RoleNavigation.Name,
+                        DeptName = manager.DepartmentNavigation.DeptName,
+                        DateOfBirth = manager.DateOfBirth,
+                        DateOfJoining = manager.DateOfJoining,
+                        IsActive = manager.IsActive,
+                        IsDeleted = manager.IsDeleted,
+                        ProfileImgPath = manager.ProfileImgPath
+
+                    };
+
+                    return Results.Ok(showManager);
+                }
+
+                return Results.NotFound("No User Found");
+
+                
             });
 
 

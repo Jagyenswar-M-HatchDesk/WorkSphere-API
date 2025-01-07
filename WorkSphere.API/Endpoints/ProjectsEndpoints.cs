@@ -84,8 +84,7 @@ namespace WorkSphere.API.Endpoints
 
             app.MapPost("AddProject", async ([FromForm] IFormFile? imageFile, [FromForm] ProjectCreateDTO projDto, IProjectService projService, IHostEnvironment environment) =>
             {
-                // Validate Anti-Forgery Token
-                //await antiforgery.ValidateRequestAsync(context);
+                
 
                 // Validate DTO
                 if (projDto == null)
@@ -97,12 +96,12 @@ namespace WorkSphere.API.Endpoints
                 string imagePath = null;
                 if (imageFile != null)
                 {
-                    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
+                    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp", ".pdf", ".docx", ".zip", ".rar" };
                     var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
 
                     if (!allowedExtensions.Contains(fileExtension))
                     {
-                        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
+                        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, .rar, .zip, .docx, .pdf and .webp are allowed." });
                     }
 
                     var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
@@ -190,7 +189,7 @@ namespace WorkSphere.API.Endpoints
                     });
 
                 }
-                return Results.Empty;
+                return Results.NotFound("No Project Found");
             });
 
             
@@ -279,63 +278,7 @@ namespace WorkSphere.API.Endpoints
                 });
             }).DisableAntiforgery();
 
-            //app.MapGet("SearchProjects", async (IProjectService projService, string? title, string? department, string? client, string? status, string? manager, int pageNumber = 1, int pageSize = 10) =>
-            //{
-            //    if (pageNumber <= 0) pageNumber = 1;
-            //    if (pageSize <= 0) pageSize = 10;
-            //    // Fetch all projects
-            //    var projects = await projService.GetallProjAsync();
-
-            //    // Apply filters if search criteria are provided
-            //    var filteredProjects = projects.Where(proj =>
-            //        (string.IsNullOrEmpty(title) || proj.Title!.Contains(title, StringComparison.OrdinalIgnoreCase))
-            //        &&
-            //        (string.IsNullOrEmpty(department) || proj.DepartmentNav!.DeptName.Contains(department, StringComparison.OrdinalIgnoreCase)) &&
-            //        (string.IsNullOrEmpty(client) || proj.ClientNavigation!.ClientName.Contains(client, StringComparison.OrdinalIgnoreCase)) &&
-            //        (string.IsNullOrEmpty(status) || proj.StatusNav!.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase)) &&
-            //        (string.IsNullOrEmpty(status) || proj.ManagerNavigation!.FirstName.Contains(status, StringComparison.OrdinalIgnoreCase))
-            //    //&&
-            //    //(string.IsNullOrEmpty(status) || proj.StatusNav.StatusName.Contains(status, StringComparison.OrdinalIgnoreCase))
-            //    );
-
-            //    var count = filteredProjects.Count();
-            //    // Transform to DTOs
-            //    var result = filteredProjects.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(proj => new ProjectsDTO
-            //    {
-            //        ProjID = proj.ProjID,
-            //        Title = proj.Title,
-            //        ProjDescr = proj.ProjDescr,
-            //        TeamSize = proj.TeamSize,
-            //        StartDate = proj.StartDate,
-            //        Department = proj.DepartmentID,
-            //        DepartmentName = proj.DepartmentNav?.DeptName ?? "Null",
-            //        Client = proj.ClientId,
-            //        ClientName = proj.ClientNavigation?.ClientName ?? "Null",
-            //        Manager = proj.ManagerID,
-            //        ManagerName = proj.ManagerNavigation?.FirstName ?? "Null",
-            //        Deadline = proj.Deadline,
-            //        ImagePath = proj.ImagePath,
-            //        Status = proj.StatusId,
-            //        StatusName = proj.StatusNav?.StatusName ?? "Null",
-            //        SeverityLevel = proj.SeverityLevelId,
-            //        SeverityLevelName = proj.SeverityLevelNav?.level ?? "Null",
-            //        IsActive = proj.IsActive,
-            //        IsCompleted = proj.IsCompleted,
-            //        ModifiedOn = proj.ModifiedOn,
-            //        CreatedBy = proj.CreatedBy,
-            //        CreatedOn = proj.CreatedOn
-            //    });
-
-            //    return Results.Ok(new
-            //    {
-
-            //        Total = count,
-            //        PageNumber = pageNumber,
-            //        PageSize = pageSize,
-            //        TotalPages = (int)Math.Ceiling(count / (double)pageSize),
-            //        Projects = result
-            //    });
-            //});
+            
             app.MapGet("SearchProjects", async (IProjectService projService, string? query, int pageNumber = 1, int pageSize = 10) =>
             {
                 if (pageNumber <= 0) pageNumber = 1;
