@@ -2,6 +2,7 @@
 using WorkSphere.Application.DTOs;
 using WorkSphere.Application.DTOs.TaskDTO;
 using WorkSphere.Application.Interfaces.IServices;
+using WorkSphere.Domain;
 
 namespace WorkSphere.API.Endpoints
 {
@@ -11,12 +12,12 @@ namespace WorkSphere.API.Endpoints
         {
             var app = erb.MapGroup("").WithTags("Task");
 
-            app.MapGet("AllTask", async (ITaskService taskService, int pageNumber = 1, int pageSize = 10) =>
+            app.MapGet("GetAllTask/{ProjectId}", async (int projectId , ITaskService taskService, int pageNumber = 1, int pageSize = 10) =>
             {
                 if(pageNumber <=0 ) pageNumber = 1;
                 if(pageSize <= 0 ) pageSize = 10;
 
-                var task = await taskService.GetTasksAsync();
+                var task = await taskService.GetTasksAsync(projectId);
 
                 var count = task.Count();
 
@@ -26,7 +27,7 @@ namespace WorkSphere.API.Endpoints
                     TaskTitle = task.TaskTitle,
                     TaskDescr = task.TaskDescr,
                     AssignedTo = task.AssignedTo,
-                    Project = task.ProjID,
+                    ProjID = task.ProjID,
                     Progress = task.Progress,
                     Status = task.StatusId,
                     IsActive = task.IsActive,
@@ -60,7 +61,7 @@ namespace WorkSphere.API.Endpoints
                         TaskTitle = task.TaskTitle,
                         TaskDescr = task.TaskDescr,
                         AssignedTo = task.AssignedTo,
-                        Project = task.ProjID,
+                        ProjID = task.ProjID,
                         Progress = task.Progress,
                         Status = task.StatusId,
                         IsActive = task.IsActive,
@@ -74,26 +75,20 @@ namespace WorkSphere.API.Endpoints
                 }
                 return Results.Empty;
             });
-            app.MapPost("AddTask", async (ITaskService taskService, TaskCreateDTO dto) =>
-            {
-                await taskService.AddTaskAsync(dto);
-                var task = new TaskDTO()
-                {
-                    TaskTitle = dto.TaskTitle,
-                    TaskDescr = dto.TaskDescr,
-                    AssignedTo = dto.AssignedTo,
-                    Project = dto.Project,
-                    Progress = dto.Progress,
-                    Status = dto.Status,
-                    IsActive = true,
-                    IsCompleted = false,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = dto.CreatedBy,
-                    ModifiedOn = DateTime.Now
+           
 
-                };
-                return Results.Ok(task);
+            app.MapPost("AddTask/{projectId}", async (int projectId, ITaskService taskService, TaskCreateDTO dto) =>
+            {
+                // Project ID ko DTO mein set karo
+                dto.ProjID = projectId;
+
+                // Add task asynchronously using taskService
+                var taskDTO = await taskService.AddTaskAsync(dto);
+
+                return Results.Ok(taskDTO);
             });
+
+
 
             app.MapPut("UpdateTask/{id}", async (ITaskService taskService, int id, TaskCreateDTO projDto) =>
             {

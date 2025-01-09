@@ -83,6 +83,8 @@ builder.Services.AddScoped<ITaskService, TaskServices>();
 builder.Services.AddScoped<IClientRepo, ClientFRepo>();
 builder.Services.AddScoped<IClientServices, ClientService>();
 builder.Services.AddScoped<IAccountRepo, AccountRepo>();
+builder.Services.AddScoped<IEmployeeService  , EmployeeService>();  
+builder.Services.AddScoped<IEmployeeRepo , EmployeeRepository>();
 builder.Services.AddScoped<IAccountService, AccountServices>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
@@ -116,5 +118,6 @@ app.DepartmentEndpoint();
 app.Client_Endpoints();
 app.Manager_Endpoints();
 app.Severity_Endponits();
+app.MapEmployeeEndpoints();
 
 app.Run();

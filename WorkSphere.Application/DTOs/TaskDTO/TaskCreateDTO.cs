@@ -30,7 +30,7 @@ namespace WorkSphere.Application.DTOs.TaskDTO
         public string? TaskDescr { get; set; }
 
 
-        public int Project { get; set; }
+        public int ProjID { get; set; }
 
         public int? CreatedBy { get; set; }
 

@@ -36,11 +36,11 @@ namespace WorkSphere.Domain
         public int ManagerID { get; set; } 
 
         public DateTime? ModifiedOn { get; set; }
+        public int? CreatedBy { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }
 
-        public int? CreatedBy { get; set; }
 
         public string? ImagePath { get; set; }
 

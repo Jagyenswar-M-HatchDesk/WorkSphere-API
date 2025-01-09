@@ -10,9 +10,9 @@ namespace WorkSphere.Application.Interfaces.IRepo
 {
     public interface ITaskRepo
     {
-        Task<IEnumerable<Tasks>> GetTasks();
+        Task<IEnumerable<Tasks>> GetTasks(int projectId);
         Task<Tasks> GetTaskbyId(int id);
-        Task AddTask(TaskCreateDTO task);
+        Task <TaskDTO>AddTask(TaskCreateDTO task);
         Task EditTask(Tasks task);
         Task CompleteTask(int id);
     }
