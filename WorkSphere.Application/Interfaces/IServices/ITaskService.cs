@@ -10,13 +10,13 @@ namespace WorkSphere.Application.Interfaces.IServices
 {
     public interface ITaskService
     {
-        Task<IEnumerable<Tasks>> GetTasksAsync();
+        Task<IEnumerable<Tasks>> GetTasksAsync(int projectId);
 
         Task<Tasks> GetTaskByIdSaync(int id);
 
         Task UpdateTaskasync(Tasks task);
 
-        Task AddTaskAsync(TaskCreateDTO task);
+        Task <TaskDTO>AddTaskAsync(TaskCreateDTO task);
 
         Task completeTaskAsync(int id);
     }

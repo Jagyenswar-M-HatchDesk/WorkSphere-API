@@ -19,10 +19,11 @@ namespace WorkSphere.Infrastructure.Repository
             this._context = context;
         }
 
-        public async Task<IEnumerable<Tasks>> GetTasks()
+        public async Task<IEnumerable<Tasks>> GetTasks(int projectId)
         {
-            var task = await _context.tbl_Tasks.ToListAsync();
-            return task;
+            return await _context.tbl_Tasks
+           .Where(task => task.ProjID == projectId)
+            .ToListAsync();
         }
 
         public async Task<Tasks> GetTaskbyId(int id)
@@ -31,7 +32,7 @@ namespace WorkSphere.Infrastructure.Repository
             return task;
         }
 
-        public async Task AddTask(TaskCreateDTO task)
+        public async Task<TaskDTO> AddTask(TaskCreateDTO task)
         {
             var newtask = new Tasks()
             {
@@ -39,9 +40,9 @@ namespace WorkSphere.Infrastructure.Repository
                 TaskDescr = task.TaskDescr,
                 AssignedTo = task.AssignedTo,
                 CreatedBy = task.CreatedBy,
+                ProjID = task.ProjID,
                 StatusId = task.Status,
                 Progress = task.Progress,
-                ProjID = task.Project,
                 CreatedOn = DateTime.Now,
                 ModifiedOn = DateTime.Now,
                 IsActive = true,
@@ -49,6 +50,21 @@ namespace WorkSphere.Infrastructure.Repository
             };
             _context.tbl_Tasks.Add(newtask);
             await _context.SaveChangesAsync();
+
+            return new TaskDTO()
+            {
+                TaskTitle = newtask.TaskTitle,
+                TaskDescr = newtask.TaskDescr,
+                AssignedTo = newtask.AssignedTo,
+                CreatedBy = newtask.CreatedBy,
+                Status = newtask.StatusId,
+               ProjID  =  newtask.ProjID,
+                Progress = newtask.Progress,
+                CreatedOn = newtask.CreatedOn,
+                ModifiedOn = newtask.ModifiedOn,
+                IsActive = true,
+                IsCompleted = false
+            };
         }
 
         public async Task EditTask(Tasks task)

@@ -30,6 +30,7 @@ namespace WorkSphere.API.Endpoints
                 return manager;
             });
 
+
             app.MapPost("account/register-manager", async (ManagerCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IAccountService service, IEmailService emailService) =>
             {
                 if (string.IsNullOrWhiteSpace(request.Email) )//|| string.IsNullOrWhiteSpace(request.Password))
@@ -163,6 +164,29 @@ namespace WorkSphere.API.Endpoints
                 await service.UpdateManagerAsync(manager);
                 return Results.Ok("Manager is Successfully Deleted");
             });
+
+            app.MapGet("GetProjectByManager", async (WorkSphereDbContext dbContext, int managerId) =>
+            {
+                var projects = await dbContext.tbl_Projects
+                    .Where(p => p.ManagerID == managerId)
+                    .Select(p => new
+                    {
+                        ProjID = p.ProjID,
+                        Title = p.Title,
+                        ProjDescr = p.ProjDescr,
+                        CreatedOn = p.CreatedOn,
+                        imagePath = p.ImagePath
+                    })
+                    .ToListAsync();
+
+                if (!projects.Any())
+                {
+                    return Results.NotFound(new { Message = "No projects found for this manager." });
+                }
+
+                return Results.Ok(projects);
+            });
+
 
         }
     }
