@@ -79,6 +79,8 @@ namespace WorkSphere.Domain
         public virtual SeverityLevel? SeverityLevelNav { get; set; }
         public virtual ICollection<Tasks>? Tasks { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         
     }
 

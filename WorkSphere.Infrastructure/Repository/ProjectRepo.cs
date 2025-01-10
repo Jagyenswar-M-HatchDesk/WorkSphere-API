@@ -94,7 +94,14 @@ namespace WorkSphere.Infrastructure.Repository
         public async Task DeleteProject(int id)
         {
             var proj = await GetProjectById(id);
-            _workSphereDbContext.tbl_Projects.Remove(proj);
+            if (proj != null)
+            {
+                proj.IsActive = false;
+                proj.IsCompleted = false;
+                proj.IsDeleted = true;
+            }
+
+            _workSphereDbContext.tbl_Projects.Update(proj);
             await _workSphereDbContext.SaveChangesAsync();
         }
 
