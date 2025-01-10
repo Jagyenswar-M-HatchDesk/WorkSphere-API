@@ -26,7 +26,7 @@ namespace WorkSphere.API.Endpoints
 
                 var proj = await projservice.GetallProjAsync();
 
-                
+           
 
                 //sortiing
                 proj = sorting.ToLower() switch
@@ -48,7 +48,7 @@ namespace WorkSphere.API.Endpoints
                 var pageProduct = proj.Skip((pageNumber - 1) * pageSize).Take(pageSize)
                  .Select(proj => new ProjectsDTO
                  {
-                     ProjID = proj.ProjID,
+                     Id = proj.ProjID,
                      Title = proj.Title,
                      ProjDescr = proj.ProjDescr,
                      TeamSize = proj.TeamSize,
@@ -157,7 +157,7 @@ namespace WorkSphere.API.Endpoints
                 {
                     var viewproj = new ProjectsDTO
                     {
-                        ProjID = proj.ProjID,
+                        Id = proj.ProjID,
                         Title = proj.Title,
                         ProjDescr = proj.ProjDescr,
                         TeamSize = proj.TeamSize,
@@ -252,7 +252,7 @@ namespace WorkSphere.API.Endpoints
                     message = "Successfully Updated data",
                     Project = new ProjectsDTO
                     {
-                        ProjID = proj.ProjID,
+                        Id = proj.ProjID,
                         Title = proj.Title,
                         ProjDescr = proj.ProjDescr,
                         TeamSize = proj.TeamSize,
@@ -300,7 +300,7 @@ namespace WorkSphere.API.Endpoints
                 // Transform to DTOs
                 var result = filteredProjects.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(proj => new ProjectsDTO
                 {
-                    ProjID = proj.ProjID,
+                    Id = proj.ProjID,
                     Title = proj.Title,
                     ProjDescr = proj.ProjDescr,
                     TeamSize = proj.TeamSize,

@@ -8,6 +8,6 @@ namespace WorkSphere.Application.DTOs.EmployeeDTO
 {
     public class EmployeeEditDTO : EmployeeCreateDTO
     {
-        public int empId { get; set; }
+        public int Id { get; set; }
     }
 }

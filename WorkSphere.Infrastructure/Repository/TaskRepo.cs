@@ -22,7 +22,7 @@ namespace WorkSphere.Infrastructure.Repository
         public async Task<IEnumerable<Tasks>> GetTasks(int projectId)
         {
             return await _context.tbl_Tasks
-           .Where(task => task.ProjID == projectId)
+           .Where(task => task.TaskID == projectId)
             .ToListAsync();
         }
 
@@ -40,7 +40,7 @@ namespace WorkSphere.Infrastructure.Repository
                 TaskDescr = task.TaskDescr,
                 AssignedTo = task.AssignedTo,
                 CreatedBy = task.CreatedBy,
-                ProjID = task.ProjID,
+                Id = task.ProjID,
                 StatusId = task.Status,
                 Progress = task.Progress,
                 CreatedOn = DateTime.Now,
@@ -58,7 +58,7 @@ namespace WorkSphere.Infrastructure.Repository
                 AssignedTo = newtask.AssignedTo,
                 CreatedBy = newtask.CreatedBy,
                 Status = newtask.StatusId,
-               ProjID  =  newtask.ProjID,
+               ProjID  =  newtask.Id,
                 Progress = newtask.Progress,
                 CreatedOn = newtask.CreatedOn,
                 ModifiedOn = newtask.ModifiedOn,
