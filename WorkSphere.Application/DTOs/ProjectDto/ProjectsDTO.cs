@@ -10,7 +10,7 @@ namespace WorkSphere.Application.DTOs.ProjectDto
 {
     public class ProjectsDTO
     {
-        public int ProjID { get; set; }
+        public int Id { get; set; }
 
 
         public string? Title { get; set; }

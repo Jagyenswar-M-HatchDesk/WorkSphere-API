@@ -54,6 +54,7 @@ namespace WorkSphere.Domain
         public string? ProfileImgPath { get; set; }
         [ForeignKey("DeptId")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
+
         public virtual Department? DepartmentNavigation { get; set; }
         [ForeignKey("Rollid")]
         [DeleteBehavior(DeleteBehavior.Restrict)]

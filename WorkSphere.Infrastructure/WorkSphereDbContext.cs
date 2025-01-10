@@ -31,8 +31,14 @@ namespace WorkSphere.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // Required for Identity tables
-            
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>()
+     .HasOne(u => u.DepartmentNavigation) // User ka ek Department hoga
+     .WithMany(d => d.Users)    // Department ke multiple Users ho sakte hain
+     .HasForeignKey(u => u.DeptId) // Foreign key DeptId hai
+     .OnDelete(DeleteBehavior.Restrict);
+            // Required for Identity tables
+
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 1, Name = "Admin", NormalizedName = "Admin".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 2, Name = "Manager", NormalizedName = "Manager".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
             modelBuilder.Entity<Roles>().HasData(new Roles { Id = 3, Name = "Employee", NormalizedName = "Employee".ToUpper(), IsActive = true, IsDelete = false, CreatedOn = DateTime.Now });
@@ -124,7 +130,7 @@ namespace WorkSphere.Infrastructure
 
             modelBuilder.Entity<Projects>().HasData(new Projects { ProjID = 1, ProjDescr = "Project For test", Title = "Test Project", ClientId = 1, CreatedOn = DateTime.Now, Deadline = null, DepartmentID= 1, ImagePath="string.jpeg",  CreatedBy=1, IsActive= true, IsCompleted=false, ManagerID=2, ModifiedOn=DateTime.Now, SeverityLevelId = 2, StartDate= DateTime.Now, TeamSize = 3, StatusId =null});
             
-            modelBuilder.Entity<Tasks>().HasData(new Tasks { TaskID = 1, TaskDescr = "Task For test", TaskTitle = "Test TAsk", AssignedTo = 3, CreatedOn = DateTime.Now, Progress= 25, ProjID= 1,   CreatedBy=1, IsActive= true, IsCompleted=false,  ModifiedOn=DateTime.Now, StatusId =null});
+            modelBuilder.Entity<Tasks>().HasData(new Tasks { TaskID = 1, TaskDescr = "Task For test", TaskTitle = "Test TAsk", AssignedTo = 3, CreatedOn = DateTime.Now, Progress= 25, Id= 1,   CreatedBy=1, IsActive= true, IsCompleted=false,  ModifiedOn=DateTime.Now, StatusId =null});
 
             base.OnModelCreating(modelBuilder);
         }

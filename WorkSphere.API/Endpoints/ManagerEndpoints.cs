@@ -171,7 +171,7 @@ namespace WorkSphere.API.Endpoints
                     .Where(p => p.ManagerID == managerId)
                     .Select(p => new
                     {
-                        ProjID = p.ProjID,
+                        Id = p.ProjID,
                         Title = p.Title,
                         ProjDescr = p.ProjDescr,
                         CreatedOn = p.CreatedOn,

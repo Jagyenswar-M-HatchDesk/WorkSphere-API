@@ -68,22 +68,27 @@ namespace WorkSphere.Infrastructure.Repository
 
         public async Task<List<EmployeeDTO>> GetAllEmployee()
         {
-            var emp = await _context.Users.Where(e => e.IsActive == true && e.Rollid == 3).ToListAsync();
-            var MappedProduct = emp.Select(x => new EmployeeDTO
-            {
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Email = x.Email,
-                RoleId = x.Rollid,
-                DepartmentId = x.DeptId,
-                IsActive = true,
-                ModifiedOn = DateTime.Now,
-                CreatedBy = x.CreatedBy,
-                DateOfJoining = DateTime.Now,
+            var emp = await _context.Users
+                .Include(u => u.DepartmentNavigation) 
+                .Where(e => e.IsActive == true && e.Rollid == 3)
+                .Select(x => new EmployeeDTO
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    RoleId = x.Rollid,
+                    DepartmentId = x.DeptId,
+                    DepartmentName = x.DepartmentNavigation!.DeptName, 
+                    IsActive = true,
+                    ModifiedOn = DateTime.Now,
+                    CreatedBy = x.CreatedBy,
+                    DateOfJoining = x.DateOfJoining
+                }).ToListAsync();
 
-            }).ToList();
-            return MappedProduct;
+            return emp;
         }
+
 
         public async Task<EmployeeEditDTO> GetEmployeeById(int id)
         {
@@ -91,7 +96,8 @@ namespace WorkSphere.Infrastructure.Repository
             if (objEmp != null)
             {
                 return new EmployeeEditDTO
-                {
+                {       
+                    Id = objEmp.Id,
                     FirstName = objEmp.FirstName,
                     LastName = objEmp.LastName,
                     Email = objEmp.Email,
@@ -108,7 +114,7 @@ namespace WorkSphere.Infrastructure.Repository
 
         public async Task<EmployeeDTO> UpdateEmployee(EmployeeEditDTO employee)
         {
-            var emp = await _context.Users.FirstOrDefaultAsync(x => x.Id == employee.empId && x.Rollid == 3);
+            var emp = await _context.Users.FirstOrDefaultAsync(x => x.Id == employee.Id && x.Rollid == 3);
             if (emp != null)
             {
                 // Map updated values
@@ -129,7 +135,7 @@ namespace WorkSphere.Infrastructure.Repository
                 // Return updated DTO
                 return new EmployeeDTO
                 {
-                    empId = emp.Id,
+                    Id = emp.Id,
                     FirstName = emp.FirstName,
                     LastName = emp.LastName,
                     Email = emp.Email,

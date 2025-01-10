@@ -39,7 +39,7 @@ namespace WorkSphere.Domain
         public string? TaskDescr { get; set; }
 
         [Required]
-        public int ProjID { get; set; }
+        public int Id { get; set; }
         [ForeignKey("ProjID")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
 
