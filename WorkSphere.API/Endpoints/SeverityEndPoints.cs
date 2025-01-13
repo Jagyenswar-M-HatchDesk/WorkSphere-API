@@ -14,6 +14,14 @@ namespace WorkSphere.API.Endpoints
                 var level = await dbcontext.mst_SeverityLevel.ToListAsync();
                 return level;
             });
+
+
+            app.MapGet("GetStatus", async (WorkSphereDbContext dbcontext) =>
+            {
+                var level = await dbcontext.mst_Status.ToListAsync();
+                return level;
+            });
+
         }
     }
 }

@@ -12,12 +12,12 @@ namespace WorkSphere.Application.Interfaces.IServices
     {
         Task<IEnumerable<Tasks>> GetTasksAsync(int projectId);
 
-        Task<Tasks> GetTaskByIdSaync(int id);
+        Task<TaskEditDTO> GetTaskByIdSaync(int id);
 
-        Task UpdateTaskasync(Tasks task);
+        Task<TaskDTO> UpdateTaskasync(TaskEditDTO task);
 
         Task <TaskDTO>AddTaskAsync(TaskCreateDTO task);
 
-        Task completeTaskAsync(int id);
+        //Task completeTaskAsync(int id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Mvc;
 using WorkSphere.Application.DTOs;
 using WorkSphere.Application.DTOs.TaskDTO;
 using WorkSphere.Application.Interfaces.IServices;
@@ -27,6 +28,7 @@ namespace WorkSphere.API.Endpoints
                     TaskTitle = task.TaskTitle,
                     TaskDescr = task.TaskDescr,
                     AssignedTo = task.AssignedTo,
+                    SeverityLevel = task.SeverityLevelId,
                     ProjID = task.Id,
                     Progress = task.Progress,
                     Status = task.StatusId,
@@ -61,9 +63,11 @@ namespace WorkSphere.API.Endpoints
                         TaskTitle = task.TaskTitle,
                         TaskDescr = task.TaskDescr,
                         AssignedTo = task.AssignedTo,
-                        ProjID = task.Id,
+                        SeverityLevel =  task.SeverityLevel,
+                        ImagePath = task.ImagePath,
+                        ProjID = task.ProjID,
                         Progress = task.Progress,
-                        Status = task.StatusId,
+                        Status = task.Status,
                         IsActive = task.IsActive,
                         IsCompleted = task.IsCompleted,
                         CreatedOn = task.CreatedOn,
@@ -75,10 +79,40 @@ namespace WorkSphere.API.Endpoints
                 }
                 return Results.Empty;
             });
-           
 
-            app.MapPost("AddTask/{projectId}", async (int projectId, ITaskService taskService, TaskCreateDTO dto) =>
+            app.MapPost("AddTask/{projectId}", async ([FromForm] IFormFile ? imageFile , int projectId, ITaskService taskService, [FromForm] TaskCreateDTO dto , IHostEnvironment environment) =>
             {
+
+                string imagePath = null;
+                if (imageFile != null)
+                {
+                    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp", ".pdf", ".docx", ".zip", ".rar" };
+                    var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, .rar, .zip, .docx, .pdf and .webp are allowed." });
+                    }
+
+                    var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
+                }
+
+                // Set the image path in DTO
+                dto.ImagePath = imagePath;
                 // Project ID ko DTO mein set karo
                 dto.ProjID = projectId;
 
@@ -86,25 +120,53 @@ namespace WorkSphere.API.Endpoints
                 var taskDTO = await taskService.AddTaskAsync(dto);
 
                 return Results.Ok(taskDTO);
-            });
+            }).DisableAntiforgery(); ;
 
-
-
-            app.MapPut("UpdateTask/{id}", async (ITaskService taskService, int id, TaskCreateDTO projDto) =>
+            app.MapPut("UpdateTask/{id}", async (ITaskService taskService, [FromRoute]int id, [FromForm] IFormFile? imageFile, [FromForm] TaskEditDTO dto , IHostEnvironment environment) =>
             {
+                string imagePath = null;
+                if (imageFile != null)
+                {
+                    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
+                    var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
+                    }
+
+                    var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
+                }
+
+                dto.ImagePath = imagePath;
+
+
                 var task = await taskService.GetTaskByIdSaync(id);
                 if (task == null) return Results.NotFound();
 
-                task.TaskTitle = projDto.TaskTitle;
-                task.TaskDescr = projDto.TaskDescr;
-                task.AssignedTo = projDto.AssignedTo;
-                task.Progress = projDto.Progress;
-                task.StatusId = projDto.Status;
-                //task.Client = projDto.Client;
-                //task.Manager = projDto.Manager;
-                //task.Deadline = projDto.Deadline;
-                //task.ImagePath = projDto.ImagePath;
-                //task.Status = projDto.Status;
+                task.TaskTitle = dto.TaskTitle;
+                task.TaskDescr = dto.TaskDescr;
+                task.AssignedTo = dto.AssignedTo;
+                task.Progress = dto.Progress;
+                task.StartDate = dto.StartDate;
+                dto.EndDate = dto.EndDate;
+                dto.Status = dto.Status;
+                task.SeverityLevel = dto.SeverityLevel;
+              
 
                 await taskService.UpdateTaskasync(task);
                 return Results.Ok(task);
