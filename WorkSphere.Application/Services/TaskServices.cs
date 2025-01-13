@@ -25,14 +25,14 @@ namespace WorkSphere.Application.Services
             return await _repo.GetTasks(projectId);
         }
 
-        public async Task<Tasks> GetTaskByIdSaync(int id)
+        public async Task<TaskEditDTO> GetTaskByIdSaync(int id)
         {
             return await _repo.GetTaskbyId(id);
         }
 
-        public async Task UpdateTaskasync(Tasks task)
+        public async Task<TaskDTO> UpdateTaskasync(TaskEditDTO task)
         {
-            await _repo.EditTask(task);
+           return  await _repo.EditTask(task);
         }
 
         public async Task<TaskDTO> AddTaskAsync(TaskCreateDTO task)
@@ -40,9 +40,9 @@ namespace WorkSphere.Application.Services
             return await _repo.AddTask(task);
         }
 
-        public async Task completeTaskAsync(int id)
-        {
-            await _repo.CompleteTask(id);
-        }
+        //public async Task completeTaskAsync(int id)
+        //{
+        //    await _repo.CompleteTask(id);
+        //}
     }
 }

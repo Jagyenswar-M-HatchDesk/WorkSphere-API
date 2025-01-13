@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WorkSphere.Application.DTOs.TaskDTO
+﻿namespace WorkSphere.Application.DTOs.TaskDTO
 {
     public class TaskDTO
     {
@@ -22,8 +14,11 @@ namespace WorkSphere.Application.DTOs.TaskDTO
 
             public DateTime? ModifiedOn { get; set; }
 
-           
-            public bool IsActive { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+
+
+        public bool IsActive { get; set; }
 
             
             public bool IsCompleted { get; set; }
@@ -38,9 +33,10 @@ namespace WorkSphere.Application.DTOs.TaskDTO
 
             public int? CreatedBy { get; set; }
 
+        public string? ImagePath { get; set; }
+        public int ?SeverityLevel { get; set; }
 
-            
-            public int? Status { get; set; }
+        public int? Status { get; set; }
 
             public int? Progress { get; set; }
             //public virtual User? UserNavigation { get; set; }

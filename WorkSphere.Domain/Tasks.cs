@@ -21,6 +21,12 @@ namespace WorkSphere.Domain
         [Required]
         public DateTime CreatedOn { get; set; }
 
+   
+        public DateTime? StartDate { get; set; }
+   
+        public DateTime? EndDate { get; set; }
+
+
         public DateTime? ModifiedOn { get; set; }
 
         [Required]
@@ -38,6 +44,8 @@ namespace WorkSphere.Domain
 
         public string? TaskDescr { get; set; }
 
+        public string? ImagePath { get; set; }
+
         [Required]
         public int Id { get; set; }
         [ForeignKey("ProjID")]
@@ -54,6 +62,12 @@ namespace WorkSphere.Domain
         [DeleteBehavior(DeleteBehavior.Restrict)]
 
         public virtual Status? StatusNav { get; set; }
+
+        public int? SeverityLevelId { get; set; }
+        [ForeignKey("SeverityLevelId")]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+
+        public virtual SeverityLevel? SeverityLevelNav { get; set; }
 
         public int? Progress { get; set; }
         //public virtual User? UserNavigation { get; set; }

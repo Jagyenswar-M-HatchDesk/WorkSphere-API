@@ -12,8 +12,8 @@ using WorkSphere.Infrastructure;
 namespace WorkSphere.Infrastructure.Migrations
 {
     [DbContext(typeof(WorkSphereDbContext))]
-    [Migration("20250101082535_initials")]
-    partial class initials
+    [Migration("20250113071204_taskiamge add")]
+    partial class taskiamgeadd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -211,11 +211,11 @@ namespace WorkSphere.Infrastructure.Migrations
                             ClientID = 1,
                             ClientName = "Hatchdesk",
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(2565),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 985, DateTimeKind.Local).AddTicks(3356),
                             Email = "hatchdesk18@gmail.com",
                             IsActive = true,
                             IsDelete = false,
-                            ModifiedOn = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(3072),
+                            ModifiedOn = new DateTime(2025, 1, 13, 12, 42, 1, 985, DateTimeKind.Local).AddTicks(4449),
                             PhoneNumber = "7723099993"
                         },
                         new
@@ -223,11 +223,11 @@ namespace WorkSphere.Infrastructure.Migrations
                             ClientID = 2,
                             ClientName = "Congent",
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(4356),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 985, DateTimeKind.Local).AddTicks(8444),
                             Email = "cogent@gmail.com",
                             IsActive = true,
                             IsDelete = false,
-                            ModifiedOn = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(4358),
+                            ModifiedOn = new DateTime(2025, 1, 13, 12, 42, 1, 985, DateTimeKind.Local).AddTicks(8450),
                             PhoneNumber = "374t4328234"
                         });
                 });
@@ -265,7 +265,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             DeptId = 1,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 678, DateTimeKind.Local).AddTicks(9403),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 490, DateTimeKind.Local).AddTicks(3824),
                             DeptName = "None",
                             IsActive = true,
                             IsDelete = false
@@ -274,7 +274,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             DeptId = 2,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 678, DateTimeKind.Local).AddTicks(9795),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 490, DateTimeKind.Local).AddTicks(5466),
                             DeptName = "Desktop App Development",
                             IsActive = true,
                             IsDelete = false
@@ -283,7 +283,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             DeptId = 3,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 678, DateTimeKind.Local).AddTicks(9822),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 490, DateTimeKind.Local).AddTicks(5531),
                             DeptName = "Mobile Development",
                             IsActive = true,
                             IsDelete = false
@@ -292,7 +292,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             DeptId = 4,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 678, DateTimeKind.Local).AddTicks(9842),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 490, DateTimeKind.Local).AddTicks(5561),
                             DeptName = "UI/UX Design",
                             IsActive = true,
                             IsDelete = false
@@ -301,7 +301,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             DeptId = 5,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 678, DateTimeKind.Local).AddTicks(9862),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 490, DateTimeKind.Local).AddTicks(5590),
                             DeptName = "API Development",
                             IsActive = true,
                             IsDelete = false
@@ -385,16 +385,16 @@ namespace WorkSphere.Infrastructure.Migrations
                             ProjID = 1,
                             ClientId = 1,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(5487),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 986, DateTimeKind.Local).AddTicks(2615),
                             DepartmentID = 1,
                             ImagePath = "string.jpeg",
                             IsActive = true,
                             IsCompleted = false,
                             ManagerID = 2,
-                            ModifiedOn = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(7041),
+                            ModifiedOn = new DateTime(2025, 1, 13, 12, 42, 1, 986, DateTimeKind.Local).AddTicks(7039),
                             ProjDescr = "Project For test",
                             SeverityLevelId = 2,
-                            StartDate = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(7384),
+                            StartDate = new DateTime(2025, 1, 13, 12, 42, 1, 986, DateTimeKind.Local).AddTicks(8152),
                             TeamSize = 3,
                             Title = "Test Project"
                         });
@@ -436,30 +436,30 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             Id = 1,
                             CreatedBy = 1,
-                            Createdon = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(2996),
+                            Createdon = new DateTime(2025, 1, 13, 12, 42, 1, 492, DateTimeKind.Local).AddTicks(7131),
                             IsActive = true,
                             IsDeleted = false,
-                            Updatedon = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(3184),
+                            Updatedon = new DateTime(2025, 1, 13, 12, 42, 1, 492, DateTimeKind.Local).AddTicks(7668),
                             level = "High"
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = 1,
-                            Createdon = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(3495),
+                            Createdon = new DateTime(2025, 1, 13, 12, 42, 1, 493, DateTimeKind.Local).AddTicks(676),
                             IsActive = true,
                             IsDeleted = false,
-                            Updatedon = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(3497),
+                            Updatedon = new DateTime(2025, 1, 13, 12, 42, 1, 493, DateTimeKind.Local).AddTicks(688),
                             level = "Medium"
                         },
                         new
                         {
                             Id = 3,
                             CreatedBy = 1,
-                            Createdon = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(3524),
+                            Createdon = new DateTime(2025, 1, 13, 12, 42, 1, 493, DateTimeKind.Local).AddTicks(759),
                             IsActive = true,
                             IsDeleted = false,
-                            Updatedon = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(3525),
+                            Updatedon = new DateTime(2025, 1, 13, 12, 42, 1, 493, DateTimeKind.Local).AddTicks(761),
                             level = "Low"
                         });
                 });
@@ -497,7 +497,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             StatusId = 1,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(1312),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 491, DateTimeKind.Local).AddTicks(326),
                             IsActive = true,
                             IsDelete = false,
                             StatusName = "Accepted"
@@ -506,7 +506,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             StatusId = 2,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(1656),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 491, DateTimeKind.Local).AddTicks(2334),
                             IsActive = true,
                             IsDelete = false,
                             StatusName = "In Progress"
@@ -515,7 +515,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             StatusId = 3,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(1680),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 491, DateTimeKind.Local).AddTicks(2393),
                             IsActive = true,
                             IsDelete = false,
                             StatusName = "Pending"
@@ -524,7 +524,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             StatusId = 4,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(1703),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 491, DateTimeKind.Local).AddTicks(2427),
                             IsActive = true,
                             IsDelete = false,
                             StatusName = "Delayed"
@@ -533,7 +533,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             StatusId = 5,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(1724),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 491, DateTimeKind.Local).AddTicks(2460),
                             IsActive = true,
                             IsDelete = false,
                             StatusName = "At Risk"
@@ -542,7 +542,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             StatusId = 6,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(1748),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 491, DateTimeKind.Local).AddTicks(2512),
                             IsActive = true,
                             IsDelete = false,
                             StatusName = "Completed"
@@ -551,7 +551,7 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             StatusId = 7,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 679, DateTimeKind.Local).AddTicks(1769),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 491, DateTimeKind.Local).AddTicks(2542),
                             IsActive = true,
                             IsDelete = false,
                             StatusName = "Rejected"
@@ -575,6 +575,15 @@ namespace WorkSphere.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -587,8 +596,14 @@ namespace WorkSphere.Infrastructure.Migrations
                     b.Property<int?>("Progress")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjID")
+                    b.Property<int?>("ProjID")
                         .HasColumnType("int");
+
+                    b.Property<int?>("SeverityLevelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("StatusId")
                         .HasColumnType("int");
@@ -606,6 +621,8 @@ namespace WorkSphere.Infrastructure.Migrations
 
                     b.HasIndex("ProjID");
 
+                    b.HasIndex("SeverityLevelId");
+
                     b.HasIndex("StatusId");
 
                     b.ToTable("tbl_Tasks");
@@ -616,12 +633,12 @@ namespace WorkSphere.Infrastructure.Migrations
                             TaskID = 1,
                             AssignedTo = 3,
                             CreatedBy = 1,
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 980, DateTimeKind.Local).AddTicks(9241),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 987, DateTimeKind.Local).AddTicks(4415),
+                            Id = 1,
                             IsActive = true,
                             IsCompleted = false,
-                            ModifiedOn = new DateTime(2025, 1, 1, 13, 55, 34, 981, DateTimeKind.Local).AddTicks(197),
+                            ModifiedOn = new DateTime(2025, 1, 13, 12, 42, 1, 987, DateTimeKind.Local).AddTicks(7261),
                             Progress = 25,
-                            ProjID = 1,
                             TaskDescr = "Task For test",
                             TaskTitle = "Test TAsk"
                         });
@@ -642,8 +659,14 @@ namespace WorkSphere.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateOfJoining")
                         .HasColumnType("datetime2");
@@ -660,6 +683,9 @@ namespace WorkSphere.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -701,6 +727,9 @@ namespace WorkSphere.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfileImgPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Rollid")
                         .HasColumnType("int");
 
@@ -735,9 +764,9 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3d637e70-6d7d-4212-a0a8-2b87402eaa02",
+                            ConcurrencyStamp = "c3e691bf-0809-41fd-b909-f6ea870c57c6",
                             CreatedBy = 1,
-                            DateOfJoining = new DateTime(2025, 1, 1, 13, 55, 34, 682, DateTimeKind.Local).AddTicks(3276),
+                            DateOfJoining = new DateTime(2025, 1, 13, 12, 42, 1, 498, DateTimeKind.Local).AddTicks(7807),
                             DeptId = 1,
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
@@ -746,8 +775,8 @@ namespace WorkSphere.Infrastructure.Migrations
                             IsDeleted = false,
                             LastName = "Admin",
                             LockoutEnabled = false,
-                            ModifiedOn = new DateTime(2025, 1, 1, 13, 55, 34, 682, DateTimeKind.Local).AddTicks(3475),
-                            PasswordHash = "AQAAAAIAAYagAAAAEPCj1tSrSEh2fov82waU05RqGPErlJiYoQb27V1JOP1J5Qy5XkzDiSccehp5t2kS2g==",
+                            ModifiedOn = new DateTime(2025, 1, 13, 12, 42, 1, 498, DateTimeKind.Local).AddTicks(8263),
+                            PasswordHash = "AQAAAAIAAYagAAAAEPR9vvmMUl+trTJmc8qxAqdhpnPWd2Y3v/dI7Tjtz+vVfU+AhXK57KqnRpyd4psZsg==",
                             PhoneNumber = "7723099993",
                             PhoneNumberConfirmed = false,
                             Rollid = 1,
@@ -758,9 +787,9 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6c02d611-f649-413f-8fb0-654a438819ac",
+                            ConcurrencyStamp = "b2f60a86-9e58-4c5e-a448-c2f42ab79925",
                             CreatedBy = 1,
-                            DateOfJoining = new DateTime(2025, 1, 1, 13, 55, 34, 792, DateTimeKind.Local).AddTicks(8741),
+                            DateOfJoining = new DateTime(2025, 1, 13, 12, 42, 1, 665, DateTimeKind.Local).AddTicks(408),
                             DeptId = 3,
                             Email = "tapanmeher@gmail.com",
                             EmailConfirmed = false,
@@ -769,8 +798,8 @@ namespace WorkSphere.Infrastructure.Migrations
                             IsDeleted = false,
                             LastName = "Meher",
                             LockoutEnabled = false,
-                            ModifiedOn = new DateTime(2025, 1, 1, 13, 55, 34, 792, DateTimeKind.Local).AddTicks(8767),
-                            PasswordHash = "AQAAAAIAAYagAAAAENV6jI0ZFkJW4/wZpRJsk6oGr7JC/W7nS3ICt45zZdkRnPHh5Z0bCwbZj790MgE80Q==",
+                            ModifiedOn = new DateTime(2025, 1, 13, 12, 42, 1, 665, DateTimeKind.Local).AddTicks(422),
+                            PasswordHash = "AQAAAAIAAYagAAAAEDB6r8A/V37eQFwqx8rwlRnClbXpNI3QBMyNkapXOaeAEnoxt5MRDo2cx2HUDREHpQ==",
                             PhoneNumber = "7723099993",
                             PhoneNumberConfirmed = false,
                             Rollid = 2,
@@ -781,9 +810,9 @@ namespace WorkSphere.Infrastructure.Migrations
                         {
                             Id = 3,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7b37cf34-91b4-48be-a80c-ca68c44e2dab",
+                            ConcurrencyStamp = "e739fc09-60c9-4c5c-9217-6db425c42d58",
                             CreatedBy = 1,
-                            DateOfJoining = new DateTime(2025, 1, 1, 13, 55, 34, 885, DateTimeKind.Local).AddTicks(7615),
+                            DateOfJoining = new DateTime(2025, 1, 13, 12, 42, 1, 807, DateTimeKind.Local).AddTicks(941),
                             DeptId = 3,
                             Email = "sakshiyadav@gmail.com",
                             EmailConfirmed = false,
@@ -792,8 +821,8 @@ namespace WorkSphere.Infrastructure.Migrations
                             IsDeleted = false,
                             LastName = "Yadav",
                             LockoutEnabled = false,
-                            ModifiedOn = new DateTime(2025, 1, 1, 13, 55, 34, 885, DateTimeKind.Local).AddTicks(7641),
-                            PasswordHash = "AQAAAAIAAYagAAAAEAWn704kMUR9T9TckGH2aR4GVtdesislTeNtJQ0OWMB206JEGrNo4HQWNbfG7lM3dQ==",
+                            ModifiedOn = new DateTime(2025, 1, 13, 12, 42, 1, 807, DateTimeKind.Local).AddTicks(974),
+                            PasswordHash = "AQAAAAIAAYagAAAAEIrFRIVUUIzRdFpJoU8CKF8rTJg05Hpqtb61WwEVI3HZiSskzjqbm4GYJojEelivyg==",
                             PhoneNumber = "2783682993",
                             PhoneNumberConfirmed = false,
                             Rollid = 3,
@@ -823,7 +852,7 @@ namespace WorkSphere.Infrastructure.Migrations
                             Id = 1,
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 676, DateTimeKind.Local).AddTicks(2903),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 487, DateTimeKind.Local).AddTicks(709),
                             IsActive = true,
                             IsDelete = false
                         },
@@ -832,7 +861,7 @@ namespace WorkSphere.Infrastructure.Migrations
                             Id = 2,
                             Name = "Manager",
                             NormalizedName = "MANAGER",
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 678, DateTimeKind.Local).AddTicks(6977),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 489, DateTimeKind.Local).AddTicks(9175),
                             IsActive = true,
                             IsDelete = false
                         },
@@ -841,7 +870,7 @@ namespace WorkSphere.Infrastructure.Migrations
                             Id = 3,
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE",
-                            CreatedOn = new DateTime(2025, 1, 1, 13, 55, 34, 678, DateTimeKind.Local).AddTicks(7165),
+                            CreatedOn = new DateTime(2025, 1, 13, 12, 42, 1, 489, DateTimeKind.Local).AddTicks(9876),
                             IsActive = true,
                             IsDelete = false
                         });
@@ -951,8 +980,12 @@ namespace WorkSphere.Infrastructure.Migrations
                     b.HasOne("WorkSphere.Domain.Projects", "ProjectNav")
                         .WithMany("Tasks")
                         .HasForeignKey("ProjID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("WorkSphere.Domain.SeverityLevel", "SeverityLevelNav")
+                        .WithMany()
+                        .HasForeignKey("SeverityLevelId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WorkSphere.Domain.Status", "StatusNav")
                         .WithMany("Tasks")
@@ -962,6 +995,8 @@ namespace WorkSphere.Infrastructure.Migrations
                     b.Navigation("AssignedEmployee");
 
                     b.Navigation("ProjectNav");
+
+                    b.Navigation("SeverityLevelNav");
 
                     b.Navigation("StatusNav");
                 });
