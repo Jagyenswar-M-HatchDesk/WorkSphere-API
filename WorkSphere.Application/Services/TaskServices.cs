@@ -40,6 +40,11 @@ namespace WorkSphere.Application.Services
             return await _repo.AddTask(task);
         }
 
+        public async Task<bool> DeleteTaskAsync(int id)
+        {
+            return await _repo.DeleteTask(id);
+        }
+
         //public async Task completeTaskAsync(int id)
         //{
         //    await _repo.CompleteTask(id);

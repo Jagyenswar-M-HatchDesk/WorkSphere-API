@@ -18,6 +18,8 @@ namespace WorkSphere.Application.Interfaces.IServices
 
         Task <TaskDTO>AddTaskAsync(TaskCreateDTO task);
 
+        Task<bool> DeleteTaskAsync(int id);
+
         //Task completeTaskAsync(int id);
     }
 }

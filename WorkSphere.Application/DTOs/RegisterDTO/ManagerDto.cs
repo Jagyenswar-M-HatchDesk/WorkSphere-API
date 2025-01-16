@@ -11,6 +11,7 @@ namespace WorkSphere.Application.DTOs.RegisterDTO
     {
         public int Id { get; set; }
         public string FullName {  get; set; }
+        public DateTime DateOfJoining { get; set; }
         public List<ProjectsName>? projects { get; set; }
     }
 

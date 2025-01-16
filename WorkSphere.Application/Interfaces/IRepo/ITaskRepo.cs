@@ -14,6 +14,8 @@ namespace WorkSphere.Application.Interfaces.IRepo
         Task<TaskEditDTO> GetTaskbyId(int id);
         Task <TaskDTO>AddTask(TaskCreateDTO task);
         Task<TaskDTO> EditTask(TaskEditDTO task);
+        Task<bool> DeleteTask(int id);
+
         //Task CompleteTask(int id);
     }
 }

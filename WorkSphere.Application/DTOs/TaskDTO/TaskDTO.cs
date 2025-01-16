@@ -38,9 +38,15 @@
 
         public int? Status { get; set; }
 
+
             public int? Progress { get; set; }
-            //public virtual User? UserNavigation { get; set; }
-            //public virtual Projects? ProjectNavigation { get; set; }
+        public string? StatusName { get; set; }
+        public string? EmployeeName { get; set; }
+
+        public string SeverityLevelName { get; set; }
+
+        //public virtual User? UserNavigation { get; set; }
+        //public virtual Projects? ProjectNavigation { get; set; }
     }
 
 }

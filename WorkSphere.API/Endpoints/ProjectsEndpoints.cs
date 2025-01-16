@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,6 +19,7 @@ namespace WorkSphere.API.Endpoints
         public static void Projects_Endpoints(this IEndpointRouteBuilder erb)
         {
             var app = erb.MapGroup("").WithTags("Projects");
+            
 
             app.MapGet("GetAllProject", async (IProjectService projservice, string? sorting = "", int pageNumber = 1, int pageSize = 10, bool isAscending = true) =>
             {
@@ -26,7 +28,7 @@ namespace WorkSphere.API.Endpoints
 
                 var proj = await projservice.GetallProjAsync();
 
-           
+
 
                 //sortiing
                 proj = sorting.ToLower() switch
@@ -63,8 +65,8 @@ namespace WorkSphere.API.Endpoints
                      ImagePath = proj.ImagePath,
                      Status = proj.StatusId,
                      StatusName = proj.StatusNav?.StatusName ?? "Null",
-                     SeverityLevel = proj.SeverityLevelId,
                      SeverityLevelName = proj.SeverityLevelNav?.level ?? "Null",
+                     SeverityLevel = proj.SeverityLevelId,
                      IsActive = proj.IsActive,
                      IsCompleted = proj.IsCompleted,
                      ModifiedOn = proj.ModifiedOn,
@@ -80,7 +82,7 @@ namespace WorkSphere.API.Endpoints
                     TotalPages = (int)Math.Ceiling(count / (double)pageSize),
                     Projects = pageProduct
                 });
-            });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = " Admin" });
 
             app.MapPost("AddProject", async ([FromForm] IFormFile? imageFile, [FromForm] ProjectCreateDTO projDto, IProjectService projService, IHostEnvironment environment) =>
             {
@@ -147,7 +149,7 @@ namespace WorkSphere.API.Endpoints
                         addedProject.SeverityLevelId
                     }
                 });
-            }).DisableAntiforgery();
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" }).DisableAntiforgery();
 
             
             app.MapGet("Project/{id}", async (IProjectService projService, int id) =>
@@ -190,7 +192,7 @@ namespace WorkSphere.API.Endpoints
 
                 }
                 return Results.NotFound("No Project Found");
-            });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
 
             
            
@@ -276,7 +278,7 @@ namespace WorkSphere.API.Endpoints
                         CreatedOn = proj.CreatedOn
                     }
                 });
-            }).DisableAntiforgery();
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" }).DisableAntiforgery();
 
             
             app.MapGet("SearchProjects", async (IProjectService projService, string? query, int pageNumber = 1, int pageSize = 10) =>
@@ -347,13 +349,13 @@ namespace WorkSphere.API.Endpoints
             {
                 await service.DeleteProjAsync(id);
                 return Results.Ok("The Data has been Deleted");
-            });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
 
             app.MapPut("ChangeStatus", async (IProjectService service, ChangeStatusDto dto, int id) =>
             {
                 await service.ChangeStatusAsync(dto, id);
                 return Results.Ok("The Status Has CHanged");
-            });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
         }
 
     }

@@ -19,18 +19,28 @@ namespace WorkSphere.Infrastructure.Repository
             this._context = context;
         }
 
-        public async Task<IEnumerable<Tasks>> GetTasks(int projectId)
-        {
-            return await _context.tbl_Tasks
-           .Where(task => task.Id == projectId)
-            .ToListAsync();
-        }
+  public async Task<IEnumerable<Tasks>> GetTasks(int projectId)
+{
+    return await _context.tbl_Tasks
+                         .Include(e => e.StatusNav)
+                         .Include(e => e.SeverityLevelNav)
+                          .Include(e => e.AssignedEmployee)
+                         .Where(task => task.Id == projectId) 
+                         .ToListAsync();
+}
+
+
 
         public async Task<TaskEditDTO> GetTaskbyId(int id)
         {
             var task = await _context.tbl_Tasks.FirstOrDefaultAsync(e=>e.TaskID == id);
+            if (task == null)
+            {
+                throw new KeyNotFoundException($"Task with ID {id} not found.");
+            }
             return new TaskEditDTO
             {
+                TaskID = task.TaskID,
                 TaskTitle = task.TaskTitle,
                 TaskDescr = task.TaskDescr,
                 AssignedTo = task.AssignedTo,
@@ -133,6 +143,21 @@ namespace WorkSphere.Infrastructure.Repository
             }
             return new TaskDTO();
 
+        }
+
+        public async Task<bool> DeleteTask(int id)
+        {
+            var isDeleted = await _context.tbl_Tasks.FindAsync(id);
+            if (isDeleted == null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.tbl_Tasks.Remove(isDeleted);
+                await _context.SaveChangesAsync();
+                return true;
+            }
         }
 
         //public async Task CompleteTask(int id)
