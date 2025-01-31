@@ -19,10 +19,10 @@ namespace WorkSphere.Application.Services
         }
 
 
-        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeCreateDTO employee)
-        {
-           return await _employeeRepo.AddEmployee(employee);
-        }
+        //public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeCreateDTO employee)
+        //{
+        //   return await _employeeRepo.AddEmployee(employee);
+        //}
 
        
         public async Task<bool> DeleteEmployeeAsync(int id)

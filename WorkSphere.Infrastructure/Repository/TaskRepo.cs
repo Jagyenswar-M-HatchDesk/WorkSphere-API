@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSphere.Application.DTOs.ProjectDto;
 using WorkSphere.Application.DTOs.TaskDTO;
 using WorkSphere.Application.Interfaces.IRepo;
 using WorkSphere.Domain;
@@ -25,7 +26,7 @@ namespace WorkSphere.Infrastructure.Repository
                          .Include(e => e.StatusNav)
                          .Include(e => e.SeverityLevelNav)
                           .Include(e => e.AssignedEmployee)
-                         .Where(task => task.Id == projectId) 
+                         .Where(task => task.ProjID == projectId) 
                          .ToListAsync();
 }
 
@@ -49,7 +50,7 @@ namespace WorkSphere.Infrastructure.Repository
                 ImagePath = task.ImagePath,
                 StartDate = task.StartDate,
                 EndDate = task.EndDate,
-                ProjID = task.Id,
+                ProjID = task.ProjID,
                 Status = task.StatusId,
                 Progress = task.Progress,
                 CreatedOn = DateTime.Now,
@@ -73,7 +74,7 @@ namespace WorkSphere.Infrastructure.Repository
                 ImagePath = task.ImagePath,
                 StartDate = task.StartDate,
                 EndDate = task.EndDate,
-                Id = task.ProjID,
+                ProjID = task.ProjID,
                 StatusId = task.Status,
                 Progress = task.Progress,
                 CreatedOn = DateTime.Now,
@@ -95,7 +96,7 @@ namespace WorkSphere.Infrastructure.Repository
                 StartDate = newtask.StartDate,
                 EndDate = newtask.EndDate,
                 Status = newtask.StatusId,
-               ProjID  =  newtask.Id,
+               ProjID  =  newtask.ProjID,
                 Progress = newtask.Progress,
                 CreatedOn = newtask.CreatedOn,
                 ModifiedOn = newtask.ModifiedOn,
@@ -119,6 +120,7 @@ namespace WorkSphere.Infrastructure.Repository
                 tasks.SeverityLevelId = task.SeverityLevel;
                 tasks.StatusId = task.Status;
                 tasks.ImagePath = task.ImagePath;
+                tasks.Progress = task.Progress;
                 tasks.IsActive = true;
                 tasks.IsCompleted = true;
 
@@ -160,6 +162,35 @@ namespace WorkSphere.Infrastructure.Repository
             }
         }
 
+        public async Task<TaskEditDTO> ChangeStatus(ChangeTaskStatusDto dto, int id)
+        {
+            // Fetch task by ID
+            var task = await _context.tbl_Tasks.FindAsync(id);
+            if (task == null)
+            {
+                throw new Exception("Task not found.");
+            }
+
+            // Validate the status change
+            if (task.StatusId == dto.Status)
+            {
+                throw new Exception("Task is already in the requested status.");
+            }
+
+            task.StatusId = dto.Status;
+            _context.tbl_Tasks.Update(task);
+            await _context.SaveChangesAsync();
+            return new TaskEditDTO
+            {
+                TaskTitle = task.TaskTitle,
+                TaskDescr = task.TaskDescr,
+                Status = task.StatusId  
+            };
+        }
+
+    }
+}
+
         //public async Task CompleteTask(int id)
         //{
         //    var deltask = await GetTaskbyId(id);
@@ -174,5 +205,5 @@ namespace WorkSphere.Infrastructure.Repository
         //    await _context.SaveChangesAsync();
 
         //}
-    }
-}
+    
+

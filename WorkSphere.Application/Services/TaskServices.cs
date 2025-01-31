@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSphere.Application.DTOs.ProjectDto;
 using WorkSphere.Application.DTOs.TaskDTO;
 using WorkSphere.Application.Interfaces.IRepo;
 using WorkSphere.Application.Interfaces.IServices;
@@ -43,6 +44,11 @@ namespace WorkSphere.Application.Services
         public async Task<bool> DeleteTaskAsync(int id)
         {
             return await _repo.DeleteTask(id);
+        }
+
+        public async Task<TaskEditDTO> ChangeStatusAsync(ChangeTaskStatusDto dto, int id)
+        {
+            return await _repo.ChangeStatus(dto, id);
         }
 
         //public async Task completeTaskAsync(int id)

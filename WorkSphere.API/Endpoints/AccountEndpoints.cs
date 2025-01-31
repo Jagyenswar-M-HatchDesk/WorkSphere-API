@@ -21,7 +21,7 @@ namespace WorkSphere.API.Endpoints
     {
         public static void Register_LoginEndpoint(this IEndpointRouteBuilder endpointRouteBuilder)
         {
-            var app = endpointRouteBuilder.MapGroup("").WithTags("Account");
+            var app = endpointRouteBuilder.MapGroup("api").WithTags("Account");
 
 
             app.MapPost("account/register", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager) =>

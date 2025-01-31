@@ -19,37 +19,37 @@ namespace WorkSphere.Infrastructure.Repository
         {
             _context = context;
         }
-        public async Task<EmployeeDTO> AddEmployee(EmployeeCreateDTO employee)
-        {
-            var newEmployee = new User()
-            {
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Email = employee.Email,
-               Rollid = 3,
-               DeptId = employee.DepartmentId,
-                IsActive = true,
-                IsDeleted=false,
-                ModifiedOn = DateTime.Now,
-                CreatedBy = employee.CreatedBy,
-                DateOfJoining = DateTime.Now,
-            };
+        //public async Task<EmployeeDTO> AddEmployee(EmployeeCreateDTO employee)
+        //{
+        //    var newEmployee = new User()
+        //    {
+        //        FirstName = employee.FirstName,
+        //        LastName = employee.LastName,
+        //        Email = employee.Email,
+        //       Rollid = 3,
+        //       DeptId = employee.DepartmentId,
+        //        IsActive = true,
+        //        IsDeleted=false,
+        //        ModifiedOn = DateTime.Now,
+        //        CreatedBy = employee.CreatedBy,
+        //        DateOfJoining = DateTime.Now,
+        //    };
 
-            _context.Users.Add(newEmployee);
-            await _context.SaveChangesAsync();
-            return new EmployeeDTO()
-            {
-                FirstName = newEmployee.FirstName,
-                LastName = newEmployee.LastName,
-                Email = newEmployee.Email,
-                RoleId = newEmployee.Rollid,
-                DepartmentId = newEmployee.DeptId,
-                IsActive = true,
-                ModifiedOn = DateTime.Now,
-                CreatedBy = newEmployee.CreatedBy,
-                DateOfJoining = DateTime.Now,
-            };
-        }
+        //    _context.Users.Add(newEmployee);
+        //    await _context.SaveChangesAsync();
+        //    return new EmployeeDTO()
+        //    {
+        //        FirstName = newEmployee.FirstName,
+        //        LastName = newEmployee.LastName,
+        //        Email = newEmployee.Email,
+        //        RoleId = newEmployee.Rollid,
+        //        DepartmentId = newEmployee.DeptId,
+        //        IsActive = true,
+        //        ModifiedOn = DateTime.Now,
+        //        CreatedBy = newEmployee.CreatedBy,
+        //        DateOfJoining = DateTime.Now,
+        //    };
+        //}
 
         public async  Task<bool> DeleteEmployee(int id)
         {
@@ -77,13 +77,7 @@ namespace WorkSphere.Infrastructure.Repository
                     FirstName = x.FirstName,
                     LastName = x.LastName,
                     Email = x.Email,
-                    RoleId = x.Rollid,
-                    DepartmentId = x.DeptId,
-                    DepartmentName = x.DepartmentNavigation!.DeptName, 
-                    IsActive = true,
-                    ModifiedOn = DateTime.Now,
-                    CreatedBy = x.CreatedBy,
-                    DateOfJoining = x.DateOfJoining
+            
                 }).ToListAsync();
 
             return emp;
@@ -101,12 +95,7 @@ namespace WorkSphere.Infrastructure.Repository
                     FirstName = objEmp.FirstName,
                     LastName = objEmp.LastName,
                     Email = objEmp.Email,
-                    RoleId = objEmp.Rollid,
-                    DepartmentId = objEmp.DeptId,
-                    IsActive = true,
-                    ModifiedOn = DateTime.Now,
-                    CreatedBy = objEmp.CreatedBy,
-                    DateOfJoining = DateTime.Now,
+              
                 };
             }
             return null;
@@ -122,11 +111,7 @@ namespace WorkSphere.Infrastructure.Repository
                 emp.LastName = employee.LastName;
                 emp.Email = employee.Email;
                 emp.Rollid = 3; // Keep constant or map from DTO if needed
-                emp.DeptId = employee.DepartmentId;
-                emp.IsActive = true;
-                emp.ModifiedOn = DateTime.Now;
-                emp.CreatedBy = employee.CreatedBy;
-                emp.DateOfJoining = employee.DateOfJoining;
+            
 
                 // Update entity in context
                 _context.Users.Update(emp);
@@ -139,12 +124,7 @@ namespace WorkSphere.Infrastructure.Repository
                     FirstName = emp.FirstName,
                     LastName = emp.LastName,
                     Email = emp.Email,
-                    RoleId = emp.Rollid,
-                    DepartmentId = emp.DeptId,
-                    IsActive = emp.IsActive,
-                    ModifiedOn = emp.ModifiedOn,
-                    CreatedBy = emp.CreatedBy,
-                    DateOfJoining = emp.DateOfJoining
+                  
                 };
             }
 

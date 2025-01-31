@@ -16,7 +16,7 @@ namespace WorkSphere.API.Endpoints
     {
         public static void Manager_Endpoints(this IEndpointRouteBuilder erb)
         {
-            var app = erb.MapGroup("").WithTags("Manager");
+            var app = erb.MapGroup("api").WithTags("Manager");
 
             app.MapGet("GetManagers", async (WorkSphereDbContext dbcontext) =>
             {
@@ -167,7 +167,7 @@ namespace WorkSphere.API.Endpoints
 
                 await service.UpdateManagerAsync(manager);
                 return Results.Ok("Manager is Successfully Deleted");
-            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Manager" }); ;
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Manager , Admin" }); ;
 
             app.MapGet("GetProjectByManager", async (WorkSphereDbContext dbContext, int managerId) =>
             {

@@ -7,7 +7,7 @@ namespace WorkSphere.API.Endpoints
     {
         public static void Severity_Endponits(this IEndpointRouteBuilder builder)
         {
-            var app = builder.MapGroup("").WithTags("Severity Levels");
+            var app = builder.MapGroup("api").WithTags("Severity Levels");
 
             app.MapGet("GetSeverityLevel", async (WorkSphereDbContext dbcontext) =>
             {

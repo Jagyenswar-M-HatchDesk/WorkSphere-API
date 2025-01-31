@@ -18,7 +18,7 @@ namespace WorkSphere.API.Endpoints
 
         public static void Projects_Endpoints(this IEndpointRouteBuilder erb)
         {
-            var app = erb.MapGroup("").WithTags("Projects");
+            var app = erb.MapGroup("api").WithTags("Projects");
             
 
             app.MapGet("GetAllProject", async (IProjectService projservice, string? sorting = "", int pageNumber = 1, int pageSize = 10, bool isAscending = true) =>
@@ -192,10 +192,9 @@ namespace WorkSphere.API.Endpoints
 
                 }
                 return Results.NotFound("No Project Found");
-            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin,Manager" });
 
-            
-           
+                  
             app.MapPut("UpdateProject/{id}", async ([FromRoute]int id,[FromForm] IFormFile? imageFile, [FromForm] ProjectEditDTO projDto, IProjectService projService, IHostEnvironment environment) =>
             {
                 //if (projDto == null)
@@ -339,11 +338,13 @@ namespace WorkSphere.API.Endpoints
                 });
             });
 
+
             app.MapPut("CompleteProject", async (IProjectService service, int id) =>
             {
                 await service.CompleteProjectAsync(id);
                 return Results.Ok("The Project status has change to Completed");
             });
+
 
             app.MapDelete("DeleteProject", async (IProjectService service, int id) =>
             {

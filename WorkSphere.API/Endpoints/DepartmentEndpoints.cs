@@ -9,7 +9,7 @@ namespace WorkSphere.API.Endpoints
     {
         public static void DepartmentEndpoint(this IEndpointRouteBuilder erb)
         {
-            var app = erb.MapGroup("").WithTags("Department");
+            var app = erb.MapGroup("api").WithTags("Department");
 
             app.MapPost("AddDepartment", async (WorkSphereDbContext dbcontext, DepartmentDTO dto) =>
             {
