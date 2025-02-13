@@ -13,7 +13,7 @@ namespace WorkSphere.Application.Interfaces.IServices
 
         Task<EmployeeEditDTO> GetEmployeeByIdAsync(int id);
 
-        Task<EmployeeDTO> AddEmployeeAsync(EmployeeCreateDTO employee);
+        //Task<EmployeeDTO> AddEmployeeAsync(EmployeeCreateDTO employee);
 
         Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeEditDTO employee);
 

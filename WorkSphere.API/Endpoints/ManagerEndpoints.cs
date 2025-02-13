@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
@@ -15,7 +16,7 @@ namespace WorkSphere.API.Endpoints
     {
         public static void Manager_Endpoints(this IEndpointRouteBuilder erb)
         {
-            var app = erb.MapGroup("").WithTags("Manager");
+            var app = erb.MapGroup("api").WithTags("Manager");
 
             app.MapGet("GetManagers", async (WorkSphereDbContext dbcontext) =>
             {
@@ -24,11 +25,14 @@ namespace WorkSphere.API.Endpoints
                 {
                     FullName = manager.FirstName + " " + manager.LastName,
                     Id = manager.Id,
-                    projects = manager.Projects.Select(p => new ProjectsName() { Title = p.Title}).ToList(),
+                    DateOfJoining = manager.DateOfJoining,
+                    
+                    projects = manager.Projects.Select(p => new ProjectsName() { Title = p.Title }).ToList(),
                 }).ToListAsync();
                 //var fullname = manager.Select(manager => new ManagerDto() { FullName = manager.FirstName + " " + manager.LastName, Id = manager.Id, projects = manager.Projects });
                 return manager;
-            });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin,Manager" });
+
 
 
             app.MapPost("account/register-manager", async (ManagerCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IAccountService service, IEmailService emailService) =>
@@ -151,7 +155,7 @@ namespace WorkSphere.API.Endpoints
 
 
 
-            }).DisableAntiforgery();
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin,Manager" }).DisableAntiforgery();
 
             app.MapDelete("DeleteManager", async (IAccountService service, int id) =>
             {
@@ -163,7 +167,7 @@ namespace WorkSphere.API.Endpoints
 
                 await service.UpdateManagerAsync(manager);
                 return Results.Ok("Manager is Successfully Deleted");
-            });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Manager , Admin" }); ;
 
             app.MapGet("GetProjectByManager", async (WorkSphereDbContext dbContext, int managerId) =>
             {
@@ -185,7 +189,7 @@ namespace WorkSphere.API.Endpoints
                 }
 
                 return Results.Ok(projects);
-            });
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin,Manager" }); ;
 
 
         }

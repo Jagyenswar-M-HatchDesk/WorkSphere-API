@@ -13,7 +13,7 @@ namespace WorkSphere.API.Endpoints
     {
         public static void Client_Endpoints(this IEndpointRouteBuilder erb)
         {
-            var app = erb.MapGroup("").WithTags("CLient");
+            var app = erb.MapGroup("api").WithTags("CLient");
 
             app.MapGet("SearchClient", async (WorkSphereDbContext context, string? Name) =>
             {

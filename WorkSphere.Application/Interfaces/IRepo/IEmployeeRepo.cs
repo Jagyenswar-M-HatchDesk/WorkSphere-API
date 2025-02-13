@@ -15,7 +15,7 @@ namespace WorkSphere.Application.Interfaces.IRepo
 
         Task<EmployeeEditDTO> GetEmployeeById(int id);
 
-        Task<EmployeeDTO> AddEmployee(EmployeeCreateDTO employee);
+        //Task<EmployeeDTO> AddEmployee(EmployeeCreateDTO employee);
 
         Task<EmployeeDTO> UpdateEmployee(EmployeeEditDTO employee);
        

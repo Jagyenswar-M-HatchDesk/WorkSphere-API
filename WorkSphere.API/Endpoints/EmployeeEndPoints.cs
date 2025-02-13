@@ -21,68 +21,68 @@ namespace WorkSphere.API.Endpoints
                 return emp;
             });
 
-            app.MapPost("AddEmployee", async ( EmployeeCreateDTO empDto, IEmployeeService empService) =>
-            {
-                // Validate DTO
-                if (empDto == null)
-                {
-                    return Results.BadRequest(new { message = "Invalid project data." });
-                }
+            //app.MapPost("AddEmployee", async ( EmployeeCreateDTO empDto, IEmployeeService empService) =>
+            //{
+            //    // Validate DTO
+            //    if (empDto == null)
+            //    {
+            //        return Results.BadRequest(new { message = "Invalid project data." });
+            //    }
 
-                // Handle file upload
-                //string imagePath = null;
-                //if (imageFile != null)
-                //{
-                //    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
-                //    var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+            //    // Handle file upload
+            //    //string imagePath = null;
+            //    //if (imageFile != null)
+            //    //{
+            //    //    var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".webp" };
+            //    //    var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
 
-                //    if (!allowedExtensions.Contains(fileExtension))
-                //    {
-                //        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
-                //    }
+            //    //    if (!allowedExtensions.Contains(fileExtension))
+            //    //    {
+            //    //        return Results.BadRequest(new { message = "Invalid file type. Only .jpeg, .jpg, .png, and .webp are allowed." });
+            //    //    }
 
-                //    var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
-                //    if (!Directory.Exists(uploadsFolder))
-                //    {
-                //        Directory.CreateDirectory(uploadsFolder);
-                //    }
+            //    //    var uploadsFolder = Path.Combine(environment.ContentRootPath, "Uploads");
+            //    //    if (!Directory.Exists(uploadsFolder))
+            //    //    {
+            //    //        Directory.CreateDirectory(uploadsFolder);
+            //    //    }
 
-                //    var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
-                //    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            //    //    var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+            //    //    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                //    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                //    {
-                //        await imageFile.CopyToAsync(fileStream);
-                //    }
+            //    //    using (var fileStream = new FileStream(filePath, FileMode.Create))
+            //    //    {
+            //    //        await imageFile.CopyToAsync(fileStream);
+            //    //    }
 
-                //    imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
-                //}
+            //    //    imagePath = Path.Combine("Uploads", uniqueFileName).Replace("\\", "/");
+            //    //}
 
-                //// Set the image path in DTO
-                //prodDto.ImagePath = imagePath;
+            //    //// Set the image path in DTO
+            //    //prodDto.ImagePath = imagePath;
 
-                // Add the project
-                var addedProject = await empService.AddEmployeeAsync(empDto);
+            //    // Add the project
+            //    var addedProject = await empService.AddEmployeeAsync(empDto);
 
-                // Return the response
-                return Results.Ok(new
-                {
-                    message = "Successfully created a new Employee",
-                    Project = new
-                    {
-                        addedProject.Id,
-                        addedProject.FirstName,
-                        addedProject.LastName,
-                        addedProject.DateOfJoining,
-                        addedProject.RoleId,
-                        addedProject.DepartmentId,
-                        addedProject.IsActive,
-                        addedProject.IsDeleted,
-                        addedProject.ModifiedOn,
+            //    // Return the response
+            //    return Results.Ok(new
+            //    {
+            //        message = "Successfully created a new Employee",
+            //        Project = new
+            //        {
+            //            addedProject.Id,
+            //            addedProject.FirstName,
+            //            addedProject.LastName,
+            //            addedProject.DateOfJoining,
+            //            addedProject.RoleId,
+            //            addedProject.DepartmentId,
+            //            addedProject.IsActive,
+            //            addedProject.IsDeleted,
+            //            addedProject.ModifiedOn,
 
-                    }
-                });
-            }).DisableAntiforgery();
+            //        }
+            //    });
+            //}).DisableAntiforgery();
 
             app.MapPut("UpdateEmployee/{id}", async (IEmployeeService empService, int id, EmployeeEditDTO employee) =>
             {
@@ -102,11 +102,7 @@ namespace WorkSphere.API.Endpoints
                 emp.FirstName = employee.FirstName;
                 emp.LastName = employee.LastName;
                 emp.Email = employee.Email;
-                emp.RoleId = 3;
-                emp.DepartmentId = employee.DepartmentId;
-                emp.IsActive = employee.IsActive ?? emp.IsActive; // If nullable, keep old value if null
-                emp.DateOfJoining = employee.DateOfJoining;
-                emp.ModifiedOn = DateTime.Now;
+         
              
 
                 // Call update service
@@ -122,13 +118,8 @@ namespace WorkSphere.API.Endpoints
                             Id = emp.Id,
                             FirstName = emp.FirstName,
                             LastName = emp.LastName,
-                            DateOfJoining = emp.DateOfJoining,
-                            RoleId = emp.RoleId,
-                            DepartmentId = emp.DepartmentId,
-                            IsActive = emp.IsActive,
-                            IsDeleted = emp.IsDeleted,
-                            CreatedBy = emp.CreatedBy,
-                            ModifiedOn = emp.ModifiedOn
+                            Email = emp.Email
+                     
                         }
                     });
                 }

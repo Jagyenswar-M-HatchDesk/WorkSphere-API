@@ -47,7 +47,7 @@ namespace WorkSphere.Domain
         public string? ImagePath { get; set; }
 
         [Required]
-        public int Id { get; set; }
+        public int ProjID { get; set; }
         [ForeignKey("ProjID")]
         [DeleteBehavior(DeleteBehavior.Restrict)]
 

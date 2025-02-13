@@ -10,6 +10,10 @@ using System.Runtime.InteropServices;
 using WorkSphere.Application.DTOs.ClientDTO;
 using WorkSphere.Application.DTOs.UserDTO;
 using WorkSphere.Application.Interfaces.IServices;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WorkSphere.API.Endpoints
 {
@@ -17,7 +21,7 @@ namespace WorkSphere.API.Endpoints
     {
         public static void Register_LoginEndpoint(this IEndpointRouteBuilder endpointRouteBuilder)
         {
-            var app = endpointRouteBuilder.MapGroup("").WithTags("Account");
+            var app = endpointRouteBuilder.MapGroup("api").WithTags("Account");
 
 
             app.MapPost("account/register", async (RegisterCreateDTO request, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager) =>
@@ -128,7 +132,7 @@ namespace WorkSphere.API.Endpoints
                 });
             });
 
-            
+
             app.MapGet("account/checkAuth", async (ClaimsPrincipal claims, UserManager<User> userManager) =>
             {
                 // Check if user is authenticated
@@ -164,7 +168,7 @@ namespace WorkSphere.API.Endpoints
                         user.Rollid
                     }
                 });
-            }).RequireAuthorization();
+            });
 
             
 
@@ -221,54 +225,60 @@ namespace WorkSphere.API.Endpoints
 
                 return Results.Ok(userInfo);
             });
-            app.MapPost("account/login", async (LogInDTO request, SignInManager<User> signInManager, UserManager<User> userManager, IAccountService service) =>
+           
+            app.MapPost("/account/login", [AllowAnonymous] async (LogInDTO request, UserManager<User> userManager, IConfiguration configuration) =>
             {
-                // Validate the incoming request
                 if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
                 {
                     return Results.BadRequest("Email and Password are required.");
                 }
 
-                // Find the user by email
+                // Get user by email
+                var user = await userManager.Users.Include(r => r.RoleNavigation).FirstOrDefaultAsync(u => u.Email == request.Email);
 
-                //var user = await userManager.FindByEmailAsync(request.Email);
-                var user = await userManager.Users
-        .Include(u => u.DepartmentNavigation)
-        .Include(u => u.RoleNavigation)
-        .FirstOrDefaultAsync(u => u.Email == request.Email);
+                
                 if (user == null)
                 {
-                    return Results.Unauthorized();//new { Message = "Invalid email or password." });
+                    return Results.Unauthorized();
                 }
 
-                // Check if the user is active
-                if (!user.IsActive)
-                {
-                    return Results.Forbid();//new { Message = "Account is inactive. Please contact support." });
-                }
-
-
-                // Attempt to sign in the user
+                // Check password
                 var passwordCheck = await userManager.CheckPasswordAsync(user, request.Password);
                 if (!passwordCheck)
                 {
-                    return Results.Unauthorized();//new { Message = "Invalid email or password." });
+                    return Results.Unauthorized();
                 }
 
-                // Sign in the user
-                await signInManager.SignInAsync(user, isPersistent: false);
+              
 
-                // Create a response with user info and roles
-                var roles = await userManager.GetRolesAsync(user);
+                // JWT Token Creation
+                var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new[]
+                    {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Email, user.Email),
+              new Claim("FirstName", user.FirstName),
+        new Claim("LastName", user.LastName),
+            new Claim(ClaimTypes.Role,user!.RoleNavigation!.Name! )
+        }),
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    Issuer = configuration["Jwt:Issuer"],
+                    Audience = configuration["Jwt:Audience"],
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
 
-                user.LastLogin = DateTime.Now;
-                await service.UpdateManagerAsync(user);
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
 
-                var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "Purpose");
+                // Return JWT token and user info
                 return Results.Ok(new
                 {
                     Message = "Login successful.",
-                    Token = token,
+                    Token = tokenString,
                     User = new
                     {
                         user.Id,
@@ -276,12 +286,16 @@ namespace WorkSphere.API.Endpoints
                         user.Email,
                         user.FirstName,
                         user.LastName,
-                        user.DepartmentNavigation.DeptName,
-                        user.RoleNavigation.Name,
-                        Roles = roles
+                        user.RoleNavigation.Name
+
                     }
                 });
             });
+
+
+
+
+
 
             app.MapGet("GetUser/{id}", async ( IAccountService service, int id) =>
             {
